@@ -4,7 +4,10 @@
       include 'pwhg_flst.h'
       include 'pwhg_kn.h'
       include 'pwhg_rad.h'
+      include 'pwhg_flg.h'
       integer j,alr,em
+      real*8 random
+      external random
       do j=1,rad_nkinreg
          rad_kinreg_on(j)=.false.
       enddo
@@ -20,6 +23,19 @@
             rad_kinreg_on(em-flst_lightpart+2)=.true.
          endif
       enddo
+
+c Choosing a value for rho
+      if(flg_newsuda)
+         if(rad_ubornidx.eq.1) then
+            if(random().lt.rhoweight) then
+               rho_idx=1
+            else
+               rho_idx=2
+            endif
+         else
+            rho_idx=rad_ubornidx+1
+         endif
+      endif
       end
 
       subroutine gen_real_idx

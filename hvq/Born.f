@@ -36,7 +36,6 @@ C     Abbreviation of (4.*pi*st_alpha)**2
 
       gs4=(4*pi*st_alpha)**2
 
-      if(bflav(1).eq.0.and.bflav(2).eq.0) then
 
 c Calculating rhoweight to generate a value for rho
         if(flg_newsuda) then
@@ -49,7 +48,10 @@ c u=(p1-p4)^2 - m2 = p1^2 -2p1*p4 + p4^2 - m2 = -2p1*p4
           rhoweight=ggbornplanar1/(ggbornplanar1+ggbornplanar2)
         endif
 
-        
+
+
+      if(bflav(1).eq.0.and.bflav(2).eq.0) then
+
 c gluon fusion
 c the following expression equals the amplitude squared, summed
 c and averaged over spins and colours. It is equal to h^(0)_gg
