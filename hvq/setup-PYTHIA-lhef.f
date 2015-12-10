@@ -42,7 +42,7 @@ c      mstp(61)=0                !No IS shower
 c      mstp(71)=0                !No FS shower
 c      mstp(91)=0                !No Primordial kt
 c      mstp(131)=0               !No Pile Up
-c      mstp(111)=0               !No hadronization
+      mstp(111)=0               !No hadronization
 
 c     Change lambda in alfa running.
 c     Keep all commented to let PYTHIA do its default
@@ -118,13 +118,22 @@ c pythia routine to abort event
       end
 
       subroutine pyaend
+      implicit none
+      include 'pwhg_rnd.h'
+       character * 100 filename
       character * 20 pwgprefix
       integer lprefix
       common/cpwgprefix/pwgprefix,lprefix
-      open(unit=99,file=pwgprefix(1:lprefix)//'POWHEG+PYTHIA-output.top'
-     #     ,status='unknown')
+      if(rnd_cwhichseed.eq.'none') then
+         filename=pwgprefix(1:lprefix)//
+     1        'POWHEG+PYTHIA-output'
+      else
+         filename=pwgprefix(1:lprefix)//'-'//
+     1        rnd_cwhichseed //'-'//
+     2        'POWHEG+PYTHIA-output'
+      endif
       call pwhgsetout
-      call pwhgtopout
+      call pwhgtopout(filename)
       close(99)
       end
 
