@@ -6,13 +6,13 @@
 
 !Heavy flavour production parameters
 
-numevts 500000   ! number of events to be generated
+numevts 50   ! number of events to be generated
 ih1   1        ! hadron 1
 ih2   1        ! hadron 2
-#ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
-#ndns2 131      ! pdf for hadron 2
-lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
-lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
+ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
+ndns2 131      ! pdf for hadron 2
+#lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
+#lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
 ebeam1 7000    ! energy of beam 1
 ebeam2 7000    ! energy of beam 2
 qmass  172     ! mass of heavy quark in GeV
@@ -20,7 +20,7 @@ facscfact 1    ! factorization scale factor: mufact=muref*facscfact
 renscfact 1    ! renormalization scale factor: muren=muref*renscfact 
 #fixedscale 1    ! use ref. scale=qmass (default 0, use running scale)
 
-topdecaymode 20000   ! an integer of 5 digits that are either 0, or 2, representing in 
+topdecaymode 22000   ! an integer of 5 digits that are either 0, or 2, representing in 
                      ! the order the maximum number of the following particles(antiparticles)
                      ! in the final state: e  mu tau up charm
                      ! For example
@@ -55,9 +55,9 @@ tdec/sin2cabibbo 0.051
 use-old-grid 1    ! if 1 use old grid if file pwggrids.dat is present (# 1: regenerate)
 use-old-ubound 1  ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; # 1: regenerate
 
-ncall1 10000   ! number of calls for initializing the integration grid
+ncall1 100   ! number of calls for initializing the integration grid
 itmx1 5        ! number of iterations for initializing the integration grid
-ncall2 100000  ! number of calls for computing the integral and finding upper bound
+ncall2 1000  ! number of calls for computing the integral and finding upper bound
 itmx2 5        ! number of iterations for computing the integral and finding upper bound
 foldcsi   1      ! number of folds on x integration
 foldy   1      ! number of folds on y integration
