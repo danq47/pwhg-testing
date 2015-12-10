@@ -609,6 +609,10 @@ c extra suppression factor of upper bounding function (may depend upon radiation
 c Veto from upper bound to real value. Count how many vetoes,
 c since these may be expensive.
       call sigborn_rad(born)
+c Make the replacement B^{f_b} -> B^{f_b,rho}
+      if(flg_newsuda)
+         born=born*factor
+      endif
       if(born.lt.0) then
          born=0
       endif
