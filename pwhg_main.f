@@ -35,6 +35,12 @@ c Print out svn information, if any
          testplots=.false.
       endif
       nev=powheginput('numevts')
+c Flag to see if we are to use the new Sudakov form factor or not
+      if(powheginput('#newsuda').eq.1d0) then
+         flg_newsuda=.true.
+      else
+         flg_newsuda=.false.
+      endif
 
 c whether to save btilde calls to set up upper bounding envelope
       if(powheginput('#storemintupb').eq.1d0) then

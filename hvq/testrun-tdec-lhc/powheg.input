@@ -1,3 +1,5 @@
+
+newsuda 0          ! 0 for old sudakov, 1 for new sudakov
 !randomseed 352345 ! uncomment to set the random seed to a value of your choice.
                    ! It generates the call RM48IN(352345,0,0) (see the RM48 manual).
                    ! THIS MAY ONLY AFFECTS THE GENERATION OF POWHEG EVENTS!
