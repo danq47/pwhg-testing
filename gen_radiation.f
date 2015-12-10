@@ -482,13 +482,19 @@ c
       external random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad
       unorm=rad_norms(rad_kinreg,rad_ubornidx)
 
-c calculate 'factor' i.e. factor = B1(2)/(B1+B2) for rho=1(2)
-      if(rho_idx.eq.1) then
-         factor=rhoweight
-      elseif(rho_idx.eq.2) then
-         factor=(1d0-rhoweight)
-      else
-         factor=1d0
+c calculate 'factor' i.e. factor = B1(2)/(B1+B2) for rho=1(2) that we need to raise the upper bound by
+      if(flg_newsuda) then
+         if(rho_idx.eq.1) then
+            factor=rhoweight
+         elseif(rho_idx.eq.2) then
+            factor=(1d0-rhoweight)
+         else
+            factor=1d0
+         endif
+c Raise the normalisation on the upper bounding function by 'factor'
+         if(factor.lt.1d0) then
+            unorm=unorm/factor
+         endif
       endif
 
       sborn=kn_sborn
