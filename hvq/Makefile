@@ -95,6 +95,13 @@ endif
 endif
 endif
 
+# PYTHIA 8
+
+PYTHIA8LOCATION=/Users/Dan/code/pythia8185
+FJCXXFLAGS+=-I$(PYTHIA8LOCATION)/include -I$(PYTHIA8LOCATION)/include/Pythia8
+LIBPYTHIA8=-L$(PYTHIA8LOCATION)/lib/archive -lpythia8  -lstdc++ 
+
+
 %.o: %.f $(INCLUDE)
 	$(FF) -c -o $(OBJ)/$@ $<
 
@@ -149,9 +156,19 @@ PYTHIA=main-PYTHIA.o setup-PYTHIA-lhef.o pythia.o boostrot.o powheginput.o \
 main-PYTHIA-lhef: $(PYTHIA)
 	$(FF) $(patsubst %,$(OBJ)/%,$(PYTHIA)) $(LIBSFASTJET)  $(STATIC) -o $@
 
+# target to read event file, shower events with PYTHIA8 + analysis
+PYTHIA8=main-PYTHIA8.o pythia8F77.o boostrot.o powheginput.o \
+	pwhg_bookhist-multi.o $(PWHGANAL) opencount.o lhefread.o newunit.o \
+	pdfdummies.o pwhg_analysis_driver.o \
+	random.o cernroutines.o bra_ket_subroutines.o \
+	$(FPEOBJ)
+
+main-PYTHIA8-lhef: $(PYTHIA8)
+	$(FF) $(patsubst %,$(OBJ)/%,$(PYTHIA8)) $(LIBSFASTJET) $(LIBPYTHIA8) $(STATIC) $(LIBS) -o $@
+
 # target to cleanup
 .PHONY: clean
 clean:
 	rm -f $(OBJ)/*.o pwhg_main lhef_analysis main-HERWIG-lhef	\
-	main-PYTHIA-lhef
+	main-PYTHIA-lhef main-PYTHIA8-lhef
 
