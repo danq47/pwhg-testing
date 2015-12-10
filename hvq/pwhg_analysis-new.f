@@ -93,6 +93,7 @@ c without showering, this should be equivalent to phi-j1
 
 c angular separation of the top and the anti-top
       call bookupeqbins('delta-phi-t-tbar',1d-1,0d0,3.2d0)
+
       end
 
       subroutine analysis(dsig0)
@@ -199,7 +200,7 @@ c in the event record, i.e. before decays
             endif
 c for jets, using only final state particles excluding leptons
             if(isthep(jhep).eq.1.and.
-     1           (idhep(jhep).lt.11.or.idhep(jhep).gt.16)) then
+     1           (abs(idhep(jhep)).lt.11.or.abs(idhep(jhep)).gt.16)) then
                IsForClustering(jhep) = .true.
             else
                IsForClustering(jhep) = .false.
