@@ -4,6 +4,7 @@
       include 'pwhg_math.h'
       include 'pwhg_st.h'
       include 'pwhg_kn.h'
+      include 'pwhg_flg.h'
       integer nlegs
       parameter (nlegs=nlegborn)
       real * 8 p(0:3,nlegs),bornjk(nlegs,nlegs)
@@ -15,6 +16,7 @@
       parameter(b=(n**2-4)/(4*n))
 C     Abbreviation of (4.*pi*st_alpha)**2
       real*8 gs4,xxx,yyy,xm2,p12,p13,p23,s,t1,t2,ro
+      real * 8 t,u,ggbornplanar1,ggbornplanar2
       real * 8 gtens(0:3,0:3)
       data gtens/1d0, 0d0, 0d0, 0d0,
      #           0d0,-1d0, 0d0, 0d0,
@@ -35,6 +37,19 @@ C     Abbreviation of (4.*pi*st_alpha)**2
       gs4=(4*pi*st_alpha)**2
 
       if(bflav(1).eq.0.and.bflav(2).eq.0) then
+
+c Calculating rhoweight to generate a value for rho
+        if(flg_newsuda) then
+c t=(p1-p3)^2 - m2 = p1^2 -2p1*p3 + p3^2 - m2 = -2p1*p3 + m2 - m2
+c u=(p1-p4)^2 - m2 = p1^2 -2p1*p4 + p4^2 - m2 = -2p1*p4
+          t=-2*p13
+          u=-2*p23
+          ggbornplanar1=(u/(t*(s**2))*(t**2 + u**2) 4*(xm2/s)*(u/t) - 4*(xm2**2/t**2))
+          ggbornplanar2=(t/(u*(s**2))*(u**2 + t**2) 4*(xm2/s)*(t/u) - 4*(xm2**2/u**2))
+          rhoweight=ggbornplanar1/(ggbornplanar1+ggbornplanar2)
+        endif
+
+        
 c gluon fusion
 c the following expression equals the amplitude squared, summed
 c and averaged over spins and colours. It is equal to h^(0)_gg
