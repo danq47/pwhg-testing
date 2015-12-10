@@ -1,0 +1,34 @@
+
+The scale choice is POWHEG is usually a function of the UNDERLYING
+BORN kinematics.  That means, for example, that in W or Z or H
+production the pt of the boson is not available for scale setting
+purposes. There is, however, a way to set the scale in a totally
+generic way (but you should know what you are doing, if you are trying
+this!)
+
+If you want that the scale for real events is set using the real
+kinematics, set the flag:
+
+btlscalereal 1
+
+in the powheg.input file. In this case the scale can be set using real
+kinematics for both real events and their subtraction terms. If you
+want to have subtraction terms evaluated at their physical scale (that
+corresponds again to the underlying Born scale) then set also
+
+flg_btlscalect 1
+
+In order to exploit these features, you must edit the
+set_fac_ren_scales(muf,mur) subroutine in the user process, and set
+the scales as follows:
+
+   if(flg_btildepart .eq. 'b' .or. flg_btildepart .eq. 'c') then
+c here set the scales as a function of the underlying Born momenta, kn_cmpborn(0:3,1:nlegborn) 
+     ...
+   else if(flg_btildepart .eq. 'r') then
+c here set the scales as a function of the real momenta, kn_cmpreal(0:3,1:nlegreal)
+     ...
+   endif
+
+The monenta have dimension: p(0:3), with 0 being the time component. In order to know how the
+partons are labelled, look at the init_processes file in the process dependent directory.
