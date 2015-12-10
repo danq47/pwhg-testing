@@ -5,6 +5,7 @@
       include 'pwhg_st.h'
       include 'pwhg_kn.h'
       include 'pwhg_flg.h'
+      include 'pwhg_rad.h'
       integer nlegs
       parameter (nlegs=nlegborn)
       real * 8 p(0:3,nlegs),bornjk(nlegs,nlegs)
@@ -43,8 +44,8 @@ c t=(p1-p3)^2 - m2 = p1^2 -2p1*p3 + p3^2 - m2 = -2p1*p3 + m2 - m2
 c u=(p1-p4)^2 - m2 = p1^2 -2p1*p4 + p4^2 - m2 = -2p1*p4
           t=-2*p13
           u=-2*p23
-          ggbornplanar1=(u/(t*(s**2))*(t**2 + u**2) 4*(xm2/s)*(u/t) - 4*(xm2**2/t**2))
-          ggbornplanar2=(t/(u*(s**2))*(u**2 + t**2) 4*(xm2/s)*(t/u) - 4*(xm2**2/u**2))
+          ggbornplanar1=(u/(t*(s**2))*(t**2 + u**2) + 4*(xm2/s)*(u/t) - 4*(xm2**2/t**2))
+          ggbornplanar2=(t/(u*(s**2))*(u**2 + t**2) + 4*(xm2/s)*(t/u) - 4*(xm2**2/u**2))
           rhoweight=ggbornplanar1/(ggbornplanar1+ggbornplanar2)
         endif
 

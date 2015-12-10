@@ -25,7 +25,7 @@
       enddo
 
 c Choosing a value for rho
-      if(flg_newsuda)
+      if(flg_newsuda) then
          if(rad_ubornidx.eq.1) then
             if(random().lt.rhoweight) then
                rho_idx=1
