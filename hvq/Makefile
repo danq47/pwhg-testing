@@ -6,14 +6,15 @@ COMPILER=gfortran
 PDF=native
 #Choose Analysis: none, B-or-D, top
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
-ANALYSIS=dummy
+ANALYSIS=new
 #ANALYSIS=B-or-D
 ## For static linking uncomment the following
 #STATIC= -static
 #
 ifeq ("$(COMPILER)","gfortran")	
 OBJ=obj-ifort
-F77= gfortran -fno-automatic 	
+F77= gfortran -fno-automatic -ffixed-line-length-132
+#F77= gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
 ## -fbounds-check sometimes causes a weird error due to non-lazy evaluation
 ## of boolean in gfortran.
 #FFLAGS= -Wall -Wimplicit-interface -fbounds-check
@@ -83,7 +84,14 @@ else
 ifeq ("$(ANALYSIS)","top")
 PWHGANAL=pwhg_analysis-top.o 
 else
+ifeq ("$(ANALYSIS","new")
+FASTJET_CONFIG=$(shell which fastjet-config)
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no ) -lstdc++ -lc++
+FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
+PWHGANAL=pwhg_analysis-new.o  fastjetfortran.o
+else
 PWHGANAL=pwhg_analysis-dummy.o
+endif
 endif
 endif
 
@@ -105,7 +113,7 @@ PWHG=pwhg_main.o pwhg_init.o bbinit.o btilde.o lhefwrite.o		\
 	gen_index.o gen_radiation.o Bornzerodamp.o sigremnants.o	\
 	random.o boostrot.o bra_ket_subroutines.o cernroutines.o	\
 	init_phys.o powheginput.o pdfcalls.o sigreal.o sigcollremn.o	\
-	pwhg_bookhist.o pwhg_analysis_driver.o checkmomzero.o		\
+	pwhg_bookhist-multi.o pwhg_analysis_driver.o checkmomzero.o		\
 	setstrongcoupl.o integrator.o newunit.o mwarn.o sigsoftvirt.o	\
 	sigcollsoft.o sigvirtual.o reshufflemoms.o  setlocalscales.o    \
         validflav.o mint_upb.o  pwhgreweight.o opencount.o              \
@@ -127,14 +135,14 @@ lhef_analysis:$(LHEF)
 
 # target to read event file, shower events with HERWIG + analysis
 HERWIG=main-HERWIG.o setup-HERWIG-lhef.o herwig.o powheginput.o\
-	pwhg_bookhist.o $(PWHGANAL) lhefread.o opencount.o pdfdummies.o $(FPEOBJ)
+	pwhg_bookhist-multi.o $(PWHGANAL) lhefread.o opencount.o pdfdummies.o $(FPEOBJ)
 
 main-HERWIG-lhef: $(HERWIG)
 	$(FF) $(patsubst %,$(OBJ)/%,$(HERWIG))  $(LIBSFASTJET)  $(STATIC) -o $@
 
 # target to read event file, shower events with PYTHIA + analysis
 PYTHIA=main-PYTHIA.o setup-PYTHIA-lhef.o pythia.o boostrot.o powheginput.o \
-	pwhg_bookhist.o $(PWHGANAL) lhefread.o newunit.o pdfdummies.o		\
+	pwhg_bookhist-multi.o $(PWHGANAL) lhefread.o newunit.o pdfdummies.o		\
 	pwhg_analysis_driver.o random.o cernroutines.o opencount.o	\
 	$(FPEOBJ)
 
