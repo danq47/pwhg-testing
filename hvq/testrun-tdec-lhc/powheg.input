@@ -8,7 +8,7 @@ iseed 352345 ! uncomment to set the random seed to a value of your choice.
 
 !Heavy flavour production parameters
 
-numevts 200   ! number of events to be generated
+numevts 10000   ! number of events to be generated
 ih1   1        ! hadron 1
 ih2   1        ! hadron 2
 ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
@@ -57,9 +57,9 @@ tdec/sin2cabibbo 0.051
 use-old-grid 1    ! if 1 use old grid if file pwggrids.dat is present (# 1: regenerate)
 use-old-ubound 1  ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; # 1: regenerate
 
-ncall1 100   ! number of calls for initializing the integration grid
+ncall1 10000   ! number of calls for initializing the integration grid
 itmx1 5        ! number of iterations for initializing the integration grid
-ncall2 1000  ! number of calls for computing the integral and finding upper bound
+ncall2 100000  ! number of calls for computing the integral and finding upper bound
 itmx2 5        ! number of iterations for computing the integral and finding upper bound
 foldcsi   1      ! number of folds on x integration
 foldy   1      ! number of folds on y integration

@@ -467,6 +467,7 @@ c
       include 'pwhg_kn.h'
       include 'pwhg_rad.h'
       include 'pwhg_st.h'
+      include 'pwhg_flg.h'
       real * 8 t
       real * 8 x,y,x1b,x2b
       real * 8 xlr,q2,xlam2c,kt2max,unorm,sborn
@@ -477,9 +478,19 @@ c
       common/cdfxmin/xmin
       real * 8 tmax
       common/ctmax/tmax
-      real * 8 random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad
+      real * 8 random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad,factor
       external random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad
       unorm=rad_norms(rad_kinreg,rad_ubornidx)
+
+c calculate 'factor' i.e. factor = B1(2)/(B1+B2) for rho=1(2)
+      if(rho_idx.eq.1) then
+         factor=rhoweight
+      elseif(rho_idx.eq.2) then
+         factor=(1d0-rhoweight)
+      else
+         factor=1d0
+      endif
+
       sborn=kn_sborn
       x1b=kn_xb1
       x2b=kn_xb2
