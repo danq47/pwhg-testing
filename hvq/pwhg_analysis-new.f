@@ -83,13 +83,13 @@ c hardest, 2nd hardest jet rapidity in the ttbar-rapidity=0 frame
       call bookupeqbins('rapidity-j2-minus-rapidity-ttbar',1d-1,-4d0,4d0)
 
 c azimuthal angles. phi (the function azi(p)) is defined between -pi and pi
-      call bookupeqbins('phi-t',1d-1,-3.2d0,3.2d0)
-      call bookupeqbins('phi-tbar',1d-1,-3.2d0,3.2d0)
-      call bookupeqbins('phi-j1',1d-1,-3.2d0,3.2d0)
+c       call bookupeqbins('phi-t',1d-1,-3.2d0,3.2d0)
+c       call bookupeqbins('phi-tbar',1d-1,-3.2d0,3.2d0)
+c       call bookupeqbins('phi-j1',1d-1,-3.2d0,3.2d0)
 
 c azimuthal angle of the ttbar system i.e. the top and the anti top considered together (not the same as below - think about it)
 c without showering, this should be equivalent to phi-j1
-      call bookupeqbins('phi-t-tbar',1d-1,-3.2d0,3.2d0)
+c       call bookupeqbins('phi-t-tbar',1d-1,-3.2d0,3.2d0)
 
 c angular separation of the top and the anti-top
       call bookupeqbins('delta-phi-t-tbar',1d-1,0d0,3.2d0)
@@ -120,20 +120,22 @@ c angular separation of the top and the anti-top
       integer mjets,jetvec(maxtracks)
       logical   isForClustering(maxtracks)
       real * 8 j_kt(maxjets),j_eta(maxjets),j_rap(maxjets),
-     1     j_phi(maxjets),j_p(4,maxjets)
+     1     j_phi(maxjets),j_p(4,maxjets),y_t,y_tbar
       integer j,id,i_top,i_atop,i_bfromtop,i_abfromatop,
      1     i_wp,i_wm,i_lwp,i_lwm,i_nuwp,i_nuwm,i_bjet,i_abjet,jhep,
      1     i_part,njets20,njets30,njets40
       real * 8 mtop,mtb,mwp,mwm,mb,mbb,p_bmax,e_bmax,xb,
      1     p_bbmax,e_bbmax,xbb,ewp,pwp,ewm,pwm,xw,
      2     dy,deta,dphi,dr,cth1,cth2
-      integer jcth1
+      integer jcth1,i_jets,ixx,jzz,qxx,jet_index
+      integer jet_position(maxjets)
       real * 8 w(4),pb(4),ptb
       real * 8 prodvec2,powheginput
+      real * 8 azi,deltaphi
       logical sonofid
       external sonofid
       integer in_jet
-      external in_jet
+      external in_jet,azi,deltaphi
       integer ngenerations,inotfound,iprodrad
       common/cngenerations/ngenerations
       character * 2 digit(20)
@@ -342,6 +344,76 @@ c            endif
       i_bjet = in_jet(i_bfromtop,jetvec)
       i_abjet = in_jet(i_abfromatop,jetvec)
 
+c We now have mjets number of jets, however, some of these are b-jets.
+c For our analysis, we sometimes want to only see the non b-jets, so this piece of code
+c picks out the position of the 3 hardest non-bjets (at most - sometimes less than this if the jets are too soft to be picked up)
+c This runs into a problem when we do hadronisation, as the b hadrons are no longer picked up properly, however we can just turn this off for the moment
+
+
+c jet_postition starts as an array of 1..maxjets, then any b jets are set to zero, then we shift the following entries up
+c So if we have 4 jets, and a b-jet as the second hardest jet then jet_position will go
+c step 1 -> [1,2,3,4]
+c step 2 -> [1,0,3,4]
+c step 3 -> [1,3,4]
+c Therefore, the 3 hardest non-b jets are located at jets numbers 1,3, and 4
+c which can be easily accesed as jet_position(1),jet_position(2), and jet_position_(3)
+c so now, the rapidity of say the 2nd hardest non b jet is given by j_rap(jet_position(2))
+
+c first set the position of the b jets to zero
+      do i_jets=1,maxjets
+         jet_position(i_jets)=i_jets
+         if(i_jets.eq.i_bjet.or.i_jets.eq.i_abjet) then
+            jet_position(i_jets)=0
+         endif
+      enddo
+c Next, if there are no zeroes (i.e. neither of the b-jets are the hardest jets) then we simply take the first n jets
+      if(i_bjet.eq.0.and.i_abjet.eq.0) then
+         continue
+c if there is only one zero, we only need to shift the indices in the array once
+      elseif(i_bjet.eq.0.and.i_abjet.ne.0) then
+         jet_index=1
+         do jzz=1,maxjets
+            if(jet_position(jzz).eq.0) then
+               jet_index=jzz
+            endif
+         enddo
+       
+         do jzz=jet_index,maxjets-1
+            jet_position(jzz)=jet_position(jzz+1)
+         enddo
+      elseif(i_bjet.ne.0.and.i_abjet.eq.0) then
+         jet_index=1
+         do jzz=1,maxjets
+            if(jet_position(jzz).eq.0) then
+               jet_index=jzz
+            endif
+         enddo
+       
+         do jzz=jet_index,maxjets-1
+            jet_position(jzz)=jet_position(jzz+1)
+         enddo
+      else
+c now the (ususal) case where both the b jets are in the in the list of hardest jets
+c We delete the two zeroes
+         do qxx=1,2
+            jet_index=1
+            do jzz=1,maxjets+1-qxx
+               if(jet_position(jzz).eq.0) then
+                  jet_index=jzz
+               endif
+            enddo
+       
+            do jzz=jet_index,maxjets-qxx
+               jet_position(jzz)=jet_position(jzz+1)
+            enddo
+         enddo
+      endif
+
+      call getyetaptmass(p_top,y,eta,pt,mass)
+      y_t=y
+      call getyetaptmass(p_tb,y,eta,pt,mass)
+      y_tbar=y
+
       njets20 = 0
       njets30 = 0
       njets40 = 0
@@ -362,147 +434,53 @@ c            endif
       call filld('Njets-pt30',dble(njets30),dsig)
       call filld('Njets-pt40',dble(njets40),dsig)
 
+c transverse momentum of the n-th hardest jet
+      call filld('pT-j1',j_kt(jet_position(1)),dsig)
+      call filld('pT-j2',j_kt(jet_position(2)),dsig)
+      call filld('pT-j3',j_kt(jet_position(3)),dsig)
+c this below is the pT of the hardest emission as generated by POWHEG (ie not to do with the jet clusetering)
+c Therefore it only gives meaningful results if we don't shower the les houches file
+      call filld('pT-first-emission',sqrt(phep(1,5)**2 + phep(2,5)**2),dsig)
+
+c observables for the top quark
       call getyetaptmass(p_top,y,eta,pt,mass)
-      call filld('t_y',y,dsig)
-      call filld('t_eta',eta,dsig)
-      call filld('t_pt',pt,dsig)
-      call filld('t_m',mass,dsig)
-      call filld('t_zoom_m',mass,dsig)
+      call filld('pT-t',pt,dsig)
+      call filld('mass-t',mass,dsig)
+      call filld('mass-zoom-t',mass,dsig)
+      call filld('rapidity-t',y,dsig)
 
+c observables for the anti-top
       call getyetaptmass(p_tb,y,eta,pt,mass)
-      call filld('tb_y',y,dsig)
-      call filld('tb_eta',eta,dsig)
-      call filld('tb_pt',pt,dsig)
-      call filld('tb_m',mass,dsig)
-      call filld('tb_zoom_m',mass,dsig)
+      call filld('pT-tbar',pt,dsig)
+      call filld('mass-tbar',mass,dsig)
+      call filld('mass-zoom-tbar',mass,dsig)
+      call filld('rapidity-tbar',y,dsig)
 
+c observables for the ttbar system
+      call getyetaptmass(p_top+p_tb,y,eta,pt,mass)
+      call filld('pT-ttbar-all-mttbar',pt,dsig)
+      call filld('invariant-mass-t-tbar',mass,dsig)
+      call filld('rapidity-ttbar',y,dsig)
 
-      call yetaptmassplot(p_b,dsig,'btop')
+c Rapidity asymmetry
+      call filld('yt-ytb',y_t-y_tbar,dsig)
 
-      call yetaptmassplot(p_bb,dsig,'bbtop')
-
-      call yetaptmassplot(p_lwp,dsig,'lwp')
-
-      call yetaptmassplot(p_lwm,dsig,'lwm')
-
-
-      call yetaptmassplot(p_top+p_tb,dsig,'ttb')
-
-
-      if(iprodrad.eq.1) then
-         call yetaptmassplot(p_top+p_tb,dsig,'ttb-radPY')
-      elseif(iprodrad.eq.2) then
-         call yetaptmassplot(p_top+p_tb,dsig,'ttb-radPW')
+c Rapidity of the jets
+      if(j_kt(jet_position(1)).ne.0) then
+         call filld('y-j1',j_rap(jet_position(1)),dsig)
+         call filld('rapidity-j1-minus-rapidity-ttbar',j_rap(jet_position(1))-y,dsig)
+c          call filld('phi-j1',j_phi(jet_position(1)),dsig)
+      endif
+      if(j_kt(jet_position(2)).ne.0) then
+         call filld('y-j2',j_rap(jet_position(2)),dsig)
+         call filld('rapidity-j2-minus-rapidity-ttbar',j_rap(jet_position(2))-y,dsig)
       endif
 
-      call getyetaptmass(p_lwp+p_lwm,y,eta,pt,mass)
-      call filld('m_lp_lm',mass,dsig)
-
-      call getyetaptmass(p_lwp+p_nuwp,y,eta,pt,mass)
-      call filld('mT_lp_MET',mass,dsig)
-
-      call getyetaptmass(p_lwm+p_nuwm,y,eta,pt,mass)
-      call filld('mT_lm_MET',mass,dsig)
-
-      if(i_bjet.ne.0) then
-         call getyetaptmass(p_lwp+j_p(:,i_bjet),y,eta,pt,mass)
-         call filld('m_lp_jb',mass,dsig)
-      endif
-
-      if(i_abjet.ne.0) then
-         call getyetaptmass(p_lwm+j_p(:,i_abjet),y,eta,pt,mass)
-         call filld('m_lm_jbbar',mass,dsig)
-      endif
-
-c b W mass
-      call getyetaptmass(p_wp+p_b,y,eta,pt,mass)
-      call filld('m_wp_b',mass,dsig)
-
-c bb W- mass
-      call getyetaptmass(p_wm+p_bb,y,eta,pt,mass)
-      call filld('m_wm_bb',mass,dsig)
-
-c b-jet W mass
-      if(i_bjet.ne.0) then
-         call getyetaptmass(p_wp+j_p(:,i_bjet),y,eta,pt,mass)
-         call filld('m_wp_bj',mass,dsig)
-      endif
-
-c bb-jet W- mass
-      if(i_abjet.ne.0) then
-         call getyetaptmass(p_wm+j_p(:,i_abjet),y,eta,pt,mass)
-         call filld('m_wm_bbj',mass,dsig)
-      endif
-      
-c b frag: p_top.p_b/(p_top.p_b_max)
-      mtop=sqrt(p_top(4)**2-p_top(1)**2-p_top(2)**2-p_top(3)**2)
-      mwp=sqrt(p_wp(4)**2-p_wp(1)**2-p_wp(2)**2-p_wp(3)**2)
-      mb=sqrt(abs(p_b(4)**2-p_b(1)**2-p_b(2)**2-p_b(3)**2))
-      p_bmax=sqrt((mtop**2-(mb+mwp)**2)*(mtop**2-(mb-mwp)**2))/(2*mtop)
-      e_bmax=sqrt(p_bmax**2+mb**2)
-      xb=(p_top(4)*p_b(4)-p_top(1)*p_b(1)
-     1     -p_top(2)*p_b(2)-p_top(3)*p_b(3))/(mtop*e_bmax)
-      call filld('bfrag',xb,dsig)
-      call boost2reson4(p_top,1,p_wp,w)
-      call boost2reson4(p_top,1,p_b,pb)
-      ptb=sqrt( abs( (pb(1)**2+pb(2)**2+pb(3)**2)
-     1     -(pb(1)*w(1)+pb(2)*w(2)+pb(3)*w(3))**2/
-     1     (w(1)**2+w(2)**2+w(3)**2)))
-      call filld('bptdec',ptb,dsig)
-
-c bbar frag: p_top.p_bb/(p_top.p_bb_max)
-      mtb=sqrt(p_tb(4)**2-p_tb(1)**2-p_tb(2)**2-p_tb(3)**2)
-      mwm=sqrt(p_wm(4)**2-p_wm(1)**2-p_wm(2)**2-p_wm(3)**2)
-      mbb=sqrt(abs(p_bb(4)**2-p_bb(1)**2-p_bb(2)**2-p_bb(3)**2))
-      p_bbmax=sqrt((mtb**2-(mbb+mwm)**2)*(mtb**2-(mbb-mwm)**2))/(2*mtb)
-      e_bbmax=sqrt(p_bbmax**2+mbb**2)
-      xbb=(p_tb(4)*p_bb(4)-p_tb(1)*p_bb(1)
-     1     -p_tb(2)*p_bb(2)-p_tb(3)*p_bb(3))/(mtb*e_bbmax)
-      call filld('bbfrag',xbb,dsig)
-      call boost2reson4(p_tb,1,p_wm,w)
-      call boost2reson4(p_tb,1,p_bb,pb)
-      ptb=sqrt( abs( (pb(1)**2+pb(2)**2+pb(3)**2)
-     1     -(pb(1)*w(1)+pb(2)*w(2)+pb(3)*w(3))**2/
-     1     (w(1)**2+w(2)**2+w(3)**2)) )
-      call filld('bbptdec',ptb,dsig)
-
-c W momentum relative to its maximum in top rest frame
-      ewp=(p_top(4)*p_wp(4)-p_top(1)*p_wp(1)
-     1     -p_top(2)*p_wp(2)-p_top(3)*p_wp(3))/mtop
-      pwp=sqrt(ewp**2-mwp**2)
-      xw=pwp/p_bmax
-      call filld('wpmom',xw,dsig)
-
-c W momentum relative to its maximum in top rest frame
-      ewm=(p_tb(4)*p_wm(4)-p_tb(1)*p_wm(1)
-     1     -p_tb(2)*p_wm(2)-p_tb(3)*p_wm(3))/mtb
-      pwm=sqrt(ewm**2-mwm**2)
-      xw=pwm/p_bbmax
-      call filld('wmmom',xw,dsig)
-
-      call deltaplot(p_lwp,p_lwm,dsig,'lwp-lwm','')
-
-c theta1 and theta2 from Bernreuther
-      call boost2reson4(p_top+p_tb,1,p_top,ptzmf)
-      call boost2reson4(p_top+p_tb,1,p_lwp,plzmf)
-      call boost2reson4(ptzmf,1,plzmf,w)
-      cth1 = (w(1)*ptzmf(1)+w(2)*ptzmf(2)+w(3)*ptzmf(3))/
-     1 sqrt((w(1)**2+w(2)**2+w(3)**2)
-     2     *(ptzmf(1)**2+ptzmf(2)**2+ptzmf(3)**2))
-
-
-      call boost2reson4(p_top+p_tb,1,p_tb,ptzmf)
-      call boost2reson4(p_top+p_tb,1,p_lwm,plzmf)
-      call boost2reson4(ptzmf,1,plzmf,w)
-      cth2 = (w(1)*ptzmf(1)+w(2)*ptzmf(2)+w(3)*ptzmf(3))/
-     1 sqrt((w(1)**2+w(2)**2+w(3)**2)
-     2     *(ptzmf(1)**2+ptzmf(2)**2+ptzmf(3)**2))
-
-
-      jcth1 = int((cth1+1) * 5) + 1
-      if(jcth1.eq.0) jcth1=1
-      if(jcth1.eq.11) jcth1=10
-      call filld("cth1cth2-"//digit(jcth1),cth2,dsig)
+c Angular plots
+c       call filld('phi-t',azi(p_top),dsig)
+c       call filld('phi-tbar',azi(p_tb),dsig)
+c       call filld('phi-t-tbar',azi(p_top+p_tb),dsig) ! should be equivalent to phi_j1 for no showering etc, as the ttbar system only recoils off the hardest jet
+      call filld('delta-phi-t-tbar',deltaphi(azi(p_top),azi(p_tb)),dsig)
 
       end
 
@@ -534,6 +512,14 @@ c theta1 and theta2 from Bernreuther
      1 -vec1(2)*vec2(2)-vec1(3)*vec2(3)
       end
 
+      function deltaphi(azi1,azi2)
+      implicit none
+      real * 8 pi
+      parameter(pi = 3.141592653589793D0)
+      real * 8 deltaphi,azi1,azi2
+      deltaphi = abs(azi1-azi2)
+      deltaphi = min(deltaphi,2*pi - deltaphi)
+      end
 
       subroutine getyetaptmass(p,y,eta,pt,mass)
       implicit none
@@ -744,8 +730,8 @@ c     p1 and p2 in azi and pseudorapidity
       real * 8 pi,pi2
       parameter(pi = 3.141592653589793D0, pi2 = 9.869604401089358D0)
       real * 8 azi,p(0:3)
-      azi = atan(p(2)/p(1))
-      if (p(1).lt.0d0) then
+      azi = atan(p(1)/p(0))
+      if (p(0).lt.0d0) then
          if (azi.gt.0d0) then               
             azi = azi - pi
          else
@@ -753,6 +739,7 @@ c     p1 and p2 in azi and pseudorapidity
          endif
       endif    
       end
+
 
       function pseudorapidity(p)
       implicit none
@@ -788,6 +775,10 @@ C - Initialize arrays and counters for output jets
       ntracks=0
       pjet = 0
       pj = 0
+      kt = 0
+      eta = 0
+      rap = 0
+      phi = 0
 C - Extract final state particles to feed to jet finder
       do j=1,nhep
          if(.not.isForClustering(j)) cycle
