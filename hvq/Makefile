@@ -13,8 +13,8 @@ ANALYSIS=new
 #
 ifeq ("$(COMPILER)","gfortran")	
 OBJ=obj-ifort
-F77= gfortran -fno-automatic -ffixed-line-length-132
-#F77= gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
+#F77= gfortran -fno-automatic -ffixed-line-length-132
+F77= gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
 ## -fbounds-check sometimes causes a weird error due to non-lazy evaluation
 ## of boolean in gfortran.
 #FFLAGS= -Wall -Wimplicit-interface -fbounds-check
