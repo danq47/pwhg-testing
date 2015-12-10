@@ -42,63 +42,57 @@ c  pwhgfill  :  fills the histograms with data
 
       call inihists
 
+c number of jets with a pT greater than X
       call bookupeqbins('Njets-pt10'  ,1d0,-0.5d0,10.5d0)
       call bookupeqbins('Njets-pt20'  ,1d0,-0.5d0,10.5d0)
       call bookupeqbins('Njets-pt30'  ,1d0,-0.5d0,10.5d0)
       call bookupeqbins('Njets-pt40'  ,1d0,-0.5d0,10.5d0)
 
-      do j=1,9
-         if(j.eq.1) then
-            prefix='t'
-         elseif(j.eq.2) then
-            prefix='tb'
-         elseif(j.eq.3) then
-            prefix='btop'
-         elseif(j.eq.4) then
-            prefix='bbtop'
-         elseif(j.eq.5) then
-            prefix='lwp'
-         elseif(j.eq.6) then
-            prefix='lwm'
-         elseif(j.eq.7) then
-            prefix='ttb'
-          elseif(j.eq.8) then
-            prefix='ttb-radPY'
-         elseif(j.eq.9) then
-            prefix='ttb-radPW'
-         endif
-         l=lenocc(prefix)
-         call bookupeqbins(prefix(1:l)//'_y'  ,0.2d0,-4d0,4d0)
-         call bookupeqbins(prefix(1:l)//'_eta',0.2d0,-4d0,4d0)
-         call bookupeqbins(prefix(1:l)//'_pt' ,2d0,0d0,400d0)
-         if(j.eq.1.or.j.eq.2) then
-            call bookupeqbins(prefix(1:l)//'_zoom_m',0.1d0,160d0,180d0)
-         endif
-         call bookupeqbins(prefix(1:l)//'_m'  ,2.5d0,0d0,500d0)
-      enddo
-      
-      call bookupeqbins('m_lp_lm',2d0,0d0,400d0)
-      call bookupeqbins('mT_lp_MET',2d0,0d0,400d0)
-      call bookupeqbins('mT_lm_MET',2d0,0d0,400d0)
-      call bookupeqbins('m_lp_jb',2d0,0d0,400d0)
-      call bookupeqbins('m_lm_jbbar',2d0,0d0,400d0)
-      call bookupeqbins('m_wp_b',2d0,0d0,400d0)
-      call bookupeqbins('m_wm_bb',2d0,0d0,400d0)
-      call bookupeqbins('m_wp_bj',2d0,0d0,400d0)
-      call bookupeqbins('m_wm_bbj',2d0,0d0,400d0)
-      call bookupeqbins('bfrag',0.01d0,0d0,1d0)
-      call bookupeqbins('bptdec',1d0,0d0,90d0)
-      call bookupeqbins('bbptdec',1d0,0d0,90d0)
-      call bookupeqbins('bbfrag',0.01d0,0d0,1d0)
-      call bookupeqbins('wpmom',0.01d0,0d0,1d0)
-      call bookupeqbins('wmmom',0.01d0,0d0,1d0)
-      call bookupeqbins('lwp-lwm-dy',0.2d0,-4d0,4d0)
-      call bookupeqbins('lwp-lwm-deta',0.2d0,-4d0,4d0)
-      call bookupeqbins('lwp-lwm-delphi',pi/10,0d0,pi)
-      call bookupeqbins('lwp-lwm-dr',0.2d0,0d0,8d0)
-      do j=1,10
-         call bookupeqbins('cth1cth2-'//digit(j),0.2d0,-1d0,1d0)
-      enddo
+c pT of the hardest, second hardest, etc jet
+      call bookupeqbins('pT-j1',1d0,10d0,300d0)
+      call bookupeqbins('pT-first-emission',1d0,0d0,300d0)
+      call bookupeqbins('pT-j2',1d0,10d0,300d0)
+      call bookupeqbins('pT-j3',1d0,10d0,300d0)
+
+c observables for the top quark      
+      call bookupeqbins('pT-t',10d0,0d0,300d0)
+      call bookupeqbins('mass-t',10d0,0d0,300d0)
+      call bookupeqbins('mass-zoom-t',1d-1,160d0,180d0)
+      call bookupeqbins('rapidity-t',1d-1,-4d0,4d0)
+
+c observables for the antitop
+      call bookupeqbins('pT-tbar',10d0,0d0,300d0)
+      call bookupeqbins('mass-tbar',10d0,0d0,300d0)
+      call bookupeqbins('mass-zoom-tbar',1d-1,160d0,180d0)
+      call bookupeqbins('rapidity-tbar',1d-1,-4d0,4d0)
+
+c observables for the ttbar system
+      call bookupeqbins('pT-ttbar-all-mttbar',1d0,0d0,300d0)
+      call bookupeqbins('invariant-mass-t-tbar',10d0,0d0,1000d0)
+      call bookupeqbins('rapidity-ttbar',1d-1,-4d0,4d0)
+
+c rapitdity asymmetry
+      call bookupeqbins('yt-ytb',1d-1,-4d0,4d0)
+
+c rapidity of the jets
+      call bookupeqbins('y-j1',1d-1,-4d0,4d0)
+      call bookupeqbins('y-j2',1d-1,-4d0,4d0)
+
+c hardest, 2nd hardest jet rapidity in the ttbar-rapidity=0 frame
+      call bookupeqbins('rapidity-j1-minus-rapidity-ttbar',1d-1,-4d0,4d0)
+      call bookupeqbins('rapidity-j2-minus-rapidity-ttbar',1d-1,-4d0,4d0)
+
+c azimuthal angles. phi (the function azi(p)) is defined between -pi and pi
+      call bookupeqbins('phi-t',1d-1,-3.2d0,3.2d0)
+      call bookupeqbins('phi-tbar',1d-1,-3.2d0,3.2d0)
+      call bookupeqbins('phi-j1',1d-1,-3.2d0,3.2d0)
+
+c azimuthal angle of the ttbar system i.e. the top and the anti top considered together (not the same as below - think about it)
+c without showering, this should be equivalent to phi-j1
+      call bookupeqbins('phi-t-tbar',1d-1,-3.2d0,3.2d0)
+
+c angular separation of the top and the anti-top
+      call bookupeqbins('delta-phi-t-tbar',1d-1,0d0,3.2d0)
       end
 
       subroutine analysis(dsig0)
