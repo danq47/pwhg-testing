@@ -11,8 +11,8 @@
       integer rflav(nlegreal)
       character * 2 prc
       common/process/prc
-      real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2
-      integer ifl
+      real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2,p_pup(0:4,nlegreal)
+      integer ifl,ixx
       real * 8 dotp,fppx
       external dotp,fppx
 c compute mnr invariants
@@ -32,6 +32,13 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
       if(rflav(1).eq.0.and.rflav(2).eq.0) then
          prc='gg'
          ifl=0
+         do ixx=0,4
+            p_pup(0,ixx)=p(1,ixx)      !px
+            p_pup(1,ixx)=p(2,ixx)      !py
+            p_pup(2,ixx)=p(3,ixx)      !pz
+            p_pup(3,ixx)=p(0,ixx)      !E
+            p_pup(4,ixx)=sqrt(p(0,ixx)**2 - p(1,ixx)**2 - p(2,ixx)**2 - p(3,ixx)**2 )   !m
+         enddo
       elseif(rflav(1).gt.0.and.rflav(2).lt.0) then
          prc='qq'
          ifl=1
