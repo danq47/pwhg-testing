@@ -12,6 +12,7 @@
       character * 2 prc
       common/process/prc
       real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2,p_pup(0:4,nlegreal)
+      REAL * 8 T125,T152,T512,T215,T251,T521,TTOT
       integer ifl,ixx
       real * 8 dotp,fppx
       external dotp,fppx
@@ -32,13 +33,25 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
       if(rflav(1).eq.0.and.rflav(2).eq.0) then
          prc='gg'
          ifl=0
-         do ixx=0,4
-            p_pup(0,ixx)=p(1,ixx)      !px
-            p_pup(1,ixx)=p(2,ixx)      !py
-            p_pup(2,ixx)=p(3,ixx)      !pz
-            p_pup(3,ixx)=p(0,ixx)      !E
-            p_pup(4,ixx)=sqrt(p(0,ixx)**2 - p(1,ixx)**2 - p(2,ixx)**2 - p(3,ixx)**2 )   !m
-         enddo
+         if(flg_newsuda) then
+            do ixx=0,4
+               p_pup(0,ixx)=p(1,ixx)      !px
+               p_pup(1,ixx)=p(2,ixx)      !py
+               p_pup(2,ixx)=p(3,ixx)      !pz
+               p_pup(3,ixx)=p(0,ixx)      !E
+               p_pup(4,ixx)=sqrt(p(0,ixx)**2 - p(1,ixx)**2 - p(2,ixx)**2 - p(3,ixx)**2 )   !m
+            enddo
+            call ggplanar(p_pup(:,1),1,p_pup(:,2),1,p_pup(:,5),1,
+     1            p_pup(:,3),p_pup(:,4),xm2,
+     2            t512,t152,t125,t521,t251,t215)
+            ttot=t512+t152+t125+t521+t251+t215
+            rhorweight(1)=t512/ttot
+            rhorweight(2)=t152/ttot
+            rhorweight(3)=t125/ttot
+            rhorweight(4)=t521/ttot
+            rhorweight(5)=t251/ttot
+            rhorweight(6)=t215/ttot
+         endif
       elseif(rflav(1).gt.0.and.rflav(2).lt.0) then
          prc='qq'
          ifl=1
