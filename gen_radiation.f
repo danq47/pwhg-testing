@@ -627,7 +627,12 @@ c that some pdf vanish (typically heavy flavour pdf's)
       kn_azi=2*pi*random()
       ubound=born*pwhg_upperb_rad()*unorm*ufct
       call gen_real_phsp_isr_rad
-      call sigreal_rad(sig)
+c sigreal_rad2 is the same as sigreal_rad, except it reweights R^{gg} so that we only get R^{gg,rho_r}      
+      if(flg_newsuda) then
+         call sigreal_rad2(sig)
+      else
+         call sigreal_rad(sig)
+      endif
       value=sig*kn_jacreal
       if(value.gt.ubound) then
          call increasecnt(
