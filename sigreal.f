@@ -905,6 +905,16 @@ c            if(equivto(alr).lt.0.or..not.computed(equivto(alr))) then
                endif
                flst_cur_alr = alr
                call realgr(flst_alr(1,alr),kn_cmpreal,rr(alr))
+c Here is where we reweight the gg->tt~+g contribution to the Real cross section
+               if(flg_newsuda) then
+                  if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then
+                     if(rho_idx.eq.1) then
+                        rr(alr)=rr(alr)*(rhorweight(1)+rhorweight(2)+rhorweight(3))
+                     elseif(rho_idx.eq.2) then
+                        rr(alr)=rr(alr)*(rhorweight(4)+rhorweight(5)+rhorweight(6))
+                     endif
+                  endif
+               endif
                sumdijinv=0
                do k=1,flst_allreg(1,0,alr)
                   sumdijinv=sumdijinv
