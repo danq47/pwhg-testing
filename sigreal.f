@@ -787,6 +787,187 @@ c supply Born zero damping factor, if required
       enddo
       end
 
+      subroutine sigreal_rad2(sig)
+      implicit none
+      real * 8 sig
+      include 'nlegborn.h'
+      include 'pwhg_flst.h'
+      include 'pwhg_kn.h'
+      include 'pwhg_rad.h'
+      include 'pwhg_flg.h'
+      include 'pwhg_par.h'
+      include 'pwhg_pdf.h'
+      real * 8 rr(maxalr),rc(maxalr),rs(maxalr),rcs(maxalr)
+      integer alr,alrpr,iret,em
+      integer nmomset,emitter
+      parameter (nmomset=10)
+      real * 8 res(nmomset,maxalr),preal(0:3,nlegreal,nmomset),cprop
+      integer equivto(maxalr)
+      real * 8 equivcoef(maxalr)
+      integer j,k
+      real * 8 sumdijinv,dampfac,r
+      real * 8 pdf1(-pdf_nparton:pdf_nparton),
+     1         pdf2(-pdf_nparton:pdf_nparton)
+      real * 8 ptsq,pwhg_pt2,dijterm
+      logical computed(maxalr)
+      logical condition
+      logical ini
+      data ini/.true./
+      save ini,equivto,equivcoef
+      external pwhg_pt2,dijterm
+      if(ini) then
+         do alr=1,flst_nalr
+            equivto(alr)=-1
+         enddo
+         if(flg_smartsig) then
+            flg_in_smartsig = .true.
+            call randomsave
+c     generate "nmomset" random real-phase space configurations
+            call fillmomenta(nlegreal,nmomset,kn_masses,preal)
+            do alr=1,flst_nalr
+               if(kn_emitter.eq.0) then
+                  kn_resemitter=0
+               else
+                  kn_resemitter=flst_alrres(nlegreal,alr)
+               endif
+               do j=1,nmomset
+                  call realgr(
+     1                 flst_alr(1,alr),preal(0,1,j),res(j,alr))
+               enddo
+               call compare_vecs(nmomset,alr,res,1,alrpr,cprop,iret)
+               if(iret.eq.0) then
+c     they are equal
+                  equivto(alr)=alrpr
+                  equivcoef(alr)=1
+               elseif(iret.eq.1) then
+c     they are proportional
+                  equivto(alr)=alrpr
+                  equivcoef(alr)=cprop
+               else
+c     < 0 for unequal:
+                  equivto(alr)=-1
+               endif
+            enddo
+            call randomrestore
+         endif
+         flg_in_smartsig = .false.
+         ini=.false.
+      endif
+c End initialization phase; compute graphs
+      do alr=1,flst_nalr
+         rr(alr)=0
+      enddo
+      call pdfcall(1,kn_x1,pdf1)
+      call pdfcall(2,kn_x2,pdf2)
+      if(flg_withdamp) then
+         call collrad(rc)
+         call collsoftrad(rcs)
+         call softrad(rs)
+      endif
+      do alr=1,flst_nalr
+         computed(alr)=.false.
+      enddo
+      do j=1,rad_alr_nlist
+         alr=rad_alr_list(j)
+         em=flst_emitter(alr)
+c check if emitter corresponds to current radiation region (i.e. rad_kinreg):
+         if((rad_kinreg.eq.1.and.em.le.2).or.(em.gt.2.and.
+     #       flst_lightpart+rad_kinreg-2.eq.em))then
+c check if we have a g -> Q Qbar splitting below threshold:
+            if(em.gt.0) then
+               if(flst_alr(em,alr)+flst_alr(nlegreal,alr).eq.0.and.
+     #abs(flst_alr(em,alr)).ge.4) then
+                  ptsq=pwhg_pt2()
+                  if(abs(flst_alr(em,alr)).eq.4
+     #  .and.ptsq.lt.rad_charmthr2.or.
+     # abs(flst_alr(em,alr)).eq.5.and.ptsq.lt.rad_bottomthr2) then
+                     rr(alr)=0
+                     goto 995
+                  endif
+               endif
+            endif
+c ----------------
+c Gimnastic to avoid problem with non-lazy evaluation of logical
+c expressions in gfortran; replaces the line
+c            if(equivto(alr).lt.0.or..not.computed(equivto(alr))) then
+            if(equivto(alr).lt.0) then
+               condition=.true.
+            elseif(.not.computed(equivto(alr))) then
+               condition=.true.
+            else
+               condition=.false.
+            endif
+            if(condition) then
+               if(kn_emitter.eq.0) then
+                  kn_resemitter=0
+               else
+                  kn_resemitter=flst_alrres(nlegreal,alr)
+               endif
+               flst_cur_alr = alr
+               call realgr(flst_alr(1,alr),kn_cmpreal,rr(alr))
+               sumdijinv=0
+               do k=1,flst_allreg(1,0,alr)
+                  sumdijinv=sumdijinv
+     #+1/dijterm(flst_allreg(1,k,alr),flst_allreg(2,k,alr),alr)
+               enddo
+               rr(alr)=rr(alr)/dijterm(em,nlegreal,alr)/sumdijinv
+               if(em.gt.2) then
+                  if(flg_doublefsr) then
+c    supply a factor E_em/(E_em+E_rad), times 2 if both gluons
+                     rr(alr)=rr(alr)
+     1                    *kn_cmpreal(0,kn_emitter)**par_2gsupp/
+     2                    (kn_cmpreal(0,kn_emitter)**par_2gsupp
+     3                    +kn_cmpreal(0,nlegreal)**par_2gsupp)
+                     if(flst_alr(kn_emitter,alr).eq.0.and.
+     1                    flst_alr(nlegreal,alr).eq.0) then
+                        rr(alr)=rr(alr)*2
+                     endif
+                  else
+c     If the emitter is in the final state, and if the emitted and emitter
+c     are both gluons, supply a factor E_em/(E_em+E_rad) * 2
+                     if(flst_alr(kn_emitter,alr).eq.0.and.
+     1                    flst_alr(nlegreal,alr).eq.0) then
+                        rr(alr)=rr(alr)*2
+     1                       *kn_cmpreal(0,kn_emitter)**par_2gsupp/
+     2                       (kn_cmpreal(0,kn_emitter)**par_2gsupp
+     3                       +kn_cmpreal(0,nlegreal)**par_2gsupp)
+                     endif
+                  endif
+               endif
+               rr(alr)=rr(alr)*flst_mult(alr)
+c supply Born zero damping factor, if required
+               if(flg_withdamp) then
+                  r=rr(alr)
+                  call bornzerodamp(alr,r,rc(alr),rs(alr),rcs(alr),
+     1                 dampfac)
+                  rr(alr)=rr(alr) * dampfac
+               endif
+               computed(alr)=.true.
+               if(equivto(alr).gt.0) then
+                  rr(equivto(alr))=rr(alr)/equivcoef(alr)
+                  computed(equivto(alr))=.true.
+               endif
+            else
+               rr(alr)=rr(equivto(alr))*equivcoef(alr)
+            endif
+         else
+            rr(alr)=0
+         endif
+ 995     continue
+      enddo
+      sig=0
+      do j=1,rad_alr_nlist
+         alr=rad_alr_list(j)
+         if(rr(alr).ne.0) then
+            rr(alr)=rr(alr)*pdf1(flst_alr(1,alr))*pdf2(flst_alr(2,alr))
+            sig=sig+rr(alr)
+            rad_real_arr(j)=rr(alr)
+         else
+            rad_real_arr(j)=0
+         endif
+      enddo
+      end
+
 
       subroutine sigreal_btl(rr)
       implicit none
