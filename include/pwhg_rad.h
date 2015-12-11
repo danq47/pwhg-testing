@@ -42,7 +42,7 @@ c rhoweight = B1/(B1+B2) - used to calculate rho in Born.f and gen_index
      5     rad_totrm,rad_etotrm,
      6     rad_totbtlgen,rad_etotbtlgen,
      7     rad_totgen,rad_etotgen,
-     8     rad_tot,rad_etot,rhoweight
+     8     rad_tot,rad_etot,rhoweight,rhorweight(6)
 c Grid of the upper bounds of the ratio (R*kn_jacreal/B)/upper_bounding function
 c for each given kinematic region and underlying born
       real * 8 rad_csiynorms(rad_ncsiynormsmx,
@@ -94,7 +94,7 @@ c Current event weight, needed when doing reweghting
      1     rad_csiynorms,rad_norms,rad_btilde_arr,rad_real_arr,
      2     rad_normfact,rad_ptsqmin,rad_charmthr2,rad_bottomthr2,
      3     rad_lamll,rad_xradremn,rad_pt2max,
-     4     rad_branching,rad_currentweight,rhoweight,
+     4     rad_branching,rad_currentweight,rhoweight,rhorweight,
 c     integers
      1     rad_ubornidx,rad_alr_list,rad_alr_nlist,
      2     rad_realidx,rad_realalr,rad_realreg,
