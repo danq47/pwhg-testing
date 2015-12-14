@@ -12,7 +12,7 @@
       character * 2 prc
       common/process/prc
       real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2,p_pup(0:4,nlegreal)
-      REAL * 8 T125,T152,T512,T215,T251,T521,TTOT
+      REAL * 8 t125,t152,t512,t215,t251,t521,ttot
       integer ifl,ixx
       real * 8 dotp,fppx
       external dotp,fppx
@@ -34,7 +34,7 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
          prc='gg'
          ifl=0
          if(flg_newsuda) then
-            do ixx=0,4
+            do ixx=1,5
                p_pup(0,ixx)=p(1,ixx)      !px
                p_pup(1,ixx)=p(2,ixx)      !py
                p_pup(2,ixx)=p(3,ixx)      !pz
