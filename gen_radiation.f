@@ -478,22 +478,14 @@ c
       common/cdfxmin/xmin
       real * 8 tmax
       common/ctmax/tmax
-      real * 8 random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad,factor
+      real * 8 random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad
       external random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad
       unorm=rad_norms(rad_kinreg,rad_ubornidx)
 
-c calculate 'factor' i.e. factor = B1(2)/(B1+B2) for rho=1(2) that we need to raise the upper bound by
+c Bfact = B1(2)/(B1+B2) for rho=1(2) - it is the amount we need to raise the upper bound by
       if(flg_newsuda) then
-         if(rho_idx.eq.1) then
-            factor=rhoweight
-         elseif(rho_idx.eq.2) then
-            factor=(1d0-rhoweight)
-         else
-            factor=1d0
-         endif
-c Raise the normalisation on the upper bounding function by 'factor'
-         if(factor.lt.1d0) then
-            unorm=unorm/factor
+         if(Bfact.lt.1d0) then
+            unorm=unorm/Bfact
          endif
       endif
 
@@ -611,7 +603,7 @@ c since these may be expensive.
       call sigborn_rad(born)
 c Make the replacement B^{f_b} -> B^{f_b,rho}
       if(flg_newsuda) then
-         born=born*factor
+         born=born*Bfact
       endif
       if(born.lt.0) then
          born=0
