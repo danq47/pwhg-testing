@@ -50,7 +50,7 @@ c number of jets with a pT greater than X
 
 c pT of the hardest, second hardest, etc jet
       call bookupeqbins('pT-j1',1d0,10d0,300d0)
-      call bookupeqbins('pT-first-emission',10d0,0d0,1000d0)
+      call bookupeqbins('pT-first-emission',2d0,0d0,500d0)
       call bookupeqbins('gap-fraction',10d0,0d0,1000d0)
       call bookupeqbins('pT-j2',1d0,10d0,300d0)
       call bookupeqbins('pT-j3',1d0,10d0,300d0)

@@ -470,8 +470,8 @@ c
       include 'pwhg_flg.h'
       real * 8 t
       real * 8 x,y,x1b,x2b
-      real * 8 xlr,q2,xlam2c,kt2max,unorm,sborn
-      integer nlc
+      real * 8 xlr,q2,xlam2c,kt2max,unorm,sborn,R1
+      integer nlc,switch
       common/cpt2solve/xlr,q2,kt2max,xlam2c,unorm,sborn,nlc
       real * 8 xmin,rv,xp,xm,chi,tk,uk,ubound,ufct,
      #   value,err,tmp1,tmp2,tmp,rvalue,born,sig
@@ -601,10 +601,6 @@ c extra suppression factor of upper bounding function (may depend upon radiation
 c Veto from upper bound to real value. Count how many vetoes,
 c since these may be expensive.
       call sigborn_rad(born)
-c Make the replacement B^{f_b} -> B^{f_b,rho}
-      if(flg_newsuda) then
-         born=born*Bfact
-      endif
       if(born.lt.0) then
          born=0
       endif
@@ -617,11 +613,13 @@ c that some pdf vanish (typically heavy flavour pdf's)
       kn_y=y
       kn_csi=1-x
       kn_azi=2*pi*random()
-      ubound=born*pwhg_upperb_rad()*unorm*ufct
+c Use B^{f_b,rho}=B^{f_b}*Bfact here instead of B^{f_b}
+      ubound=(born*Bfact)*pwhg_upperb_rad()*unorm*ufct
       call gen_real_phsp_isr_rad
 c sigreal_rad2 is the same as sigreal_rad, except it reweights R^{gg} so that we only get R^{gg,rho_r}      
       if(flg_newsuda) then
-         call sigreal_rad2(sig)
+         call sigreal_rad2(sig,switch)
+         call sigreal_rad(R1)
       else
          call sigreal_rad(sig)
       endif
