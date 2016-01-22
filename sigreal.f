@@ -787,7 +787,7 @@ c supply Born zero damping factor, if required
       enddo
       end
 
-      subroutine sigreal_rad2(sig,switch)
+      subroutine sigreal_rad2(sig)
       implicit none
       real * 8 sig
       include 'nlegborn.h'
@@ -799,7 +799,7 @@ c supply Born zero damping factor, if required
       include 'pwhg_pdf.h'
       real * 8 rr(maxalr),rc(maxalr),rs(maxalr),rcs(maxalr)
       integer alr,alrpr,iret,em
-      integer nmomset,emitter,switch
+      integer nmomset,emitter
       parameter (nmomset=10)
       real * 8 res(nmomset,maxalr),preal(0:3,nlegreal,nmomset),cprop
       integer equivto(maxalr)
@@ -815,9 +815,6 @@ c supply Born zero damping factor, if required
       data ini/.true./
       save ini,equivto,equivcoef
       external pwhg_pt2,dijterm
-c at the beginning, the switch function is always 1
-c If the condition is failed, then it becomes 0
-      switch=1
       if(ini) then
          do alr=1,flst_nalr
             equivto(alr)=-1
@@ -948,11 +945,6 @@ c     are both gluons, supply a factor E_em/(E_em+E_rad) * 2
                   endif
                endif
                rr(alr)=rr(alr)*flst_mult(alr)
-c Calculate the switch function to see whether we should use the old or new Sudakov
-               if(((5d0*rc(alr)*Bfact).gt.rr(alr)).or.((5d0*rs(alr)*Bfact).gt.rr(alr))) then
-               	switch=0
-               endif
-c if switch=1 (regular behaviour) then we use new Sudakov, if switch=0 (bad behaviour) we us old Sudakov
 c supply Born zero damping factor, if required
                if(flg_withdamp) then
                   r=rr(alr)
