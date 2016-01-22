@@ -812,6 +812,7 @@ c supply Born zero damping factor, if required
       logical computed(maxalr)
       logical condition
       logical ini
+      character * 3 prc
       data ini/.true./
       save ini,equivto,equivcoef
       external pwhg_pt2,dijterm
@@ -870,6 +871,21 @@ c End initialization phase; compute graphs
       do j=1,rad_alr_nlist
          alr=rad_alr_list(j)
          em=flst_emitter(alr)
+c Identify which R_{alpha_r} we are dealing with         
+         if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then
+         	prc='gg'
+         elseif(flst_alr(1,alr).gt.0.and.flst_alr(2,alr).eq.0) then
+         	prc='qg'
+         elseif(flst_alr(1,alr).lt.0.and.flst_alr(2,alr).eq.0) then
+         	prc='q~g'
+         elseif(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).gt.0) then
+         	prc='gq'
+         elseif(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).lt.0) then
+         	prc='gq~'
+         else
+         	prc='qq'
+         endif
+
 c check if emitter corresponds to current radiation region (i.e. rad_kinreg):
          if((rad_kinreg.eq.1.and.em.le.2).or.(em.gt.2.and.
      #       flst_lightpart+rad_kinreg-2.eq.em))then
@@ -906,15 +922,33 @@ c            if(equivto(alr).lt.0.or..not.computed(equivto(alr))) then
                flst_cur_alr = alr
                call realgr(flst_alr(1,alr),kn_cmpreal,rr(alr))
 c Here is where we reweight the gg->tt~+g contribution to the Real cross section
+C                if(flg_newsuda) then
+C                   if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then
+C                      if(rho_idx.eq.1) then
+C                         rr(alr)=rr(alr)*(rhorweight(1)+rhorweight(2)+rhorweight(3))
+C                      elseif(rho_idx.eq.2) then
+C                         rr(alr)=rr(alr)*(rhorweight(4)+rhorweight(5)+rhorweight(6))
+C                      endif
+C                   endif
+C                endif
                if(flg_newsuda) then
-                  if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then
-                     if(rho_idx.eq.1) then
-                        rr(alr)=rr(alr)*(rhorweight(1)+rhorweight(2)+rhorweight(3))
-                     elseif(rho_idx.eq.2) then
-                        rr(alr)=rr(alr)*(rhorweight(4)+rhorweight(5)+rhorweight(6))
-                     endif
-                  endif
+               	if(rad_ubornidx.eq.1) then	! only change processes with f_b = gg
+               		if(prc.eq.'gg') then
+               			if(rho_idx.eq.1) then
+               				rr(alr) = rr(alr) * (rhorweight(1)+rhorweight(2)+rhorweight(3))
+               			else
+               				rr(alr) = rr(alr) * (rhorweight(4)+rhorweight(5)+rhorweight(6))
+               			endif
+               		elseif((prc.eq.'qg').or.(prc.eq.'q~g').or.(prc.eq.'gq').or.(prc.eq.'gq~')) then
+               			if(rho_idx.eq.1) then
+               				rr(alr) = rr(alr) * rhorweight(1)
+               			else
+               				rr(alr) = rr(alr) * rhorweight(2)
+               			endif
+               		endif
+               	endif
                endif
+
                sumdijinv=0
                do k=1,flst_allreg(1,0,alr)
                   sumdijinv=sumdijinv

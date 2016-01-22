@@ -614,10 +614,8 @@ c that some pdf vanish (typically heavy flavour pdf's)
       kn_csi=1-x
       kn_azi=2*pi*random()
       call gen_real_phsp_isr_rad
-c sigreal_rad2 is the same as sigreal_rad, except it reweights R^{gg} so that we only get R^{gg,rho_r}      
       if(flg_newsuda) then
-c Use B^{f_b,rho}=B^{f_b}*Bfact here instead of B^{f_b}
-	      ubound=(born*Bfact)*pwhg_upperb_rad()*unorm*ufct
+	      ubound=(born*Bfact)*pwhg_upperb_rad()*unorm*ufct !Use B^{f_b,rho}=B^{f_b}*Bfact rather than B^{f_b}
          call sigreal_rad2(sig)
       else
       	ubound=born*pwhg_upperb_rad()*unorm*ufct
