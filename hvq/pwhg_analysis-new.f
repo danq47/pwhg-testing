@@ -415,6 +415,11 @@ c We delete the two zeroes
       call getyetaptmass(p_tb,y,eta,pt,mass)
       y_tbar=y
 
+      if(((y_t-y_tbar.lt.0).and.(rho.eq.1)).or.(y_t-y_tbar.gt.0).and.(rho.eq.2)) then
+      	counter=counter+1
+      	if(mod(counter,10000).eq.0) then
+      		write(*,*) counter,' events accepted'
+      	endif
       njets20 = 0
       njets30 = 0
       njets40 = 0
@@ -490,6 +495,9 @@ c       call filld('phi-t',azi(p_top),dsig)
 c       call filld('phi-tbar',azi(p_tb),dsig)
 c       call filld('phi-t-tbar',azi(p_top+p_tb),dsig) ! should be equivalent to phi_j1 for no showering etc, as the ttbar system only recoils off the hardest jet
       call filld('delta-phi-t-tbar',deltaphi(azi(p_top),azi(p_tb)),dsig)
+
+
+		endif
 
       end
 

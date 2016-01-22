@@ -56,9 +56,11 @@ c...writes event information to a les houches events file on unit nlf.
       subroutine lhefwritev(nlf)
       implicit none
       integer nlf
+      include 'nlegborn.h'
       include 'LesHouches.h'
       include 'pwhg_flg.h'
       include 'pwhg_lhrwgt.h'
+      include 'pwhg_rad.h'
       integer i,j
       integer, save :: counter=0
       if(flg_noevents) then
@@ -70,7 +72,13 @@ c do not write events, write only the event count
          return
       endif
       write(nlf,'(a)')'<event>'
-      write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup
+      if(rho_idx.eq.1) then
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx
+      elseif(rho_idx.eq.2) then
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx
+      else
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,2,rho_idx
+      endif
       do 200 i=1,nup
          write(nlf,220) idup(i),istup(i),mothup(1,i),
      & mothup(2,i),icolup(1,i),icolup(2,i),(pup(j,i),j=1,5),
@@ -87,7 +95,7 @@ c do not write events, write only the event count
       if(flg_pdfreweight) call lhefwritepdfrw(nlf)
       if(flg_debug) call lhefwritextra(nlf)
       write(nlf,'(a)')'</event>'      
- 210  format(1p,2(1x,i6),4(1x,e12.5))
+ 210  format(1p,2(1x,i6),4(1x,e12.5),2(1x,i4))
  220  format(1p,i8,5(1x,i5),5(1x,e16.9),1x,e12.5,1x,e10.3)
       end
 

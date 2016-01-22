@@ -35,6 +35,13 @@ c it is an event with radiation
          alr=rad_realalr
          em=flst_emitter(alr)
          rad=nlegreal
+         if(rho_idx.eq.1.or.rho_idx.eq.2) then
+            process=1
+         else
+            process=2
+         endif
+         rho=rho_idx
+
          if(em.eq.0) then
             if(kn_y.gt.0) then
                em=1
