@@ -65,38 +65,46 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
 c quark-gluon
          prc='qg'
          ifl=1
-         call qqbplanar(p_pup(:,1),1,p_pup(:,5),-1,p_pup(:,2),-1,
+         if(flg_newsuda) then
+         	call qqbplanar(p_pup(:,1),1,p_pup(:,5),-1,p_pup(:,2),-1,
      1        p_pup(:,3),p_pup(:,4),xm2,t1r,t5r)
          	ttot=t1r+t5r
          	rhorweight(1)=t1r/ttot
          	rhorweight(2)=t5r/ttot
+         endif
       elseif(rflav(1).lt.0.and.rflav(2).eq.0) then
 c antiquark-gluon
          prc='qg'
          ifl=-1
-         call qqbplanar(p_pup(:,5),-1,p_pup(:,1),1,p_pup(:,2),-1,
-     1        p_pup(:,3),p_pup(:,4),xm2,t5r,t1r)
-         ttot=t5r+t1r
-         rhorweight(1)=t5r/ttot
-         rhorweight(2)=t1r/ttot
+         if(flg_newsuda) then
+         	call qqbplanar(p_pup(:,5),-1,p_pup(:,1),1,p_pup(:,2),-1,
+     1        	p_pup(:,3),p_pup(:,4),xm2,t5r,t1r)
+         	ttot=t5r+t1r
+         	rhorweight(1)=t5r/ttot
+         	rhorweight(2)=t1r/ttot
+         endif
       elseif(rflav(1).eq.0.and.rflav(2).gt.0) then
 c gluon-quark
          prc='gq'
          ifl=-1
-         call qqbplanar(p_pup(:,2),1,p_pup(:,5),-1,p_pup(:,1),-1,
-     1        p_pup(:,3),p_pup(:,4),xm2,t2r,t5r)
-         ttot=t2r+t5r
-         rhorweight(1)=t2r
-         rhorweight(2)=t5r
+         if(flg_newsuda) then
+         	call qqbplanar(p_pup(:,2),1,p_pup(:,5),-1,p_pup(:,1),-1,
+     1        	p_pup(:,3),p_pup(:,4),xm2,t2r,t5r)
+         	ttot=t2r+t5r
+         	rhorweight(1)=t2r
+         	rhorweight(2)=t5r
+      	endif
       elseif(rflav(1).eq.0.and.rflav(2).lt.0) then
 c gluon-antiquark
          prc='gq'
          ifl=1
-         call qqbplanar(p_pup(:,5),-1, p_pup(:,2),1,p_pup(:,1),-1,
-     1        p_pup(:,3),p_pup(:,4),xm2,t5r,t2r)
-         ttot=t5r+t2r
-         rhorweight(1)=t5r
-         rhorweight(2)=t2r
+         if(flg_newsuda) then
+         	call qqbplanar(p_pup(:,5),-1, p_pup(:,2),1,p_pup(:,1),-1,
+     1        	p_pup(:,3),p_pup(:,4),xm2,t5r,t2r)
+         	ttot=t5r+t2r
+         	rhorweight(1)=t5r
+         	rhorweight(2)=t2r
+     		endif
       endif
       amp2= fppx(ifl,s,x,y,xm2,q1q,q2q,w1h,w2h,cth2)/(4*tk*uk)
       amp2=amp2 * (4*pi*st_alpha)**3 /(st_alpha/(2*pi)) * 2 * s
