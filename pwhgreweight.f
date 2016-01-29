@@ -492,8 +492,10 @@ c check that the string fits
       write(nlf,'(a,e16.9,a)')"<wgt id='"//trim(lhrwgt_id)//"'> ",
      1     weight,' </wgt>' 
       end
+
 c From here to the end of file are the subroutines needed for full reweighting,
 c that also includes the effect of the change in pdf's in the hardest radiation
+
 
       subroutine readpowheginputinfo(nlf)
 c If any information from the current lhe file is desired, get it here.
@@ -569,16 +571,17 @@ c and Sudakov form factor (the last one in an approximate way).
       include 'LesHouches.h'
 c These are needed to call generipdfpar.
       integer iord,ih,iret
-      real * 8 lam5l
+      real * 8 lam5
       character * 2 scheme
 c
       real * 8 mu2
       integer fl1b,fl2b,fl1r,fl2r
       real * 8 pdf(-pdf_nparton:pdf_nparton)
       real * 8 lumorig,lum,as,asorig,exponent,exponentorig,
-     1         lumbornorig,lumborn,lumreal,lumrealorig,q2l,
+     1         lumbornorig,lumborn,lumreal,lumrealorig,q2,
      2         save_st_lambda5MSB,save_st_mufact2,x1r,x2r,fact
-      real * 8 powheginput,dotp
+      real * 8 powheginput,mcalphas,dotp,
+     1         simplesudakov,simplesudakovx
       integer npdforig,npdf
       logical ini
       data ini/.true./
@@ -586,27 +589,14 @@ c
       save ini,npdforig,npdf,mode
       logical pwhg_isfinite
       external pwhg_isfinite
-
-c These variables are the only ones accessed by the contained subroutines
-      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
-     1     logtaumin,logtaumax,taumin,taumax,taubmin
-      integer ngauss
-      parameter (ngauss=16)
-      double precision xgauss(ngauss),wgauss(ngauss)
-      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
-     1  alphads
-
-      double precision lam5,q2low,q2high
-c end variables accessed by the contained subroutines
-
 c two possibilities:
 c A) HERWIG style Sudakov
-c Radiation factor = Real(kt2)/Born(kt2) * Lumborn(kt2)/Lumborn(q2l) * Delta_Herwig
+c Radiation factor = Real(kt2)/Born(kt2) * Lumborn(kt2)/Lumborn(q2) * Delta_Herwig
 c The correction factor is
 c alpha(kt2)/alpha_old(kt2) * (Lumreal(kt2)/Lumrealold(kt2))/(Lumborn(kt2)/Lumborn_old(kt2))
-c Times (Lumborn(kt2)/Lumborn(q2l))/(Lumborn_old(kt2)/Lumborn_old(q2l)) Delta_Herwig/Delta_Herwig_old
+c Times (Lumborn(kt2)/Lumborn(q2))/(Lumborn_old(kt2)/Lumborn_old(q2)) Delta_Herwig/Delta_Herwig_old
 c Equals to
-c alpha(kt2)/alpha_old(kt2) * (Lumreal(kt2)/Lumreal_old(kt2)) Lumborn_old(q2l)/Lumborn(q2l)
+c alpha(kt2)/alpha_old(kt2) * (Lumreal(kt2)/Lumreal_old(kt2)) Lumborn_old(q2)/Lumborn(q2)
 c times Delta_Herwig/Delta_Herwig_old;
 c B) Sjostrand style Sudakov
 c Radiation factor = Real(kt2)/Born(kt2) * Delta_Sjostrand
@@ -658,8 +648,8 @@ c     Sudakov, Sjostrand kind, exact phase space
 c     Compute the same for original pdf's
             pdf_ndns1 = npdforig
             pdf_ndns2 = npdforig
-            call genericpdfpar(npdforig,ih,lam5l,scheme,iord,iret)
-            st_lambda5MSB = lam5l
+            call genericpdfpar(npdforig,ih,lam5,scheme,iord,iret)
+            st_lambda5MSB = lam5
 c     Sudakov, Sjostrand kind, exact phase space
             call sudakovxxx(mu2,exponentorig)
             fact = exp(exponent-exponentorig)
@@ -671,24 +661,24 @@ c Set parameters affecting pdf's as in the current settings
             st_mufact2 = save_st_mufact2
             pdf_ndns1 = npdf
             pdf_ndns2 = npdf
-            call genericpdfpar(npdf,ih,lam5l,scheme,iord,iret)
+            call genericpdfpar(npdf,ih,lam5,scheme,iord,iret)
          endif
          return
       endif
 c Set scale equal to boson pt; take real kinematics from LH event;
 c the kn_*real variables are undefined during reweighting.
       mu2 = pup(1,nup)**2 + pup(2,nup)**2
-      q2l = dotp(kn_cmpborn(:,3)+kn_cmpborn(:,4),
+      q2 = dotp(kn_cmpborn(:,3)+kn_cmpborn(:,4),
      1          kn_cmpborn(:,3)+kn_cmpborn(:,4))
 
       save_st_mufact2 = st_mufact2
 c Compute Born lum for current pdf's
 
-      call genericpdfpar(npdf,ih,lam5l,scheme,iord,iret)
+      call genericpdfpar(npdf,ih,lam5,scheme,iord,iret)
 
       if(mode.ne.3.and.mode.ne.4) then
 c in these mode, it is assumed that HERWIG style Sudakovs is a good approximation
-         st_mufact2 = max(pdf_q2min,q2l)
+         st_mufact2 = max(pdf_q2min,q2)
       else
 c Sjostrand style Sudakov; must supply the ratio of born luminosities computed at kt2
          st_mufact2 = max(pdf_q2min,mu2)
@@ -707,21 +697,21 @@ c Compute Real lum for current pdf's
       lumreal = lumreal * pdf(fl2r)
 
 c Get as to compute radiation for current pdf's
-      as = mcalphas(mu2,lam5l)
+      as = mcalphas(mu2,lam5)
       save_st_lambda5MSB = st_lambda5MSB
-      st_lambda5MSB = lam5l
-      if(q2l.gt.mu2) then
+      st_lambda5MSB = lam5
+      if(q2.gt.mu2) then
          if(mode.eq.1) then
 c Sudakov MiNLO style (HERWIG kind)
-            call sudakov_exponent(mu2,q2l,q2l,exponent,.true.,
+            call sudakov_exponent(mu2,q2,q2,exponent,.true.,
      1                            2,.false.)
          elseif(mode.eq.2) then
 c Sudakov sikmplified (HERWIG kind)
-            exponent = simplesudakov(lam5l,mu2,q2l)
+            exponent = simplesudakov(lam5,mu2,q2)
          elseif(mode.eq.3) then
 c Sudakov sikmplified (Sjostrand kind)
             exponent =
-     1           simplesudakovx(lam5l,mu2,q2l,kn_xb1,kn_xb2,fl1b,fl2b)
+     1           simplesudakovx(lam5,mu2,q2,kn_xb1,kn_xb2,fl1b,fl2b)
          endif
       else
          exponent = 0
@@ -734,10 +724,10 @@ c Sudakov, Sjostrand kind, exact phase space
 c Compute the same for original pdf's
       pdf_ndns1 = npdforig
       pdf_ndns2 = npdforig
-      call genericpdfpar(npdforig,ih,lam5l,scheme,iord,iret)
+      call genericpdfpar(npdforig,ih,lam5,scheme,iord,iret)
 
       if(mode.ne.3.and.mode.ne.4) then
-         st_mufact2 = max(pdf_q2min,q2l)
+         st_mufact2 = max(pdf_q2min,q2)
          call pdfcall(1,kn_xb1,pdf)
          lumbornorig = pdf(fl1b)
          call pdfcall(2,kn_xb2,pdf)
@@ -758,21 +748,21 @@ c Sjostrand style Sudakov; must supply the ratio of luminosities computed at kt2
       lumrealorig = lumrealorig * pdf(fl2r)
 
 c Get as to compute radiation for original pdf's
-      asorig = mcalphas(mu2,lam5l)
-      st_lambda5MSB = lam5l
+      asorig = mcalphas(mu2,lam5)
+      st_lambda5MSB = lam5
 
-      if(q2l.gt.mu2) then
+      if(q2.gt.mu2) then
          if(mode.eq.1) then
 c Sudakov MiNLO style (HERWIG kind)
-            call sudakov_exponent(mu2,q2l,q2l,exponentorig,.true.,
+            call sudakov_exponent(mu2,q2,q2,exponentorig,.true.,
      1           2,.false.)
          elseif(mode.eq.2) then
 c Sudakov sikmplified (HERWIG kind)
-            exponentorig = simplesudakov(lam5l,mu2,q2l)
+            exponentorig = simplesudakov(lam5,mu2,q2)
          elseif(mode.eq.3) then
 c Sudakov sikmplified (Sjostrand kind)
             exponentorig =
-     1           simplesudakovx(lam5l,mu2,q2l,kn_xb1,kn_xb2,fl1b,fl2b)
+     1           simplesudakovx(lam5,mu2,q2,kn_xb1,kn_xb2,fl1b,fl2b)
          endif
       else
          exponentorig = 0
@@ -787,7 +777,7 @@ c Set parameters affecting pdf's as in the current settings
       st_mufact2 = save_st_mufact2
       pdf_ndns1 = npdf
       pdf_ndns2 = npdf
-      call genericpdfpar(npdf,ih,lam5l,scheme,iord,iret)
+      call genericpdfpar(npdf,ih,lam5,scheme,iord,iret)
 c Compute reweighting factor:
       
       fact =   as/asorig                               ! as for radiation updated
@@ -806,7 +796,8 @@ c Compute reweighting factor:
          weight = weight * fact
       endif
 
-      contains
+      end
+
 
 
       double precision function
@@ -814,12 +805,14 @@ c Compute reweighting factor:
       implicit none
       double precision lam5,q2low,q2high,x1,x2
       integer fl1,fl2
+      double precision dgauss
+      double precision simplesudakov0
+      external simplesudakov0,dgauss
       integer ngauss
       parameter (ngauss=16)
       double precision xgauss(ngauss),wgauss(ngauss),xxx(2)
       integer j,k
-c      double precision simplesudakovx0,
-      double precision res
+      double precision simplesudakovx0,res
       logical ini
       data ini/.true./
       save ini,xgauss,wgauss
@@ -838,7 +831,7 @@ c Setup gaussian weights and points
          enddo
       enddo
       simplesudakovx = res
-      end function simplesudakovx
+      end
 
       double precision function
      1     simplesudakovx0(lam5,q2low,q2high,x1,x2,fl1,fl2,xxx)
@@ -851,8 +844,8 @@ c Setup gaussian weights and points
       real * 8 kt2,x,xjac,lq2,as,eta,xi,ximax,ximin,y,ymax,z,xx
       real * 8 fxr(-pdf_nparton:pdf_nparton),
      1         fxb(-pdf_nparton:pdf_nparton)
-c      real * 8 mcalphas
-c      external mcalphas
+      real * 8 mcalphas
+      external mcalphas
       xjac = 1
       lq2 = log(q2high/q2low)
       kt2 = exp(xxx(1)*lq2)*q2low
@@ -897,18 +890,21 @@ c Take xi = log((y+eta)/(1-y)) as sampling variable xi
       enddo
 c we divide by two simply because we multiply by 2 in the main program
       simplesudakovx0 = - simplesudakovx0 / 2
-      end function simplesudakovx0
+      end
 
       double precision function simplesudakov(lam50,q2low0,q2high0)
       implicit none
       double precision lam50,q2low0,q2high0
       double precision dgauss
-
+      double precision lam5,q2low,q2high
+      common/csimplesudakov/lam5,q2low,q2high
+      double precision simplesudakov0
+      external simplesudakov0,dgauss
       lam5 = lam50
       q2low = q2low0
       q2high = q2high0
       simplesudakov = dgauss(simplesudakov0,0d0,1d0,1d-4)
-      end function simplesudakov
+      end
 
       double precision function simplesudakov0(x)
       implicit none
@@ -918,6 +914,10 @@ c we divide by two simply because we multiply by 2 in the main program
       include 'pwhg_rad.h'
       double precision x
       double precision dgauss      
+      double precision lam5,q2low,q2high
+      common/csimplesudakov/lam5,q2low,q2high
+      real * 8 mcalphas
+      external mcalphas
       real * 8 as,lqlow,l,q2
       integer nf
       lqlow = log(q2high/q2low)
@@ -932,7 +932,7 @@ c               q2   2 pi       [      q2       ]
 c lqlow is the jacobian
       simplesudakov0 = - cf/(2*pi)*as*(l-1.5d0) * lqlow
 
-      end function simplesudakov0
+      end
 
       
 
@@ -957,7 +957,7 @@ c lqlow is the jacobian
       as = pwhg_alphas(q2,lam5,-1)
       as = as * (1+as/(2*pi)*((67d0/18-pi**2/6)*ca-5d0/9*nf))
       mcalphas = as
-      end function mcalphas
+      end
 
       
       subroutine sudakovxxx(kt2max,result)
@@ -966,6 +966,22 @@ c lqlow is the jacobian
       include 'nlegborn.h'
       include 'pwhg_kn.h'
       include 'pwhg_st.h'
+
+c      include 'phspsudint.h'
+c -*- Fortran -*-
+      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin
+      integer ngauss
+      parameter (ngauss=16)
+      double precision xgauss(ngauss),wgauss(ngauss)
+      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
+     1  alphads
+      common/cdeltasud/mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin,xgauss,
+     2     wgauss,shat,z,em,kmom,aslim,ycmmin,ycmmax,alphads
+     
+c end  'phspsudint.h'
+
       include 'pwhg_pdf.h'
       real * 8 pdf1(-pdf_nparton:pdf_nparton),
      1         pdf2(-pdf_nparton:pdf_nparton)
@@ -1027,7 +1043,7 @@ C      alphads = st_alpha ! fixed coupling
 
 c      call plotdeltasud
 
-      end subroutine sudakovxxx
+      end
 
       function deltasud0(ycm,tau) result(res)
       implicit none
@@ -1039,6 +1055,20 @@ c      call plotdeltasud
       include 'pwhg_rad.h'
       double precision, intent(in) :: ycm,tau
       double precision res
+c      include 'phspsudint.h'
+c -*- Fortran -*-
+      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin
+      integer ngauss
+      parameter (ngauss=16)
+      double precision xgauss(ngauss),wgauss(ngauss)
+      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
+     1  alphads
+      common/cdeltasud/mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin,xgauss,
+     2     wgauss,shat,z,em,kmom,aslim,ycmmin,ycmmax,alphads
+c end     'phspsudint.h'
+ 
       double precision kt2,xjac,x1,x2,taub,gg,gq,qg,att,auu,
      1     kl,alphas,x,x1b,x2b,k0
       include 'pwhg_pdf.h'
@@ -1062,8 +1092,7 @@ c sing1 and sing2 will stand for the singlet on the 1 and 2 incoming particles
       save    ini
       integer approx
       save    approx
-c      double precision mcalphas,as
-      double precision as
+      double precision mcalphas,as
 
       kl = em * tanh(ym-ycm)
       kt2 = kmom**2-kl**2
@@ -1139,7 +1168,7 @@ c Born pdf
 c divide by 2*pi/q2, that arises from the Born phase space in the denominator
       res = res/(pdf1(fl1r)*pdf2(fl2r)) * xjac /(2*pi/q2)
 
-      end function deltasud0
+      end
 
       function deltasud1(xx) result(res)
       implicit none
@@ -1148,7 +1177,22 @@ c and ym, ptm, ptm2 (in phspsudint.h), computes ycm,tau
 c and a jacobian to go from xx(1:2) to ycm,tau
       double precision, intent(in) :: xx(2)
       double precision res
+c      include 'phspsudint.h'
+c -*- Fortran -*-
+      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin
+      integer ngauss
+      parameter (ngauss=16)
+      double precision xgauss(ngauss),wgauss(ngauss)
+      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
+     1  alphads
+      common/cdeltasud/mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin,xgauss,
+     2     wgauss,shat,z,em,kmom,aslim,ycmmin,ycmmax,alphads
+c end phspsudint.h     
+
       double precision xjac,tau,llmin,llmax,ll,ycm,zzz
+      double precision deltasud0,deltasud0_NZ
 c integration limit
 c      tau = exp(xx(1)**2*(logtaumax-logtaumin)+logtaumin)
 c      xjac = tau*(logtaumax-logtaumin)*2*xx(1)
@@ -1180,12 +1224,26 @@ c range in ycm
       ycm = zzz*(ycmmax-ycmmin)+ycmmin
       xjac = xjac*(ycmmax-ycmmin)
       res = deltasud0(ycm,tau)*xjac
-      end function deltasud1
+      end
 
       subroutine dointdeltasud(res)
       implicit none
       real * 8 res
-      real * 8 xx(2),random
+c      include 'phspsudint.h'
+c -*- Fortran -*-
+      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin
+      integer ngauss
+      parameter (ngauss=16)
+      double precision xgauss(ngauss),wgauss(ngauss)
+      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
+     1  alphads
+      common/cdeltasud/mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin,xgauss,
+     2     wgauss,shat,z,em,kmom,aslim,ycmmin,ycmmax,alphads
+c end phspsudint.h     
+
+      real * 8 xx(2),deltasud1,random
       integer j,k,ncalls
       parameter (ncalls=100000)
       res = 0
@@ -1203,15 +1261,29 @@ c      return
             res = res + deltasud1(xx)*wgauss(j)*wgauss(k)
          enddo
       enddo
-      end subroutine dointdeltasud
+      end
 c$$$
 c$$$      subroutine plotdeltasud
 c$$$      implicit none
 c$$$      real * 8 res
+c$$$c      include 'phspsudint.h'
+c$$$c -*- Fortran -*-
+c$$$      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+c$$$     1     logtaumin,logtaumax,taumin,taumax,taubmin
+c$$$      integer ngauss
+c$$$      parameter (ngauss=16)
+c$$$      double precision xgauss(ngauss),wgauss(ngauss)
+c$$$      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
+c$$$     1  alphads
+c$$$      common/cdeltasud/mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+c$$$     1     logtaumin,logtaumax,taumin,taumax,taubmin,xgauss,
+c$$$     2     wgauss,shat,z,em,kmom,aslim,ycmmin,ycmmax,alphads
+c$$$c end phspsudint.h     
+c$$$
 c$$$      integer ncalls
 c$$$      parameter (ncalls=100000)
 c$$$      character * 20 str
-c$$$      real * 8 xx(2),random
+c$$$      real * 8 xx(2),deltasud1,random
 c$$$      integer j,k
 c$$$      logical ini
 c$$$      data ini/.true./
@@ -1239,12 +1311,26 @@ c$$$         call pwhgaccumup
 c$$$      enddo
 c$$$      call pwhgsetout
 c$$$      call pwhgtopout("deltasudhists-"//trim(str))
-c$$$      end subroutine plotdeltasud
+c$$$      end
 c$$$
 
       subroutine checkkin(x1,x2,kt2)
       implicit none
       real * 8 x1,x2,kt2,ycm,p,p0,ppar,ycmm,shat_lcl
+c      include 'phspsudint.h'
+c -*- Fortran -*-
+      double precision mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin
+      integer ngauss
+      parameter (ngauss=16)
+      double precision xgauss(ngauss),wgauss(ngauss)
+      double precision shat,z,em,kmom,aslim,ycmmin,ycmmax,
+     1  alphads
+      common/cdeltasud/mm,mm2,ym,ptm,q,ptm2,q2,mtm,mtm2,
+     1     logtaumin,logtaumax,taumin,taumax,taubmin,xgauss,
+     2     wgauss,shat,z,em,kmom,aslim,ycmmin,ycmmax,alphads
+c end phspsudint.h     
+
       if(x1.lt.0.or.x1.gt.1) then
          write(*,*) ' checkkin: x1=',x1
          call exit(-1)
@@ -1267,8 +1353,6 @@ c$$$
          write(*,*) ' checkkin: kinematics do not check'
          call exit(-1)
       endif
-      end subroutine checkkin
-
       end
       
 

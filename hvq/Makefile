@@ -1,4 +1,6 @@
 #-*- Makefile -*-
+# Choose operating system
+theOS=$(shell uname -s)
 ## Choose compiler: gfortran,ifort
 COMPILER=gfortran
 ## Choose PDF: native,lhapdf
@@ -13,8 +15,11 @@ ANALYSIS=new
 #
 ifeq ("$(COMPILER)","gfortran")	
 OBJ=obj-ifort
-#F77= gfortran -fno-automatic -ffixed-line-length-132
-F77= gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
+ifeq ("$(theOS)","Linux")
+F77=gfortran -fno-automatic -ffixed-line-length-132
+else
+F77=gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
+endif
 ## -fbounds-check sometimes causes a weird error due to non-lazy evaluation
 ## of boolean in gfortran.
 #FFLAGS= -Wall -Wimplicit-interface -fbounds-check
@@ -86,7 +91,11 @@ PWHGANAL=pwhg_analysis-top.o
 else
 ifeq ("$(ANALYSIS)","new")
 FASTJET_CONFIG=$(shell which fastjet-config)
-LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no ) -lstdc++ -lc++
+ifeq ("$(theOS)","Linux")
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins ) -lstdc++
+else
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -lc++
+endif
 FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
 PWHGANAL=pwhg_analysis-new.o  fastjetfortran.o
 PWHGANALB=pwhg_analysis-b.o fastjetfortran.o
