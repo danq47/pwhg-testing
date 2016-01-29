@@ -17,7 +17,7 @@
       parameter(b=(n**2-4)/(4*n))
 C     Abbreviation of (4.*pi*st_alpha)**2
       real*8 gs4,xxx,yyy,xm2,p12,p13,p23,s,t1,t2,ro
-      real * 8 t,u,ggbornplanar1,ggbornplanar2
+      real * 8 t,u!,ggbornplanar1,ggbornplanar2
       real * 8 gtens(0:3,0:3)
       data gtens/1d0, 0d0, 0d0, 0d0,
      #           0d0,-1d0, 0d0, 0d0,
