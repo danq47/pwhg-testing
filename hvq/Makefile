@@ -88,7 +88,8 @@ ifeq ("$(ANALYSIS)","new")
 FASTJET_CONFIG=$(shell which fastjet-config)
 LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no ) -lstdc++ -lc++
 FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
-PWHGANAL=pwhg_analysis-new.o  fastjetfortran.o 
+PWHGANAL=pwhg_analysis-new.o  fastjetfortran.o
+PWHGANALB=pwhg_analysis-b.o fastjetfortran.o
 else
 PWHGANAL=pwhg_analysis-dummy.o
 endif
@@ -134,9 +135,16 @@ LHEF=lhef_analysis.o boostrot.o random.o cernroutines.o		\
      opencount.o powheginput.o pwhg_bookhist-multi.o $(PWHGANAL)	\
      lhefread.o newunit.o pwhg_analysis_driver.o $(FPEOBJ)
 
+bLHEF=b_analysis.o boostrot.o random.o cernroutines.o		\
+     opencount.o powheginput.o pwhg_bookhist-multi.o $(PWHGANALB)	\
+     lhefread.o newunit.o pwhg_analysis_driver.o $(FPEOBJ)
+
 # target to analyze LHEF output
 lhef_analysis:$(LHEF)
 	$(FF) $(patsubst %,$(OBJ)/%,$(LHEF)) $(LIBS) $(LIBSFASTJET) $(STATIC)  -o $@ 
+
+b_analysis:$(bLHEF)
+	$(FF) $(patsubst %,$(OBJ)/%,$(bLHEF)) $(LIBS) $(LIBSFASTJET) $(STATIC)  -o $@ 
 
 
 
@@ -170,5 +178,5 @@ main-PYTHIA8-lhef: $(PYTHIA8)
 .PHONY: clean
 clean:
 	rm -f $(OBJ)/*.o pwhg_main lhef_analysis main-HERWIG-lhef	\
-	main-PYTHIA-lhef main-PYTHIA8-lhef
+	main-PYTHIA-lhef main-PYTHIA8-lhef b_analysis
 
