@@ -8,7 +8,8 @@ COMPILER=gfortran
 PDF=native
 #Choose Analysis: none, B-or-D, top
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
-ANALYSIS=new
+#ANALYSIS=new
+ANALYSIS=final
 #ANALYSIS=B-or-D
 ## For static linking uncomment the following
 #STATIC= -static
@@ -100,7 +101,19 @@ FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
 PWHGANAL=pwhg_analysis-new.o  fastjetfortran.o
 PWHGANALB=pwhg_analysis-b.o fastjetfortran.o
 else
+ifeq ("$(ANALYSIS)","final")
+FASTJET_CONFIG=$(shell which fastjet-config)
+ifeq ("$(theOS)","Linux")
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins ) -lstdc++
+else
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -lc++
+endif
+FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
+PWHGANAL=pwhg_analysis-final.o  fastjetfortran.o
+PWHGANALB=pwhg_analysis-b.o fastjetfortran.o
+else
 PWHGANAL=pwhg_analysis-dummy.o
+endif
 endif
 endif
 endif
