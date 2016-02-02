@@ -25,20 +25,18 @@ c  pwhgfill  :  fills the histograms with data
       include  'LesHouches.h'
       include 'pwhg_math.h'
       integer j,l,m,l1,l2,l3,lenocc
-      character * 24 prefix1,prefix2,prefix3      
-      character * 2 digit(20)
-      data digit/'01','02','03','04','05','06','07','08','09','10',
-     1           '11','12','13','14','15','16','17','18','19','20'/
+      character * 24 prefix1,prefix2,prefix3
      	external lenocc
 
       call inihists
+
       do j = 1,4
       	if(j.eq.1) then
       		prefix1 = '-incl'
       	elseif(j.eq.2) then
-      		prefix1 = '-stretched'
+      		prefix1 = '-str'
       	elseif(j.eq.3) then
-      		prefix1 = '-unstretched'
+      		prefix1 = '-unstr'
       	else
       		prefix1 = '-qqb'
       	endif
@@ -53,14 +51,14 @@ c  pwhgfill  :  fills the histograms with data
       		elseif(l.eq.4) then
       			prefix2 = '-wa-bfac'
       		else
-      			prefix2 = 'wa-bfac-mcut'
+      			prefix2 = '-wa-bfac-mcut'
       		endif
 
          	l1=lenocc(prefix1)
          	l2=lenocc(prefix2)
 
-      		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,300d0)
-      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,500d0)
+      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,300d0)
+      		call bookupeqbins('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,500d0)
       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
 
       		do m=1,3
@@ -114,24 +112,21 @@ c  pwhgfill  :  fills the histograms with data
      1     i_part,njets20,njets30,njets40
       real * 8 mtop,mtb,mwp,mwm,mb,mbb,p_bmax,e_bmax,xb,
      1     p_bbmax,e_bbmax,xbb,ewp,pwp,ewm,pwm,xw,
-     2     dy,deta,dphi,dr,cth1,cth2,ptj1,mttbar,ptt,pttb
+     2     dy,deta,dphi,dr,cth1,cth2,ptj1,mttbar,ptt,pttb,yj_minus_yttb
       integer jcth1,i_jets,ixx,jzz,qxx,jet_index,kxx,counter,counter2,lxx,mxx,jxx
       integer jet_position(maxjets),l1,l2,l3
       real * 8 w(4),pb(4),ptb
       real * 8 prodvec2,powheginput
-      real * 8 azi,deltaphi,low_bin_edge
+      real * 8 azi,deltaphi,low_bin_edge,pseudorapidity
       logical incl,stretched,unstretched,qqb
       logical nocuts,wa,wam,wab,wabm
-      logical pt10,pt25,pt50
+      logical pt10,pt25,pt50,condition1,condition2,condition3
       logical sonofid
-      external sonofid
+      external sonofid,pseudorapidity
       integer in_jet,lenocc
       external in_jet,azi,deltaphi,lenocc
       integer ngenerations,inotfound,iprodrad
       common/cngenerations/ngenerations
-      character * 2 digit(20)
-      data digit/'01','02','03','04','05','06','07','08','09','10',
-     1           '11','12','13','14','15','16','17','18','19','20'/
       integer id1,id2
       ngenerations = powheginput("#ngenerations")
       if(ngenerations.lt.0) ngenerations = 4
@@ -315,215 +310,133 @@ c We delete the two zeroes
       y_tbar=y
       call getyetaptmass(p_top+p_tb,y,eta,pt,mass)
       y_ttb=y
+      mttbar=mass
 
       deltay=y_t-y_tbar
 
-      ptj1=j_kt(jet_position(1))
-      y_j1=j_rap(jet_position(1))
+C       ptj1=j_kt(jet_position(1))
+      ptj1=sqrt(phep(1,5)**2 + phep(2,5)**2)
+      y_j1=pseudorapidity(phep(:,5))
+
 
       deltaphi_j_t=deltaphi(azi(p_top),j_phi(jet_position(1)))
 
 
 c Analysis - make the cuts
 
-
-
       do jxx = 1,4
 
-      	incl = .false.
-      	stretched = .false.
-      	unstretched = .false.
-      	qqb = .false.
-      	nocuts = .false.
-      	wa = .false.
-      	wam = .false.
-      	wab = .false.
-      	wabm = .false.
-      	pt10 = .false.
-      	pt25 = .false.
-      	pt50 = .false.
+      	condition1 = .false.
 
       	if(jxx.eq.1) then
-      		prefix1 = '-incl'
-      		incl = .true.
-      	elseif(jxx.eq.2) then
-      		prefix1 = '-stretched'
-      		stretched = .true.
+      		prefix1='-incl'
+      		condition1 = .true.
+        	elseif(jxx.eq.2) then
+      		prefix1='-str'
+      		if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
+      			condition1 = .true.
+      		endif
       	elseif(jxx.eq.3) then
-      		prefix1 = '-unstretched'
-      		unstretched = .true.
+      		prefix1='-unstr'
+      		if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
+      			condition1 = .true.
+      		endif
       	elseif(jxx.eq.4) then
-      		prefix1 = '-qqb'
-      		qqb = .true.
+      		prefix1='-qqb'
+      		if(rho.gt.2) then
+      			condition1 = .true.
+      		endif
       	endif
-      	
-	      do lxx=1,5
-	     		if(lxx.eq.1) then
-	     			prefix2 = '-no-cuts'
-	     			nocuts = .true.
-	     		elseif(lxx.eq.2) then
-	     			prefix2 = '-wa'
-	     			wa = .true.
-	     		elseif(lxx.eq.3) then
-	     			prefix2 = '-wa-mcut'
-	     			wam = .true.
-	     		elseif(lxx.eq.4) then
-	     			prefix2 = '-wa-bfac'
-	     			wab = .true.
-	     		elseif(lxx.eq.5) then
-	     			prefix2 = 'wa-bfac-mcut'
-	     			wabm = .true.
-	     		endif
 
-	     		l1=lenocc(prefix1)
-	     		l2=lenocc(prefix2)
+      	do lxx=1,5
 
-      		if(jxx.eq.1) then
-        			call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-       			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-       			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-       		elseif(jxx.eq.2) then
-					if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
-					   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-      				call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-      				call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
+      		condition2 = .false.
+
+      		if(lxx.eq.1) then
+      			prefix2 = '-no-cuts'
+      			condition2 = .true.
+      		elseif(lxx.eq.2) then
+      			prefix2 = '-wa'
+      			if(y_j1.gt.0) then
+      				if(abs(y_j1 - y_ttb).lt.0.5) then
+      					condition2 = .true.
+      				endif
       			endif
-      		elseif(jxx.eq.3) then
-      			if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
-					   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-      				call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-      				call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
+      		elseif(lxx.eq.3) then
+      			prefix2 = '-wa-mcut'
+      			if(y_j1.gt.0) then
+      				if(abs(y_j1 - y_ttb).lt.0.5) then
+      					if(mttbar.gt.800) then
+      						condition2 = .true.
+      					endif
+      				endif
       			endif
-      		elseif(jxx.eq.4) then
-      			if(process.eq.2) then
-					   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-      				call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
-      				call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),j_kt(jet_position(1)),dsig)
+      		elseif(lxx.eq.4) then
+      			prefix2 = '-wa-bfac'
+      			if(y_j1.gt.0) then
+      				if(abs(y_j1 - y_ttb).lt.0.5) then
+      					if(abs(deltay).lt.0.1) then
+      						condition2 = .true.
+      					endif
+      				endif
       			endif
-      		endif    			
+      		elseif(lxx.eq.5) then
+      			prefix2 = '-wa-bfac-mcut'
+      			if(y_j1.gt.0) then
+      				if(abs(y_j1 - y_ttb).lt.0.5) then
+      					if(abs(deltay).lt.0.1) then
+      						if(mttbar.gt.800) then
+      							condition2 = .true.
+      						endif
+      					endif
+      				endif
+      			endif
+      		endif
 
+      		l1=lenocc(prefix1)
+      		l2=lenocc(prefix2)
 
+      		if(condition1.and.condition2) then
+      			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			call filld('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      		endif
 
       		do mxx=1,3
+
+      			condition3 = .false.
+
       			if(mxx.eq.1) then
       				prefix3='-pT-gt-10'
-      				pt10 = .true.
+      				if(ptj1.gt.10) then
+      					condition3 = .true.
+      				endif
       			elseif(mxx.eq.2) then
       				prefix3='-pT-gt-25'
-      				pt25 = .true.
-      			else
+      				if(ptj1.gt.25) then
+      					condition3 = .true.
+      				endif
+      			elseif(mxx.eq.3) then
       				prefix3='-pT-gt-50'
-      				pt50 = .true.
+      				if(ptj1.gt.50) then
+      					condition3 = .true.
+      				endif
       			endif
 
-         		l3=lenocc(prefix3)
+      			l3=lenocc(prefix3)
 
-         		if(pt10) then
-         			if(ptj1.gt.10) then
-         				if(incl) then
-								call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-								call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-								call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-								call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-								call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-							elseif(stretched) then
-								if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							elseif(unstretched) then
-								if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							elseif(qqb) then
-								if(process.eq.2) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							endif
-						endif
-					elseif(pt25) then
-						if(ptj1.gt.50) then
-         				if(incl) then
-								call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-								call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-								call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-								call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-								call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-							elseif(stretched) then
-								if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							elseif(unstretched) then
-								if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							elseif(qqb) then
-								if(process.eq.2) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							endif
-						endif
-					elseif(pt50) then
-						if(ptj1.gt.50) then
-         				if(incl) then
-								call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-								call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-								call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-								call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-								call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-							elseif(stretched) then
-								if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							elseif(unstretched) then
-								if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							elseif(qqb) then
-								if(process.eq.2) then
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-									call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
-									call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-								endif
-							endif
-						endif
-					endif
+      			if(condition1.and.condition2.and.condition3) then
+      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
+      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
+      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
+      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
+      				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
+      			endif
+
       		enddo
-     		enddo
+      	enddo
       enddo
+
       end
 
 
