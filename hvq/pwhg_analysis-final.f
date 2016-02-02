@@ -58,7 +58,8 @@ c  pwhgfill  :  fills the histograms with data
          	l2=lenocc(prefix2)
 
       		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,300d0)
-      		call bookupeqbins('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,500d0)
+      		call bookupeqbins('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),20d0,0d0,500d0)
+      		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,1000d0)
       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
 
       		do m=1,3
@@ -399,6 +400,7 @@ c Analysis - make the cuts
       		if(condition1.and.condition2) then
       			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       			call filld('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       		endif
 
