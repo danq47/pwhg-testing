@@ -12,6 +12,12 @@ cp newgenplots.sh plots
 
 # (1.5) Loop old, then new, changing the seed each time
 
+# set seed back to 1
+
+sed -i "s/iseed\ .*/iseed\ 1/g" powheg.input
+sed -i "s/newsuda\ 1/newsuda\ 0/g" powheg.input
+
+
 for i in {1..1000}
 do
 # (2) Run old Sudakov
