@@ -57,8 +57,8 @@ c  pwhgfill  :  fills the histograms with data
          	l1=lenocc(prefix1)
          	l2=lenocc(prefix2)
 
-      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,300d0)
-      		call bookupeqbins('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),20d0,0d0,500d0)
+      		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,300d0)
+      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,500d0)
       		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,1000d0)
       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
 
@@ -73,8 +73,8 @@ c  pwhgfill  :  fills the histograms with data
 
       			l3=lenocc(prefix3)
 
-      			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),2d-1,-4d0,4d0)
-      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),2d-1,-4d0,4d0)
+      			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-4d0,4d0)
+      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-4d0,4d0)
       			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
 
       		enddo
@@ -317,7 +317,7 @@ c We delete the two zeroes
 
 C       ptj1=j_kt(jet_position(1))
       ptj1=sqrt(phep(1,5)**2 + phep(2,5)**2)
-      y_j1=pseudorapidity(phep(:,5))
+      y_j1=0.5d0*log((phep(4,5)+phep(3,5))/(phep(4,5)-phep(3,5)))
 
 
       deltaphi_j_t=deltaphi(azi(p_top),j_phi(jet_position(1)))
@@ -358,14 +358,14 @@ c Analysis - make the cuts
       			condition2 = .true.
       		elseif(lxx.eq.2) then
       			prefix2 = '-wa'
-      			if(y_j1.gt.0) then
+      			if(abs(y_j1).gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					condition2 = .true.
       				endif
       			endif
       		elseif(lxx.eq.3) then
       			prefix2 = '-wa-mcut'
-      			if(y_j1.gt.0) then
+      			if(abs(y_j1).gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					if(mttbar.gt.800) then
       						condition2 = .true.
@@ -374,7 +374,7 @@ c Analysis - make the cuts
       			endif
       		elseif(lxx.eq.4) then
       			prefix2 = '-wa-bfac'
-      			if(y_j1.gt.0) then
+      			if(abs(y_j1).gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					if(abs(deltay).lt.0.1) then
       						condition2 = .true.
@@ -383,7 +383,7 @@ c Analysis - make the cuts
       			endif
       		elseif(lxx.eq.5) then
       			prefix2 = '-wa-bfac-mcut'
-      			if(y_j1.gt.0) then
+      			if(abs(y_j1).gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					if(abs(deltay).lt.0.1) then
       						if(mttbar.gt.800) then
@@ -398,8 +398,8 @@ c Analysis - make the cuts
       		l2=lenocc(prefix2)
 
       		if(condition1.and.condition2) then
+      			call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-      			call filld('pT-j1-20GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       			call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       		endif
