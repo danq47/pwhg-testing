@@ -355,17 +355,19 @@ c Analysis - make the cuts
 
       		if(lxx.eq.1) then
       			prefix2 = '-no-cuts'
-      			condition2 = .true.
+      			if(ptj1.gt.0) then 	! Making sure there is a jet
+      				condition2 = .true.
+      			endif
       		elseif(lxx.eq.2) then
       			prefix2 = '-wa'
-      			if(abs(y_j1).gt.0) then
+      			if(ptj1.gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					condition2 = .true.
       				endif
       			endif
       		elseif(lxx.eq.3) then
       			prefix2 = '-wa-mcut'
-      			if(abs(y_j1).gt.0) then
+      			if(ptj1.gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					if(mttbar.gt.800) then
       						condition2 = .true.
@@ -374,7 +376,7 @@ c Analysis - make the cuts
       			endif
       		elseif(lxx.eq.4) then
       			prefix2 = '-wa-bfac'
-      			if(abs(y_j1).gt.0) then
+      			if(ptj1.gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					if(abs(deltay).lt.0.1) then
       						condition2 = .true.
@@ -383,7 +385,7 @@ c Analysis - make the cuts
       			endif
       		elseif(lxx.eq.5) then
       			prefix2 = '-wa-bfac-mcut'
-      			if(abs(y_j1).gt.0) then
+      			if(ptj1.gt.0) then
       				if(abs(y_j1 - y_ttb).lt.0.5) then
       					if(abs(deltay).lt.0.1) then
       						if(mttbar.gt.800) then
