@@ -73,8 +73,8 @@ c  pwhgfill  :  fills the histograms with data
 
       			l3=lenocc(prefix3)
 
-      			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-4d0,4d0)
-      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-4d0,4d0)
+      			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
+      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
       			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
 
       		enddo
