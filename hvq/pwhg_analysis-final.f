@@ -30,33 +30,33 @@ c  pwhgfill  :  fills the histograms with data
 
       call inihists
 
-      do j = 1,4
+      do j = 1,3
       	if(j.eq.1) then
       		prefix1 = '-incl'
       	elseif(j.eq.2) then
       		prefix1 = '-str'
       	elseif(j.eq.3) then
       		prefix1 = '-unstr'
-      	else
-      		prefix1 = '-qqb'
+C       	else
+C       		prefix1 = '-qqb'
       	endif
       	
-      	do l=1,8
+      	do l=1,5
       		if(l.eq.1) then
       			prefix2 = '-no-cuts'
       		elseif(l.eq.2) then
       			prefix2 = '-wa'
+C       		elseif(l.eq.3) then
+C       			prefix2 = '-wa-mcut'
+C       		elseif(l.eq.4) then
+C       			prefix2 = '-wa-bfac'
+C       		elseif(l.eq.5) then
+C       			prefix2 = '-wa-bfac-mcut'
       		elseif(l.eq.3) then
-      			prefix2 = '-wa-mcut'
-      		elseif(l.eq.4) then
-      			prefix2 = '-wa-bfac'
-      		elseif(l.eq.5) then
-      			prefix2 = '-wa-bfac-mcut'
-      		elseif(l.eq.6) then
       			prefix2 = '-wa-beam'
-      		elseif(l.eq.7) then
+      		elseif(l.eq.4) then
       			prefix2 = '-coll-beam'
-      		elseif(l.eq.8) then
+      		elseif(l.eq.5) then
       			prefix2 = '-coll'
       		endif
 
@@ -68,22 +68,22 @@ c  pwhgfill  :  fills the histograms with data
       		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
 
-      		do m=1,3
-      			if(m.eq.1) then
-      				prefix3='-pT-gt-10'
-      			elseif(m.eq.2) then
-      				prefix3='-pT-gt-25'
-      			else
-      				prefix3='-pT-gt-50'
-      			endif
+C       		do m=1,3
+C       			if(m.eq.1) then
+C       				prefix3='-pT-gt-10'
+C       			elseif(m.eq.2) then
+C       				prefix3='-pT-gt-25'
+C       			else
+C       				prefix3='-pT-gt-50'
+C       			endif
 
-      			l3=lenocc(prefix3)
+C       			l3=lenocc(prefix3)
 
-      			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-      			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
+C       			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
+C       			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
+C       			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
 
-      		enddo
+C       		enddo
       	enddo
       enddo
       end
@@ -331,7 +331,7 @@ C       ptj1=j_kt(jet_position(1))
 
 c Analysis - make the cuts
 
-      do jxx = 1,4
+      do jxx = 1,3
 
       	condition1 = .false.
 
@@ -348,14 +348,14 @@ c Analysis - make the cuts
       		if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
       			condition1 = .true.
       		endif
-      	elseif(jxx.eq.4) then
-      		prefix1='-qqb'
-      		if(rho.gt.2) then
-      			condition1 = .true.
-      		endif
+C       	elseif(jxx.eq.4) then
+C       		prefix1='-qqb'
+C       		if(rho.gt.2) then
+C       			condition1 = .true.
+C       		endif
       	endif
 
-      	do lxx=1,8
+      	do lxx=1,5
 
       		condition2 = .false.
 
@@ -371,50 +371,50 @@ c Analysis - make the cuts
       					condition2 = .true.
       				endif
       			endif
+C       		elseif(lxx.eq.3) then
+C       			prefix2 = '-wa-mcut'
+C       			if(ptj1.gt.0) then
+C       				if(abs(y_j1 - y_ttb).lt.0.5) then
+C       					if(mttbar.gt.800) then
+C       						condition2 = .true.
+C       					endif
+C       				endif
+C       			endif
+C       		elseif(lxx.eq.4) then
+C       			prefix2 = '-wa-bfac'
+C       			if(ptj1.gt.0) then
+C       				if(abs(y_j1 - y_ttb).lt.0.5) then
+C       					if(abs(deltay).lt.0.1) then
+C       						condition2 = .true.
+C       					endif
+C       				endif
+C       			endif
+C       		elseif(lxx.eq.5) then
+C       			prefix2 = '-wa-bfac-mcut'
+C       			if(ptj1.gt.0) then
+C       				if(abs(y_j1 - y_ttb).lt.0.5) then
+C       					if(abs(deltay).lt.0.1) then
+C       						if(mttbar.gt.800) then
+C       							condition2 = .true.
+C       						endif
+C       					endif
+C       				endif
+C       			endif
       		elseif(lxx.eq.3) then
-      			prefix2 = '-wa-mcut'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1 - y_ttb).lt.0.5) then
-      					if(mttbar.gt.800) then
-      						condition2 = .true.
-      					endif
-      				endif
-      			endif
-      		elseif(lxx.eq.4) then
-      			prefix2 = '-wa-bfac'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1 - y_ttb).lt.0.5) then
-      					if(abs(deltay).lt.0.1) then
-      						condition2 = .true.
-      					endif
-      				endif
-      			endif
-      		elseif(lxx.eq.5) then
-      			prefix2 = '-wa-bfac-mcut'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1 - y_ttb).lt.0.5) then
-      					if(abs(deltay).lt.0.1) then
-      						if(mttbar.gt.800) then
-      							condition2 = .true.
-      						endif
-      					endif
-      				endif
-      			endif
-      		elseif(lxx.eq.6) then
       			prefix2 = '-wa-beam'
       			if(ptj1.gt.0) then
       				if(abs(y_j1).lt.0.5) then
       					condition2 = .true.
       				endif
       			endif
-      		elseif(lxx.eq.7) then
+      		elseif(lxx.eq.4) then
       			prefix2 = '-coll-beam'
       			if(ptj1.gt.0) then
       				if(abs(y_j1).gt.2.5) then
       					condition2 = .true.
       				endif
       			endif
-      		elseif(lxx.eq.8) then
+      		elseif(lxx.eq.5) then
       			prefix2 = '-coll'
       			if(ptj1.gt.0) then
       				if(abs(y_j1 - y_ttb).gt.2.5) then
@@ -433,36 +433,36 @@ c Analysis - make the cuts
       			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
       		endif
 
-      		do mxx=1,3
+C       		do mxx=1,3
 
-      			condition3 = .false.
+C       			condition3 = .false.
 
-      			if(mxx.eq.1) then
-      				prefix3='-pT-gt-10'
-      				if(ptj1.gt.10) then
-      					condition3 = .true.
-      				endif
-      			elseif(mxx.eq.2) then
-      				prefix3='-pT-gt-25'
-      				if(ptj1.gt.25) then
-      					condition3 = .true.
-      				endif
-      			elseif(mxx.eq.3) then
-      				prefix3='-pT-gt-50'
-      				if(ptj1.gt.50) then
-      					condition3 = .true.
-      				endif
-      			endif
+C       			if(mxx.eq.1) then
+C       				prefix3='-pT-gt-10'
+C       				if(ptj1.gt.10) then
+C       					condition3 = .true.
+C       				endif
+C       			elseif(mxx.eq.2) then
+C       				prefix3='-pT-gt-25'
+C       				if(ptj1.gt.25) then
+C       					condition3 = .true.
+C       				endif
+C       			elseif(mxx.eq.3) then
+C       				prefix3='-pT-gt-50'
+C       				if(ptj1.gt.50) then
+C       					condition3 = .true.
+C       				endif
+C       			endif
 
-      			l3=lenocc(prefix3)
+C       			l3=lenocc(prefix3)
 
-      			if(condition1.and.condition2.and.condition3) then
-      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_ttb,dsig)
-      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_t,dsig)
-      				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-      			endif
+C       			if(condition1.and.condition2.and.condition3) then
+C       				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_ttb,dsig)
+C       				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_t,dsig)
+C       				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
+C       			endif
 
-      		enddo
+C       		enddo
       	enddo
       enddo
 
