@@ -41,7 +41,7 @@ c  pwhgfill  :  fills the histograms with data
       		prefix1 = '-qqb'
       	endif
       	
-      	do l=1,5
+      	do l=1,6
       		if(l.eq.1) then
       			prefix2 = '-no-cuts'
       		elseif(l.eq.2) then
@@ -50,8 +50,10 @@ c  pwhgfill  :  fills the histograms with data
       			prefix2 = '-wa-mcut'
       		elseif(l.eq.4) then
       			prefix2 = '-wa-bfac'
-      		else
+      		elseif(l.eq.5) then
       			prefix2 = '-wa-bfac-mcut'
+      		else
+      			prefix2 = '-wa-beam'
       		endif
 
          	l1=lenocc(prefix1)
@@ -349,7 +351,7 @@ c Analysis - make the cuts
       		endif
       	endif
 
-      	do lxx=1,5
+      	do lxx=1,6
 
       		condition2 = .false.
 
@@ -392,6 +394,13 @@ c Analysis - make the cuts
       							condition2 = .true.
       						endif
       					endif
+      				endif
+      			endif
+      		elseif(lxx.eq.6) then
+      			prefix2 = '-wa-beam'
+      			if(ptj1.gt.0) then
+      				if(abs(y_j1).lt.0.5) then
+      					condition2 = .true.
       				endif
       			endif
       		endif
