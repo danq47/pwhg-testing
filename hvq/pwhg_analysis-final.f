@@ -57,9 +57,9 @@ c  pwhgfill  :  fills the histograms with data
          	l1=lenocc(prefix1)
          	l2=lenocc(prefix2)
 
-      		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,300d0)
-      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,500d0)
-      		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,1000d0)
+      		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
+      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
+      		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
 
       		do m=1,3
@@ -430,10 +430,8 @@ c Analysis - make the cuts
       			l3=lenocc(prefix3)
 
       			if(condition1.and.condition2.and.condition3) then
-      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_ttb,-dsig)
-      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1,dsig)
-      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_t,-dsig)
+      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_ttb,dsig)
+      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_t,dsig)
       				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
       			endif
 
