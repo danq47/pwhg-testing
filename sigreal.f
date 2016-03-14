@@ -816,6 +816,7 @@ c supply Born zero damping factor, if required
       data ini/.true./
       save ini,equivto,equivcoef
       external pwhg_pt2,dijterm
+      Rfact = 0
       if(ini) then
          do alr=1,flst_nalr
             equivto(alr)=-1
@@ -926,8 +927,6 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
                		else  ! Otherwise, stay with Old Sudakov. This is valid, as the old Sudakov is exact in the collinear limit
                			Rfact = 0
                		endif
-               	else 		! If the process is anything else other than gg->tt~ + g, do nothing
-               		Rfact = 0
                	endif
                endif
 
