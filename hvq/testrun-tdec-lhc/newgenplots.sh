@@ -288,15 +288,15 @@ do
     if [ $jxx -eq 1 ]
     then
       if [ "$plotPoints" = "y" ] ; then
-        echo "lc rgb colour_$jxx lw 3 lt lt_$jxx pt pt_$jxx \\"   >> $gnuPlotScript
+        echo "lc rgb colour_$jxx lw 1 lt lt_$jxx pt pt_$jxx \\"   >> $gnuPlotScript
       else
-        echo "lc rgb colour_$jxx lw 3 lt lt_$jxx \\"              >> $gnuPlotScript
+        echo "lc rgb colour_$jxx lw 1 lt lt_$jxx \\"              >> $gnuPlotScript
       fi
     else
       if [ "$plotPoints" = "y" ] ; then
-        echo "lc rgb colour_$jxx lw 3 lt lt_$jxx pt pt_$jxx \\"   >> $gnuPlotScript
+        echo "lc rgb colour_$jxx lw 1 lt lt_$jxx pt pt_$jxx \\"   >> $gnuPlotScript
       else
-        echo "lc rgb colour_$jxx lw 3 lt lt_$jxx \\"              >> $gnuPlotScript
+        echo "lc rgb colour_$jxx lw 1 lt lt_$jxx \\"              >> $gnuPlotScript
       fi
     fi
     if [ $jxx -ne $nInputFiles ]
@@ -311,7 +311,7 @@ do
   echo "set tmargin at screen 0.4"                                >> $gnuPlotScript
   echo "set bmargin at screen 0.2"                                >> $gnuPlotScript
   echo "set nolog y"                                              >> $gnuPlotScript
-  echo "set yrange [0.5:1.5]"                                         >> $gnuPlotScript
+  echo "set yrange [0.95:1.05]"                                         >> $gnuPlotScript
   echo "set xrange restore"                                       >> $gnuPlotScript
   echo "set xlabel thexlabel"                                     >> $gnuPlotScript
   echo "set format x"                                             >> $gnuPlotScript
