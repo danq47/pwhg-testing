@@ -30,71 +30,88 @@ c  pwhgfill  :  fills the histograms with data
 
       call inihists
 
-      do j = 1,2
-      	if(j.eq.1) then
-      		prefix1 = '-incl'
-      	elseif(j.eq.2) then
-      		prefix1 = '-str'
-C       	elseif(j.eq.3) then
-C       		prefix1 = '-unstr'
-C       	else
-C       		prefix1 = '-qqb'
-      	endif
+C       do j = 1,2
+C       	if(j.eq.1) then
+C       		prefix1 = '-incl'
+C       	elseif(j.eq.2) then
+C       		prefix1 = '-str'
+C C       	elseif(j.eq.3) then
+C C       		prefix1 = '-unstr'
+C C       	else
+C C       		prefix1 = '-qqb'
+C       	endif
       	
-      	do l=1,9
-      		if(l.eq.1) then
-      			prefix2 = '-no-cuts'
-      		elseif(l.eq.2) then
-      			prefix2 = '-wa'
+C       	do l=1,9
+C       		if(l.eq.1) then
+C       			prefix2 = '-no-cuts'
+C       		elseif(l.eq.2) then
+C       			prefix2 = '-wa'
+C C       		elseif(l.eq.3) then
+C C       			prefix2 = '-wa-mcut'
+C C       		elseif(l.eq.4) then
+C C       			prefix2 = '-wa-bfac'
+C C       		elseif(l.eq.5) then
+C C       			prefix2 = '-wa-bfac-mcut'
 C       		elseif(l.eq.3) then
-C       			prefix2 = '-wa-mcut'
+C       			prefix2 = '-wa-beam'
 C       		elseif(l.eq.4) then
-C       			prefix2 = '-wa-bfac'
+C       			prefix2 = '-coll-beam'
 C       		elseif(l.eq.5) then
-C       			prefix2 = '-wa-bfac-mcut'
-      		elseif(l.eq.3) then
-      			prefix2 = '-wa-beam'
-      		elseif(l.eq.4) then
-      			prefix2 = '-coll-beam'
-      		elseif(l.eq.5) then
-      			prefix2 = '-coll'
-      		elseif(l.eq.6) then
-      			prefix2 = '-wa-eta'
-      		elseif(l.eq.7) then
-      			prefix2 = '-wa-beam-eta'
-      		elseif(l.eq.8) then
-      			prefix2 = '-coll-eta'
-      		elseif(l.eq.9) then
-      			prefix2 = '-coll-b-eta'
-      		endif
+C       			prefix2 = '-coll'
+C       		elseif(l.eq.6) then
+C       			prefix2 = '-wa-eta'
+C       		elseif(l.eq.7) then
+C       			prefix2 = '-wa-beam-eta'
+C       		elseif(l.eq.8) then
+C       			prefix2 = '-coll-eta'
+C       		elseif(l.eq.9) then
+C       			prefix2 = '-coll-b-eta'
+C       		endif
 
-         	l1=lenocc(prefix1)
-         	l2=lenocc(prefix2)
+C          	l1=lenocc(prefix1)
+C          	l2=lenocc(prefix2)
 
-      		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
-      		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
-      		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
-      		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
+C       		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
+C       		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
+C       		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
+C       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
 
-      		do m=1,3
-      			if(m.eq.1) then
-      				prefix3='-pT-gt-10'
-      			elseif(m.eq.2) then
-      				prefix3='-pT-gt-25'
-      			else
-      				prefix3='-pT-gt-50'
-      			endif
+C       		do m=1,3
+C       			if(m.eq.1) then
+C       				prefix3='-pT-gt-10'
+C       			elseif(m.eq.2) then
+C       				prefix3='-pT-gt-25'
+C       			else
+C       				prefix3='-pT-gt-50'
+C       			endif
 
-      			l3=lenocc(prefix3)
+C       			l3=lenocc(prefix3)
 
-      			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-      			call bookupeqbins('eta-j-minus-eta-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-c      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-c      			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
+C       			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
+C       			call bookupeqbins('eta-j-minus-eta-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
+C c      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
+C c      			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
 
-      		enddo
-      	enddo
-      enddo
+C       		enddo
+C       	enddo
+C       enddo
+
+      call bookupeqbins('pt-2GeV',2d0,0d0,500d0)
+      call bookupeqbins('pt-2GeV-coll',2d0,0d0,500d0)
+      call bookupeqbins('pt-2GeV-wa',2d0,0d0,500d0)
+
+      call bookupeqbins('pt-10GeV',10d0,0d0,1d3)
+      call bookupeqbins('pt-10GeV-coll',10d0,0d0,1d3)
+      call bookupeqbins('pt-10GeV-wa',10d0,0d0,1d3)
+
+      call bookupeqbins('pt-50GeV',50d0,0d0,2d3)
+      call bookupeqbins('pt-50GeV-coll',50d0,0d0,2d3)
+      call bookupeqbins('pt-50GeV-wa',50d0,0d0,2d3)
+
+      call bookupeqbins('pt-200GeV',200d0,0d0,3d3)
+      call bookupeqbins('pt-200GeV-coll',200d0,0d0,3d3)
+      call bookupeqbins('pt-200GeV-wa',200d0,0d0,3d3)      
+
       end
 
       subroutine analysis(dsig0)
@@ -255,267 +272,295 @@ c            endif
       i_bjet = in_jet(i_bfromtop,jetvec)
       i_abjet = in_jet(i_abfromatop,jetvec)
 
-c We now have mjets number of jets, however, some of these are b-jets.
-c For our analysis, we sometimes want to only see the non b-jets, so this piece of code
-c picks out the position of the 3 hardest non-bjets (at most - sometimes less than this if the jets are too soft to be picked up)
-c This runs into a problem when we do hadronisation, as the b hadrons are no longer picked up properly, however we can just turn this off for the moment
+C c We now have mjets number of jets, however, some of these are b-jets.
+C c For our analysis, we sometimes want to only see the non b-jets, so this piece of code
+C c picks out the position of the 3 hardest non-bjets (at most - sometimes less than this if the jets are too soft to be picked up)
+C c This runs into a problem when we do hadronisation, as the b hadrons are no longer picked up properly, however we can just turn this off for the moment
 
 
-c jet_postition starts as an array of 1..maxjets, then any b jets are set to zero, then we shift the following entries up
-c So if we have 4 jets, and a b-jet as the second hardest jet then jet_position will go
-c step 1 -> [1,2,3,4]
-c step 2 -> [1,0,3,4]
-c step 3 -> [1,3,4]
-c Therefore, the 3 hardest non-b jets are located at jets numbers 1,3, and 4
-c which can be easily accesed as jet_position(1),jet_position(2), and jet_position_(3)
-c so now, the rapidity of say the 2nd hardest non b jet is given by j_rap(jet_position(2))
+C c jet_postition starts as an array of 1..maxjets, then any b jets are set to zero, then we shift the following entries up
+C c So if we have 4 jets, and a b-jet as the second hardest jet then jet_position will go
+C c step 1 -> [1,2,3,4]
+C c step 2 -> [1,0,3,4]
+C c step 3 -> [1,3,4]
+C c Therefore, the 3 hardest non-b jets are located at jets numbers 1,3, and 4
+C c which can be easily accesed as jet_position(1),jet_position(2), and jet_position_(3)
+C c so now, the rapidity of say the 2nd hardest non b jet is given by j_rap(jet_position(2))
 
-c first set the position of the b jets to zero
-      do i_jets=1,maxjets
-         jet_position(i_jets)=i_jets
-         if(i_jets.eq.i_bjet.or.i_jets.eq.i_abjet) then
-            jet_position(i_jets)=0
-         endif
-      enddo
-c Next, if there are no zeroes (i.e. neither of the b-jets are the hardest jets) then we simply take the first n jets
-      if(i_bjet.eq.0.and.i_abjet.eq.0) then
-         continue
-c if there is only one zero, we only need to shift the indices in the array once
-      elseif(i_bjet.eq.0.and.i_abjet.ne.0) then
-         jet_index=1
-         do jzz=1,maxjets
-            if(jet_position(jzz).eq.0) then
-               jet_index=jzz
-            endif
-         enddo
+C c first set the position of the b jets to zero
+C       do i_jets=1,maxjets
+C          jet_position(i_jets)=i_jets
+C          if(i_jets.eq.i_bjet.or.i_jets.eq.i_abjet) then
+C             jet_position(i_jets)=0
+C          endif
+C       enddo
+C c Next, if there are no zeroes (i.e. neither of the b-jets are the hardest jets) then we simply take the first n jets
+C       if(i_bjet.eq.0.and.i_abjet.eq.0) then
+C          continue
+C c if there is only one zero, we only need to shift the indices in the array once
+C       elseif(i_bjet.eq.0.and.i_abjet.ne.0) then
+C          jet_index=1
+C          do jzz=1,maxjets
+C             if(jet_position(jzz).eq.0) then
+C                jet_index=jzz
+C             endif
+C          enddo
        
-         do jzz=jet_index,maxjets-1
-            jet_position(jzz)=jet_position(jzz+1)
-         enddo
-      elseif(i_bjet.ne.0.and.i_abjet.eq.0) then
-         jet_index=1
-         do jzz=1,maxjets
-            if(jet_position(jzz).eq.0) then
-               jet_index=jzz
-            endif
-         enddo
+C          do jzz=jet_index,maxjets-1
+C             jet_position(jzz)=jet_position(jzz+1)
+C          enddo
+C       elseif(i_bjet.ne.0.and.i_abjet.eq.0) then
+C          jet_index=1
+C          do jzz=1,maxjets
+C             if(jet_position(jzz).eq.0) then
+C                jet_index=jzz
+C             endif
+C          enddo
        
-         do jzz=jet_index,maxjets-1
-            jet_position(jzz)=jet_position(jzz+1)
-         enddo
-      else
-c now the (ususal) case where both the b jets are in the in the list of hardest jets
-c We delete the two zeroes
-         do qxx=1,2
-            jet_index=1
-            do jzz=1,maxjets+1-qxx
-               if(jet_position(jzz).eq.0) then
-                  jet_index=jzz
-               endif
-            enddo
+C          do jzz=jet_index,maxjets-1
+C             jet_position(jzz)=jet_position(jzz+1)
+C          enddo
+C       else
+C c now the (ususal) case where both the b jets are in the in the list of hardest jets
+C c We delete the two zeroes
+C          do qxx=1,2
+C             jet_index=1
+C             do jzz=1,maxjets+1-qxx
+C                if(jet_position(jzz).eq.0) then
+C                   jet_index=jzz
+C                endif
+C             enddo
        
-            do jzz=jet_index,maxjets-qxx
-               jet_position(jzz)=jet_position(jzz+1)
-            enddo
-         enddo
-      endif
+C             do jzz=jet_index,maxjets-qxx
+C                jet_position(jzz)=jet_position(jzz+1)
+C             enddo
+C          enddo
+C       endif
 
-      call getyetaptmass(p_top,y,eta,pt,mass)
-      y_t=y
-      call getyetaptmass(p_tb,y,eta,pt,mass)
-      y_tbar=y
+C       call getyetaptmass(p_top,y,eta,pt,mass)
+C       y_t=y
+C       call getyetaptmass(p_tb,y,eta,pt,mass)
+C       y_tbar=y
       call getyetaptmass(p_top+p_tb,y,eta,pt,mass)
       y_ttb=y
-      mttbar=mass
-      eta_ttb = eta
+C       mttbar=mass
+C       eta_ttb = eta
 
-      deltay=y_t-y_tbar
+C       deltay=y_t-y_tbar
 
 C       ptj1=j_kt(jet_position(1))
       call getyetaptmass(phep(1:4,5),y,eta,pt,mass)
-  		ptj1 = pt
+C   		ptj1 = pt
   		y_j1 = y
-  		eta_j1 = eta    
-C       ptj1=sqrt(phep(1,5)**2 + phep(2,5)**2)
+C   		eta_j1 = eta    
+      ptj1=sqrt(phep(1,5)**2 + phep(2,5)**2)
 C       y_j1=0.5d0*log((phep(4,5)+phep(3,5))/(phep(4,5)-phep(3,5)))
 
 
-      deltaphi_j_t=deltaphi(azi(p_top),j_phi(jet_position(1)))
+C       deltaphi_j_t=deltaphi(azi(p_top),j_phi(jet_position(1)))
 
 
 c Analysis - make the cuts
 
-      do jxx = 1,2
+C       do jxx = 1,2
 
-      	condition1 = .false.
+C       	condition1 = .false.
 
-      	if(jxx.eq.1) then
-      		prefix1='-incl'
-      		condition1 = .true.
-        	elseif(jxx.eq.2) then
-      		prefix1='-str'
-      		if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
-      			condition1 = .true.
-      		endif
-C       	elseif(jxx.eq.3) then
-C       		prefix1='-unstr'
-C       		if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
+C       	if(jxx.eq.1) then
+C       		prefix1='-incl'
+C       		condition1 = .true.
+C         	elseif(jxx.eq.2) then
+C       		prefix1='-str'
+C       		if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
 C       			condition1 = .true.
 C       		endif
-C       	elseif(jxx.eq.4) then
-C       		prefix1='-qqb'
-C       		if(rho.gt.2) then
-C       			condition1 = .true.
-C       		endif
-      	endif
+C C       	elseif(jxx.eq.3) then
+C C       		prefix1='-unstr'
+C C       		if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
+C C       			condition1 = .true.
+C C       		endif
+C C       	elseif(jxx.eq.4) then
+C C       		prefix1='-qqb'
+C C       		if(rho.gt.2) then
+C C       			condition1 = .true.
+C C       		endif
+C       	endif
 
-      	do lxx=1,9
+C       	do lxx=1,9
 
-      		condition2 = .false.
+C       		condition2 = .false.
 
-      		if(lxx.eq.1) then
-      			prefix2 = '-no-cuts'
-      			if(ptj1.gt.0) then 	! Making sure there is a jet
-      				condition2 = .true.
-      			endif
-      		elseif(lxx.eq.2) then
-      			prefix2 = '-wa'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1 - y_ttb).lt.0.5) then
-      					condition2 = .true.
-      				endif
-      			endif
-C       		elseif(lxx.eq.3) then
-C       			prefix2 = '-wa-mcut'
+C       		if(lxx.eq.1) then
+C       			prefix2 = '-no-cuts'
+C       			if(ptj1.gt.0) then 	! Making sure there is a jet
+C       				condition2 = .true.
+C       			endif
+C       		elseif(lxx.eq.2) then
+C       			prefix2 = '-wa'
 C       			if(ptj1.gt.0) then
 C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C       					if(mttbar.gt.800) then
-C       						condition2 = .true.
-C       					endif
+C       					condition2 = .true.
+C       				endif
+C       			endif
+C C       		elseif(lxx.eq.3) then
+C C       			prefix2 = '-wa-mcut'
+C C       			if(ptj1.gt.0) then
+C C       				if(abs(y_j1 - y_ttb).lt.0.5) then
+C C       					if(mttbar.gt.800) then
+C C       						condition2 = .true.
+C C       					endif
+C C       				endif
+C C       			endif
+C C       		elseif(lxx.eq.4) then
+C C       			prefix2 = '-wa-bfac'
+C C       			if(ptj1.gt.0) then
+C C       				if(abs(y_j1 - y_ttb).lt.0.5) then
+C C       					if(abs(deltay).lt.0.1) then
+C C       						condition2 = .true.
+C C       					endif
+C C       				endif
+C C       			endif
+C C       		elseif(lxx.eq.5) then
+C C       			prefix2 = '-wa-bfac-mcut'
+C C       			if(ptj1.gt.0) then
+C C       				if(abs(y_j1 - y_ttb).lt.0.5) then
+C C       					if(abs(deltay).lt.0.1) then
+C C       						if(mttbar.gt.800) then
+C C       							condition2 = .true.
+C C       						endif
+C C       					endif
+C C       				endif
+C C       			endif
+C       		elseif(lxx.eq.3) then
+C       			prefix2 = '-wa-beam'
+C       			if(ptj1.gt.0) then
+C       				if(abs(y_j1).lt.0.5) then
+C       					condition2 = .true.
 C       				endif
 C       			endif
 C       		elseif(lxx.eq.4) then
-C       			prefix2 = '-wa-bfac'
+C       			prefix2 = '-coll-beam'
 C       			if(ptj1.gt.0) then
-C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C       					if(abs(deltay).lt.0.1) then
-C       						condition2 = .true.
-C       					endif
+C       				if(abs(y_j1).gt.3.5) then
+C       					condition2 = .true.
 C       				endif
 C       			endif
 C       		elseif(lxx.eq.5) then
-C       			prefix2 = '-wa-bfac-mcut'
+C       			prefix2 = '-coll'
 C       			if(ptj1.gt.0) then
-C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C       					if(abs(deltay).lt.0.1) then
-C       						if(mttbar.gt.800) then
-C       							condition2 = .true.
-C       						endif
-C       					endif
+C       				if(abs(y_j1 - y_ttb).gt.3.5) then
+C       					condition2 = .true.
 C       				endif
 C       			endif
-      		elseif(lxx.eq.3) then
-      			prefix2 = '-wa-beam'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1).lt.0.5) then
-      					condition2 = .true.
-      				endif
-      			endif
-      		elseif(lxx.eq.4) then
-      			prefix2 = '-coll-beam'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1).gt.3.5) then
-      					condition2 = .true.
-      				endif
-      			endif
-      		elseif(lxx.eq.5) then
-      			prefix2 = '-coll'
-      			if(ptj1.gt.0) then
-      				if(abs(y_j1 - y_ttb).gt.3.5) then
-      					condition2 = .true.
-      				endif
-      			endif
-      		elseif(lxx.eq.6) then
-      			prefix2 = '-wa-eta'
-      			if(ptj1.gt.0) then
-      				if(abs(eta_j1 - eta_ttb).lt.0.5) then
-      					condition2 = .true.
-      				endif
-      			endif
-      		elseif(lxx.eq.7) then
-      			prefix2 = '-wa-beam-eta'
-      			if(ptj1.gt.0) then
-      				if(abs(eta_j1).lt.0.5) then
-      					condition2 = .true.
-      				endif
-      			endif
-      		elseif(lxx.eq.8) then
-      			prefix2 = '-coll-eta'
-      			if(ptj1.gt.0) then
-      				if(abs(eta_j1 - eta_ttb).gt.3.5) then
-      					condition2 = .true.
-      				endif
-      			endif    
-      		elseif(lxx.eq.9) then
-      			prefix2 = '-coll-b-eta'
-      			if(ptj1.gt.0) then
-      				if(abs(eta_j1).gt.3.5) then
-      					condition2 = .true.
-      				endif
-      			endif      			
-      		endif
-
-C       		    prefix2 = '-wa-eta'
-C       		elseif(l.eq.7) then
+C       		elseif(lxx.eq.6) then
+C       			prefix2 = '-wa-eta'
+C       			if(ptj1.gt.0) then
+C       				if(abs(eta_j1 - eta_ttb).lt.0.5) then
+C       					condition2 = .true.
+C       				endif
+C       			endif
+C       		elseif(lxx.eq.7) then
 C       			prefix2 = '-wa-beam-eta'
-C       		elseif(l.eq.8) then
+C       			if(ptj1.gt.0) then
+C       				if(abs(eta_j1).lt.0.5) then
+C       					condition2 = .true.
+C       				endif
+C       			endif
+C       		elseif(lxx.eq.8) then
 C       			prefix2 = '-coll-eta'
-C       		elseif(l.eq.9) then
+C       			if(ptj1.gt.0) then
+C       				if(abs(eta_j1 - eta_ttb).gt.3.5) then
+C       					condition2 = .true.
+C       				endif
+C       			endif    
+C       		elseif(lxx.eq.9) then
 C       			prefix2 = '-coll-b-eta'
+C       			if(ptj1.gt.0) then
+C       				if(abs(eta_j1).gt.3.5) then
+C       					condition2 = .true.
+C       				endif
+C       			endif      			
+C       		endif
 
-      		l1=lenocc(prefix1)
-      		l2=lenocc(prefix2)
+C C       		    prefix2 = '-wa-eta'
+C C       		elseif(l.eq.7) then
+C C       			prefix2 = '-wa-beam-eta'
+C C       		elseif(l.eq.8) then
+C C       			prefix2 = '-coll-eta'
+C C       		elseif(l.eq.9) then
+C C       			prefix2 = '-coll-b-eta'
 
-      		if(condition1.and.condition2) then
-      			call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-      			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-      			call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-      			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-      		endif
+C       		l1=lenocc(prefix1)
+C       		l2=lenocc(prefix2)
 
-      		do mxx=1,3
+C       		if(condition1.and.condition2) then
+C       			call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+C       			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+C       			call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+C       			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+C       		endif
 
-      			condition3 = .false.
+C       		do mxx=1,3
 
-      			if(mxx.eq.1) then
-      				prefix3='-pT-gt-10'
-      				if(ptj1.gt.10) then
-      					condition3 = .true.
-      				endif
-      			elseif(mxx.eq.2) then
-      				prefix3='-pT-gt-25'
-      				if(ptj1.gt.25) then
-      					condition3 = .true.
-      				endif
-      			elseif(mxx.eq.3) then
-      				prefix3='-pT-gt-50'
-      				if(ptj1.gt.50) then
-      					condition3 = .true.
-      				endif
-      			endif
+C       			condition3 = .false.
 
-      			l3=lenocc(prefix3)
+C       			if(mxx.eq.1) then
+C       				prefix3='-pT-gt-10'
+C       				if(ptj1.gt.10) then
+C       					condition3 = .true.
+C       				endif
+C       			elseif(mxx.eq.2) then
+C       				prefix3='-pT-gt-25'
+C       				if(ptj1.gt.25) then
+C       					condition3 = .true.
+C       				endif
+C       			elseif(mxx.eq.3) then
+C       				prefix3='-pT-gt-50'
+C       				if(ptj1.gt.50) then
+C       					condition3 = .true.
+C       				endif
+C       			endif
 
-      			if(condition1.and.condition2.and.condition3) then
-      				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_ttb,dsig)
-      				call filld('eta-j-minus-eta-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),eta_j1-eta_ttb,dsig)
-c      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_t,dsig)
-c      				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-      			endif
+C       			l3=lenocc(prefix3)
 
-      		enddo
-      	enddo
-      enddo
+C       			if(condition1.and.condition2.and.condition3) then
+C       				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_ttb,dsig)
+C       				call filld('eta-j-minus-eta-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),eta_j1-eta_ttb,dsig)
+C c      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_t,dsig)
+C c      				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
+C       			endif
+
+C       		enddo
+C       	enddo
+C       enddo
+
+      call filld('pt-2GeV',ptj1,dsig)
+      call filld('pt-10GeV',ptj1,dsig)
+      call filld('pt-50GeV',ptj1,dsig)
+      call filld('pt-200GeV',ptj1,dsig)
+
+      if(abs(y_j1-y_ttb).lt.0.5) then
+      	call filld('pt-2GeV-wa',ptj1,dsig)
+      	call filld('pt-10GeV-wa',ptj1,dsig)
+      	call filld('pt-50GeV-wa',ptj1,dsig)
+      	call filld('pt-200GeV-wa',ptj1,dsig)
+      elseif(abs(y_j1-y_ttb).gt.3.) then
+      	call filld('pt-2GeV-coll',ptj1,dsig)
+      	call filld('pt-10GeV-coll',ptj1,dsig)
+      	call filld('pt-50GeV-coll',ptj1,dsig)
+      	call filld('pt-200GeV-coll',ptj1,dsig)
+      endif
+
+C       if(abs(y_j1-y_ttb).gt.3.5) then
+C       	counter2=counter2+1
+C       	if(RB.gt.0) then
+C       		if(RB.lt.0.889.or.RB.gt.1.111) then
+C       			counter=counter+1
+C       			write(27,*) ptj1,RB,counter,counter2
+C       		endif
+C       	endif
+C       endif
+
 
       end
 

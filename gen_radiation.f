@@ -614,13 +614,14 @@ c that some pdf vanish (typically heavy flavour pdf's)
       kn_csi=1-x
       kn_azi=2*pi*random()
       call gen_real_phsp_isr_rad
+      ubound=born*pwhg_upperb_rad()*unorm*ufct
+
       if(flg_newsuda) then
-	      ubound=(born*Bfact)*pwhg_upperb_rad()*unorm*ufct !Use B^{f_b,rho}=B^{f_b}*Bfact rather than B^{f_b}
          call sigreal_rad2(sig)
       else
-      	ubound=born*pwhg_upperb_rad()*unorm*ufct
          call sigreal_rad(sig)
       endif
+      
       value=sig*kn_jacreal
       if(value.gt.ubound) then
          call increasecnt(
