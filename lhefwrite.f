@@ -73,11 +73,11 @@ c do not write events, write only the event count
       endif
       write(nlf,'(a)')'<event>'
       if(rho_idx.eq.1) then
-         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,Bfact
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,Rfact/Bfact
       elseif(rho_idx.eq.2) then
-         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,Bfact
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,Rfact/Bfact
       else
-         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,2,rho_idx,Bfact
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,2,rho_idx,Rfact/Bfact
       endif
       do 200 i=1,nup
          write(nlf,220) idup(i),istup(i),mothup(1,i),

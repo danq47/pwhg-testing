@@ -41,7 +41,7 @@ c it is an event with radiation
             process=2
          endif
          rho=rho_idx
-         Bf=Bfact
+         RB=Rfact/Bfact
 
          if(em.eq.0) then
             if(kn_y.gt.0) then

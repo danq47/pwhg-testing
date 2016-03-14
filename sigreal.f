@@ -865,27 +865,16 @@ c End initialization phase; compute graphs
          call collsoftrad(rcs)
          call softrad(rs)
       endif
+c Need to call this for the check later on in the modification, will switch back to the old
+c Sudakov if we are close to the collinear limit, as this is exact
+      call collrad(rc)
+
       do alr=1,flst_nalr
          computed(alr)=.false.
       enddo
       do j=1,rad_alr_nlist
          alr=rad_alr_list(j)
          em=flst_emitter(alr)
-c Identify which R_{alpha_r} we are dealing with         
-         if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then
-         	prc='gg'
-         elseif(flst_alr(1,alr).gt.0.and.flst_alr(2,alr).eq.0) then
-         	prc='qg'
-         elseif(flst_alr(1,alr).lt.0.and.flst_alr(2,alr).eq.0) then
-         	prc='q~g'
-         elseif(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).gt.0) then
-         	prc='gq'
-         elseif(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).lt.0) then
-         	prc='gq~'
-         else
-         	prc='qq'
-         endif
-
 c check if emitter corresponds to current radiation region (i.e. rad_kinreg):
          if((rad_kinreg.eq.1.and.em.le.2).or.(em.gt.2.and.
      #       flst_lightpart+rad_kinreg-2.eq.em))then
@@ -921,31 +910,24 @@ c            if(equivto(alr).lt.0.or..not.computed(equivto(alr))) then
                endif
                flst_cur_alr = alr
                call realgr(flst_alr(1,alr),kn_cmpreal,rr(alr))
-c Here is where we reweight the gg->tt~+g contribution to the Real cross section
-C                if(flg_newsuda) then
-C                   if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then
-C                      if(rho_idx.eq.1) then
-C                         rr(alr)=rr(alr)*(rhorweight(1)+rhorweight(2)+rhorweight(3))
-C                      elseif(rho_idx.eq.2) then
-C                         rr(alr)=rr(alr)*(rhorweight(4)+rhorweight(5)+rhorweight(6))
-C                      endif
-C                   endif
-C                endif
+
+c Here is where we modify the Sudakov form factor - if the process is gg->tt~ + g then
+c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} in FNO eq. (4.58)
                if(flg_newsuda) then
-               	if(rad_ubornidx.eq.1) then	! only change processes with f_b = gg
-               		if(prc.eq.'gg') then
-               			if(rho_idx.eq.1) then
-               				rr(alr) = rr(alr) * (rhorweight(1)+rhorweight(2)+rhorweight(3))
-               			else
-               				rr(alr) = rr(alr) * (rhorweight(4)+rhorweight(5)+rhorweight(6))
-               			endif
-               		elseif((prc.eq.'qg').or.(prc.eq.'q~g').or.(prc.eq.'gq').or.(prc.eq.'gq~')) then
-               			if(rho_idx.eq.1) then
-               				rr(alr) = rr(alr) * rhorweight(1)
-               			else
-               				rr(alr) = rr(alr) * rhorweight(2)
-               			endif
+               	if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then 
+               		if(rho_idx.eq.1) then
+               			Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               		elseif(rho_idx.eq.2) then
+               			Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
                		endif
+
+               		if(rr(alr).lt.rc(alr)) then ! If we are far from the collinear limit, modify the Sudakov
+               			rr(alr) = (Rfact/Bfact) * rr(alr)
+               		else  ! Otherwise, stay with Old Sudakov. This is valid, as the old Sudakov is exact in the collinear limit
+               			Rfact = 0
+               		endif
+               	else 		! If the process is anything else other than gg->tt~ + g, do nothing
+               		Rfact = 0
                	endif
                endif
 
