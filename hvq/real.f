@@ -46,26 +46,7 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
          if(flg_newsuda) then
             call ggplanar(p_pup(:,1),1,p_pup(:,2),1,p_pup(:,5),1,
      1            p_pup(:,3),p_pup(:,4),xm2,
-     2            t512,t152,t125,t521,t251,t215)
-C             if((p_pup(0,5)**2 + p_pup(1,5)**2).lt.10) then
-C ! cb1=curly bracket 1
-C             cb1=(3.0*(4.5/3.0)*(eik(p_pup(:,1),p_pup(:,4),p_pup(:,5)) + eik(p_pup(:,2),p_pup(:,3),p_pup(:,5))))
-C c            cb1=cb1+(3.0*((4.0/3.0) - (3.0/2.0))*(eik(p_pup(:,1),p_pup(:,3),p_pup(:,5)) + 
-C c     1 			eik(p_pup(:,2),p_pup(:,4),p_pup(:,5))))
-C             cb1=cb1+(9.0/2.0)*eik(p_pup(:,1),p_pup(:,2),p_pup(:,5))
-C             cb1=cb1+((3.0/4.0)**2)*(eik(p_pup(:,3),p_pup(:,3),p_pup(:,5))+eik(p_pup(:,4),p_pup(:,4),p_pup(:,5)))
-C c            cb1=cb1+(2.0*(((4.0/3.0)-(3.0/2.0))**2))*eik(p_pup(:,3),p_pup(:,4),p_pup(:,5))
-C             cb1=cb1*ggbornplanar1
-C ! cb2=curly bracket 2
-C             cb2=(3.0*(4.5/3.0)*(eik(p_pup(:,2),p_pup(:,4),p_pup(:,5)) + eik(p_pup(:,1),p_pup(:,3),p_pup(:,5))))
-C c            cb2=cb2+(3.0*((4.0/3.0) - (3.0/2.0))*(eik(p_pup(:,2),p_pup(:,3),p_pup(:,5)) + 
-C c     1 			eik(p_pup(:,1),p_pup(:,4),p_pup(:,5))))
-C             cb2=cb2+(9.0/2.0)*eik(p_pup(:,1),p_pup(:,2),p_pup(:,5))
-C             cb2=cb2+((3.0/4.0)**2)*(eik(p_pup(:,3),p_pup(:,3),p_pup(:,5))+eik(p_pup(:,4),p_pup(:,4),p_pup(:,5)))
-C c            cb2=cb2+(2.0*(((4.0/3.0)-(3.0/2.0))**2))*eik(p_pup(:,3),p_pup(:,4),p_pup(:,5))
-C             cb2=cb2*ggbornplanar2
-C 				endif
-            
+     2            t512,t152,t125,t521,t251,t215)           
             ttot=t512+t152+t125+t521+t251+t215
             rhorweight(1)=t512/ttot
             rhorweight(2)=t152/ttot
@@ -73,14 +54,6 @@ C 				endif
             rhorweight(4)=t521/ttot
             rhorweight(5)=t251/ttot
             rhorweight(6)=t215/ttot
-C             if((p_pup(0,5)**2 + p_pup(1,5)**2).lt.10) then
-C c            write(26,*) 'rhorweight(1..3) = ',rhorweight(1)+rhorweight(2)+rhorweight(3),', rhorweight(4..6) = ',
-C c     1 				rhorweight(4)+rhorweight(5)+rhorweight(6)
-C c            write(26,*) 'curly bracket 1 = ',cb1/(cb1+cb2),', curly bracket 2 = ',cb2/(cb1+cb2)
-C             write(26,*) 'cb1weight/rhorweight(1..3)=',cb1/((cb1+cb2)*(rhorweight(1)+rhorweight(2)+rhorweight(3))),
-C      1 					'cb2weight/rhorweight(4..6)=',cb2/((cb1+cb2)*(rhorweight(4)+rhorweight(5)+rhorweight(6)))
-C          	write(26,*)
-C          	endif
          endif
       elseif(rflav(1).gt.0.and.rflav(2).lt.0) then
          prc='qq'
