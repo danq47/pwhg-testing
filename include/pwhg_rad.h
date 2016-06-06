@@ -6,8 +6,6 @@ c rad_alr_nlist: length of the above list
 c rad_realidx: index in rad_alr_list of current alr
 c rad_realalr: current alr
 
-c rho_idx: the value of rho that we are calculating
-
 c rad_realreg: index of regular contribution in the array flst_regular
       integer rad_ubornidx,rad_alr_list(maxalr),rad_alr_nlist,
      #     rad_realidx,rad_realalr,rad_realreg,rho_idx,switch
@@ -32,7 +30,19 @@ c 1 for Btilde event, 2 for remnant, 3 for regular
 c Signed total, absolute value total, positive total and negative total
 c obtained in the integration of btilde
 
+
+
+c New variables added by DQ
+c
+c rho_idx: the value of rho that we are calculating (included in line 11 above)
 c rhoweight = B1/(B1+B2) - used to calculate rho in Born.f and gen_index
+c Bfact = B^\rho/(B1+B2) - after we have chosen \rho, Bfact is the Born cross section for the chosen value of rho
+c Rfact = After we have chosen rho, Rfact is the amount we multiply our the gg part of our real cross section by so that we only include Real contributions with the same underlying Born colour flow (see FNO (4.56) - this is implementing new sum that we have in the numerator of the exponent)
+c rhorweight(6) = array of the 6 planar amplitude weights in FNO (4.52)
+c ggbornplanar1(2) = Born planar amplitudes for rho=1(2)
+c switch = 0 if we are not near the collinear limit, and 1 if we are (as defined by [R(alr)-Rc(alr)]/R(alr) < \alpha_s (included in line 11 above)
+c
+cccccccccccccccccccccccccccccccccc
 
       real * 8
      1     rad_totbtl,rad_etotbtl,
@@ -42,7 +52,7 @@ c rhoweight = B1/(B1+B2) - used to calculate rho in Born.f and gen_index
      5     rad_totrm,rad_etotrm,
      6     rad_totbtlgen,rad_etotbtlgen,
      7     rad_totgen,rad_etotgen,
-     8     rad_tot,rad_etot,rhoweight,rhorweight(6),Bfact,Rfact,ggbornplanar1,ggbornplanar2
+     8     rad_tot,rad_etot,rhoweight,Bfact,Rfact,rhorweight(6),ggbornplanar1,ggbornplanar2
 c Grid of the upper bounds of the ratio (R*kn_jacreal/B)/upper_bounding function
 c for each given kinematic region and underlying born
       real * 8 rad_csiynorms(rad_ncsiynormsmx,
@@ -100,7 +110,7 @@ c     integers
      2     rad_realidx,rad_realalr,rad_realreg,
      3     rad_kinreg,rad_nkinreg,
      4     rad_ncsinorms,rad_nynorms,rad_type,rad_btilde_sign,
-     5     rad_iupperfsr,rad_iupperisr,rho_idx,
+     5     rad_iupperfsr,rad_iupperisr,rho_idx,switch
 c     logical
-     6     rad_kinreg_on,switch
+     6     rad_kinreg_on
       save /pwhg_rad/
