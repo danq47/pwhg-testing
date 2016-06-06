@@ -110,7 +110,7 @@ c     integers
      2     rad_realidx,rad_realalr,rad_realreg,
      3     rad_kinreg,rad_nkinreg,
      4     rad_ncsinorms,rad_nynorms,rad_type,rad_btilde_sign,
-     5     rad_iupperfsr,rad_iupperisr,rho_idx,switch
+     5     rad_iupperfsr,rad_iupperisr,rho_idx,switch,
 c     logical
      6     rad_kinreg_on
       save /pwhg_rad/
