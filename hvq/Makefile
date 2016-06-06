@@ -157,17 +157,10 @@ LHEF=lhef_analysis.o boostrot.o random.o cernroutines.o		\
      opencount.o powheginput.o pwhg_bookhist-multi.o $(PWHGANAL)	\
      lhefread.o newunit.o pwhg_analysis_driver.o $(FPEOBJ)
 
-bLHEF=b_analysis.o boostrot.o random.o cernroutines.o		\
-     opencount.o powheginput.o pwhg_bookhist-multi.o $(PWHGANALB)	\
-     lhefread.o newunit.o pwhg_analysis_driver.o $(FPEOBJ)
 
 # target to analyze LHEF output
 lhef_analysis:$(LHEF)
 	$(FF) $(patsubst %,$(OBJ)/%,$(LHEF)) $(LIBS) $(LIBSFASTJET) $(STATIC)  -o $@ 
-
-b_analysis:$(bLHEF)
-	$(FF) $(patsubst %,$(OBJ)/%,$(bLHEF)) $(LIBS) $(LIBSFASTJET) $(STATIC)  -o $@ 
-
 
 
 # target to read event file, shower events with HERWIG + analysis
@@ -200,5 +193,5 @@ main-PYTHIA8-lhef: $(PYTHIA8)
 .PHONY: clean
 clean:
 	rm -f $(OBJ)/*.o pwhg_main lhef_analysis main-HERWIG-lhef	\
-	main-PYTHIA-lhef main-PYTHIA8-lhef b_analysis
+	main-PYTHIA-lhef main-PYTHIA8-lhef
 
