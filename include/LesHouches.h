@@ -9,7 +9,7 @@ c -*-Fortran-*-
      &                xmaxup(maxpup),lprup(maxpup)
       integer maxnup
       parameter (maxnup=500)
-      integer nup,idprup,idup,istup,mothup,icolup,rho,process,sw
+      integer nup,idprup,idup,istup,mothup,icolup,rho,sw
       double precision xwgtup,scalup,aqedup,aqcdup,pup,vtimup,spinup
       common/hepeup/nup,idprup,xwgtup,scalup,aqedup,aqcdup,
      &              idup(maxnup),istup(maxnup),mothup(2,maxnup),
