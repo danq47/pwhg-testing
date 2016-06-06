@@ -5,7 +5,10 @@ testrun-tdec-lhc4
 testrun-tdec-lhc5
 testrun-tdec-lhc6
 testrun-tdec-lhc7
-obj-ifort
+
+obj-gfortran/*
+obj/*
+obj-ifort/*
 pwhg_main
 lhef_analysis
 

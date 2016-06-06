@@ -203,6 +203,8 @@ c     1 and 2 are incoming! conjugate color
       subroutine realcolour_lh
       implicit none
       include 'LesHouches.h'
+      include 'nlegborn.h'
+      include 'pwhg_rad.h'
       character * 2 genprc
       integer jflreal
       integer igluon
@@ -232,7 +234,7 @@ c     1 and 2 are incoming! conjugate color
      1        pup(1,3),pup(1,4),xm2,
      2        t512,t152,t125,t521,t251,t215)
          if(rho_idx.eq.1) then
-            ichoice=ipick(t512,t152,t125,0,0,0)
+            ichoice=ipick(t512,t152,t125,0.,0.,0.)
             if(ichoice.eq.1) then
                call clinkqggga(icolup(1,3),icolup(1,5),
      1           icolup(1,1),icolup(1,2),icolup(1,4))
@@ -244,7 +246,7 @@ c     1 and 2 are incoming! conjugate color
      1           icolup(1,2),icolup(1,5),icolup(1,4))
             endif
          elseif(rho_idx.eq.2) then
-            ichoice=ipick(0,0,0,t512,t251,t215)
+            ichoice=ipick(0.,0.,0.,t512,t251,t215)
             if(ichoice.eq.4) then
                call clinkqggga(icolup(1,3),icolup(1,5),
      1           icolup(1,2),icolup(1,1),icolup(1,4))
