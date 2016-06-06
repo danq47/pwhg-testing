@@ -6,15 +6,18 @@
 
 !Heavy flavour production parameters
 
-numevts 500000   ! number of events to be generated
-ih1   1        ! hadron 1
-ih2   1        ! hadron 2
-#ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
-#ndns2 131      ! pdf for hadron 2
-lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
-lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
-ebeam1 7000    ! energy of beam 1
-ebeam2 7000    ! energy of beam 2
+numevts 1000000   ! number of events to be generated
+ih1   1         ! hadron 1
+ih2  -1         ! hadron 2
+ndns1 131      ! pdf for hadron 1
+ndns2 131      ! pdf for hadron 2
+! To be set only if using LHA pdfs
+lhans1 10000
+lhans2 10000
+! To be set only if using different pdf sets for the two incoming hadrons
+! QCDLambda5  0.25 ! for not equal pdf sets 
+ebeam1  980    ! energy of beam 1
+ebeam2  980    ! energy of beam 2
 qmass  172     ! mass of heavy quark in GeV
 facscfact 1    ! factorization scale factor: mufact=muref*facscfact 
 renscfact 1    ! renormalization scale factor: muren=muref*renscfact 
@@ -59,10 +62,28 @@ ncall1 10000   ! number of calls for initializing the integration grid
 itmx1 5        ! number of iterations for initializing the integration grid
 ncall2 100000  ! number of calls for computing the integral and finding upper bound
 itmx2 5        ! number of iterations for computing the integral and finding upper bound
-foldcsi   1      ! number of folds on x integration
+foldcsi 1      ! number of folds on x integration
 foldy   1      ! number of folds on y integration
 foldphi 1      ! number of folds on phi integration
 nubound 100000  ! number of bbarra calls to setup norm of upper bounding function
-iymax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
-ixmax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
-xupbound 2      ! increase upper bound for radiation generation
+#iymax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
+#ixmax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
+#xupbound 2      ! increase upper bound for radiation generation
+
+
+#iseed 10001
+#rand1     10      ! initialize random number sequence 
+#rand2     10      ! initialize random number sequence 
+
+#manyseeds 1       ! Used to perform multiple runs with different random
+                   ! seeds in the same directory.
+                   ! If set to 1, the program asks for an integer j;
+                   ! The file pwgseeds.dat at line j is read, and the
+                   ! integer at line j is used to initialize the random
+                   ! sequence for the generation of the event.
+                   ! The event file is called pwgevents-'j'.lhe
+
+#withnegweights 1  ! output negative weighted events, instead of disregarding them
+
+
+testplots 0
