@@ -42,6 +42,7 @@ c      mstp(61)=0                !No IS shower
 c      mstp(71)=0                !No FS shower
 c      mstp(91)=0                !No Primordial kt
 c      mstp(131)=0               !No Pile Up
+c     Doesn't work with hadronisation for some reason
       mstp(111)=0               !No hadronization
 
 c     Change lambda in alfa running.
@@ -118,9 +119,11 @@ c pythia routine to abort event
       end
 
       subroutine pyaend
+c     Have taken this from another process directory (from NZ I think)
+c     This uses the new histogram binning procedure
       implicit none
       include 'pwhg_rnd.h'
-       character * 100 filename
+      character * 100 filename
       character * 20 pwgprefix
       integer lprefix
       common/cpwgprefix/pwgprefix,lprefix
