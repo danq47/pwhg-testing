@@ -53,14 +53,13 @@ c...reads event information from a les houches events file on unit nlf.
 c on error try next event. The error may be caused by merging
 c truncated event files. Thus we are tolerant about it.
 c Only on EOF return with no event found
-         read(nlf,*,end=998,err=1)nup,idprup,xwgtup,scalup,aqedup,aqcdup,process,rho,sw
+         read(nlf,*,end=998,err=1)nup,idprup,xwgtup,scalup,aqedup,aqcdup,rho,sw
          do i=1,nup
             read(nlf,*,end=998,err=1) idup(i),istup(i),mothup(1,i),
      &           mothup(2,i),icolup(1,i),icolup(2,i),(pup(j,i),j=1,5),
      &           vtimup(i),spinup(i)
          enddo
          call lhefreadextra(nlf,iret)
-
          if(iret.ne.0) goto 1
          goto 999
       else
@@ -139,8 +138,6 @@ c Look for old new weight format:
       return
  998  continue
       end
-
-
 
 
 
