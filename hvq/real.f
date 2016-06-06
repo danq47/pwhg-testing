@@ -12,10 +12,10 @@
       character * 2 prc
       common/process/prc
       real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2,p_pup(0:4,nlegreal)
-      REAL * 8 t125,t152,t512,t215,t251,t521,ttot,t1r,t2r,t5r,cb1,cb2
+      REAL * 8 t125,t152,t512,t215,t251,t521,ttot
       integer ifl,ixx
-      real * 8 dotp,fppx,eik
-      external dotp,fppx,eik
+      real * 8 dotp,fppx
+      external dotp,fppx
 c compute mnr invariants
       s=2*dotp(p(0,1),p(0,2))
       q1q=-2*dotp(p(0,1),p(0,3))
@@ -30,6 +30,7 @@ c     w1=-q1+q2-tk, w2=q1-q2-uk, w1(w2) = w1h(w2h) *s*(1-x)/2
       y=(tk-uk)/(s*(1-x))
 c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear limit
       cth2=0
+c     Need to redefine momenta to use the ggplanar function
       if(flg_newsuda) then
       	do ixx=1,5
             p_pup(0,ixx)=p(1,ixx)      !px
@@ -43,6 +44,8 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
       if(rflav(1).eq.0.and.rflav(2).eq.0) then
          prc='gg'
          ifl=0
+c        Calculating the planar amplitude weightings like FNO (4.52) 
+c        rhorweight(rho_r) = R^{\alpha_r = gg, rho_r}/R^{\alpha_r=gg,1..6}
          if(flg_newsuda) then
             call ggplanar(p_pup(:,1),1,p_pup(:,2),1,p_pup(:,5),1,
      1            p_pup(:,3),p_pup(:,4),xm2,
@@ -62,66 +65,21 @@ c     cth2 is not used by fgg,fqg,fqq, unless we are very near the collinear lim
          prc='qq'
          ifl=-1
       elseif(rflav(1).gt.0.and.rflav(2).eq.0) then
-c quark-gluon
          prc='qg'
          ifl=1
-         if(flg_newsuda) then
-         	call qqbplanar(p_pup(:,1),1,p_pup(:,5),-1,p_pup(:,2),-1,
-     1        p_pup(:,3),p_pup(:,4),xm2,t1r,t5r)
-         	ttot=t1r+t5r
-         	rhorweight(1)=t5r/ttot  ! if rho=1
-         	rhorweight(2)=t1r/ttot 	! if rho=2
-         endif
       elseif(rflav(1).lt.0.and.rflav(2).eq.0) then
-c antiquark-gluon
          prc='qg'
          ifl=-1
-         if(flg_newsuda) then
-         	call qqbplanar(p_pup(:,5),-1,p_pup(:,1),1,p_pup(:,2),-1,
-     1        	p_pup(:,3),p_pup(:,4),xm2,t5r,t1r)
-         	ttot=t5r+t1r
-         	rhorweight(1)=t1r/ttot	! if rho=1
-         	rhorweight(2)=t5r/ttot  ! if rho=2
-         endif
       elseif(rflav(1).eq.0.and.rflav(2).gt.0) then
-c gluon-quark
          prc='gq'
          ifl=-1
-         if(flg_newsuda) then
-         	call qqbplanar(p_pup(:,2),1,p_pup(:,5),-1,p_pup(:,1),-1,
-     1        	p_pup(:,3),p_pup(:,4),xm2,t2r,t5r)
-         	ttot=t2r+t5r
-         	rhorweight(1)=t2r/ttot	! if rho=1
-         	rhorweight(2)=t5r/ttot	! if rho=2
-      	endif
       elseif(rflav(1).eq.0.and.rflav(2).lt.0) then
-c gluon-antiquark
          prc='gq'
          ifl=1
-         if(flg_newsuda) then
-         	call qqbplanar(p_pup(:,5),-1, p_pup(:,2),1,p_pup(:,1),-1,
-     1        	p_pup(:,3),p_pup(:,4),xm2,t5r,t2r)
-         	ttot=t5r+t2r
-         	rhorweight(1)=t5r/ttot	! if rho=1
-         	rhorweight(2)=t2r/ttot	! if rho=2
-     		endif
       endif
       amp2= fppx(ifl,s,x,y,xm2,q1q,q2q,w1h,w2h,cth2)/(4*tk*uk)
       amp2=amp2 * (4*pi*st_alpha)**3 /(st_alpha/(2*pi)) * 2 * s
       end
-
-      function eik(p1,p2,k)
-      implicit none
-      real * 8 p1(0:3),p2(0:3),k(0:3)
-      real * 8 dotp
-      real * 8 p1p2,eik,p1k,p2k
-      external dotp
-      p1p2 = (p1(3)*p2(3)) - ((p1(0)*p2(0))+(p1(1)*p2(1))+(p1(2)*p2(2)))
-      p1k = (p1(3)*k(3)) - ((p1(0)*k(0))+(p1(1)*k(1))+(p1(2)*k(2)))
-      p2k = (p2(3)*k(3)) - ((p2(0)*k(0))+(p2(1)*k(1))+(p2(2)*k(2)))
-      eik = p1p2/(p1k*p2k)
-   	end
-
 
       function fppx(ifl,s,x,y,xm2,q1q,q2q,w1h,w2h,cth2)
 c front-end to fpp in hvqcrsx.f that deals with the cases:
