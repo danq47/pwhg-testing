@@ -10,7 +10,7 @@ c rho_idx: the value of rho that we are calculating
 
 c rad_realreg: index of regular contribution in the array flst_regular
       integer rad_ubornidx,rad_alr_list(maxalr),rad_alr_nlist,
-     #     rad_realidx,rad_realalr,rad_realreg,rho_idx
+     #     rad_realidx,rad_realalr,rad_realreg,rho_idx,switch
 c rad_kinreg: index in current kinematic region
 c rad_nkinreg: number of kinematic regions
 c     kinematic regions are numbered as:
@@ -102,5 +102,5 @@ c     integers
      4     rad_ncsinorms,rad_nynorms,rad_type,rad_btilde_sign,
      5     rad_iupperfsr,rad_iupperisr,rho_idx,
 c     logical
-     6     rad_kinreg_on
+     6     rad_kinreg_on,switch
       save /pwhg_rad/

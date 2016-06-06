@@ -817,6 +817,7 @@ c supply Born zero damping factor, if required
       save ini,equivto,equivcoef
       external pwhg_pt2,dijterm
       Rfact = 0
+      switch = 0
       if(ini) then
          do alr=1,flst_nalr
             equivto(alr)=-1
@@ -861,14 +862,11 @@ c End initialization phase; compute graphs
       enddo
       call pdfcall(1,kn_x1,pdf1)
       call pdfcall(2,kn_x2,pdf2)
-      if(flg_withdamp) then
+c      if(flg_withdamp) then
          call collrad(rc)
          call collsoftrad(rcs)
          call softrad(rs)
-      endif
-c Need to call this for the check later on in the modification, will switch back to the old
-c Sudakov if we are close to the collinear limit, as this is exact
-      call collrad(rc)
+c      endif
 
       do alr=1,flst_nalr
          computed(alr)=.false.
@@ -922,13 +920,17 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
                			Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
                		endif
 
-               		if(rr(alr).lt.rc(alr)) then ! If we are far from the collinear limit, modify the Sudakov
-               			rr(alr) = (Rfact/Bfact) * rr(alr)
-               		else  ! Otherwise, stay with Old Sudakov. This is valid, as the old Sudakov is exact in the collinear limit
-               			Rfact = 0
-               		endif
+                     rr(alr) = (Rfact/Bfact) * rr(alr)
+
+                     ! Check if the radiation is collinear
+                     if(abs((rr(alr)-rc(alr))/rr(alr)).lt.0.1) then
+                        switch = 1
+                     endif
+
                	endif
                endif
+
+
 
                sumdijinv=0
                do k=1,flst_allreg(1,0,alr)

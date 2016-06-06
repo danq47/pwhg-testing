@@ -73,11 +73,11 @@ c do not write events, write only the event count
       endif
       write(nlf,'(a)')'<event>'
       if(rho_idx.eq.1) then
-         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,Rfact/Bfact
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,switch
       elseif(rho_idx.eq.2) then
-         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,Rfact/Bfact
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,1,rho_idx,switch
       else
-         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,2,rho_idx,Rfact/Bfact
+         write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,2,rho_idx,switch
       endif
       do 200 i=1,nup
          write(nlf,220) idup(i),istup(i),mothup(1,i),
@@ -95,7 +95,7 @@ c do not write events, write only the event count
       if(flg_pdfreweight) call lhefwritepdfrw(nlf)
       if(flg_debug) call lhefwritextra(nlf)
       write(nlf,'(a)')'</event>'      
- 210  format(1p,2(1x,i6),4(1x,e12.5),2(1x,i4),e15.8)
+ 210  format(1p,2(1x,i6),4(1x,e12.5),3(1x,i4))
  220  format(1p,i8,5(1x,i5),5(1x,e16.9),1x,e12.5,1x,e10.3)
       end
 

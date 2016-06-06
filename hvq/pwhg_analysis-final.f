@@ -30,88 +30,49 @@ c  pwhgfill  :  fills the histograms with data
 
       call inihists
 
-C       do j = 1,2
-C       	if(j.eq.1) then
-C       		prefix1 = '-incl'
-C       	elseif(j.eq.2) then
-C       		prefix1 = '-str'
-C C       	elseif(j.eq.3) then
-C C       		prefix1 = '-unstr'
-C C       	else
-C C       		prefix1 = '-qqb'
-C       	endif
+      do j = 1,6
+      	if(j.eq.1) then
+      		prefix1 = '-incl'
+      	elseif(j.eq.2) then
+      		prefix1 = '-str'
+      	elseif(j.eq.3) then
+      		prefix1 = '-unstr'
+         elseif(j.eq.4) then
+            prefix1 = '-vstr'
+         elseif(j.eq.5) then
+            prefix1 = '-vunstr'
+         else
+      		prefix1 = '-qqb'
+      	endif
       	
-C       	do l=1,9
-C       		if(l.eq.1) then
-C       			prefix2 = '-no-cuts'
-C       		elseif(l.eq.2) then
-C       			prefix2 = '-wa'
-C C       		elseif(l.eq.3) then
-C C       			prefix2 = '-wa-mcut'
-C C       		elseif(l.eq.4) then
-C C       			prefix2 = '-wa-bfac'
-C C       		elseif(l.eq.5) then
-C C       			prefix2 = '-wa-bfac-mcut'
-C       		elseif(l.eq.3) then
-C       			prefix2 = '-wa-beam'
-C       		elseif(l.eq.4) then
-C       			prefix2 = '-coll-beam'
-C       		elseif(l.eq.5) then
-C       			prefix2 = '-coll'
-C       		elseif(l.eq.6) then
-C       			prefix2 = '-wa-eta'
-C       		elseif(l.eq.7) then
-C       			prefix2 = '-wa-beam-eta'
-C       		elseif(l.eq.8) then
-C       			prefix2 = '-coll-eta'
-C       		elseif(l.eq.9) then
-C       			prefix2 = '-coll-b-eta'
-C       		endif
+      	do l=1,3
+      		if(l.eq.1) then
+      			prefix2 = '-no-cuts'
+      		elseif(l.eq.2) then
+      			prefix2 = '-wa'
+      		elseif(l.eq.3) then
+      			prefix2 = '-coll'
+      		endif
 
-C          	l1=lenocc(prefix1)
-C          	l2=lenocc(prefix2)
+         	l1=lenocc(prefix1)
+         	l2=lenocc(prefix2)
 
-C       		call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
-C       		call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
-C       		call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
-C       		call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
+            if(j.ne.6) then
+      		   call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
+      		   call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
+      		   call bookupeqbins('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,1500d0)
+      		   call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
+      		   call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
+            elseif(l.eq.1.and.j.eq.6) then
+               call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
+               call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
+               call bookupeqbins('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,1500d0)
+               call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
+               call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
+            endif
 
-C       		do m=1,3
-C       			if(m.eq.1) then
-C       				prefix3='-pT-gt-10'
-C       			elseif(m.eq.2) then
-C       				prefix3='-pT-gt-25'
-C       			else
-C       				prefix3='-pT-gt-50'
-C       			endif
-
-C       			l3=lenocc(prefix3)
-
-C       			call bookupeqbins('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-C       			call bookupeqbins('eta-j-minus-eta-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-C c      			call bookupeqbins('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,-6d0,6d0)
-C c      			call bookupeqbins('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),1d-1,0d0,3.2d0)
-
-C       		enddo
-C       	enddo
-C       enddo
-
-      call bookupeqbins('pt-2GeV',2d0,0d0,500d0)
-      call bookupeqbins('pt-2GeV-coll',2d0,0d0,500d0)
-      call bookupeqbins('pt-2GeV-wa',2d0,0d0,500d0)
-
-      call bookupeqbins('pt-10GeV',10d0,0d0,1d3)
-      call bookupeqbins('pt-10GeV-coll',10d0,0d0,1d3)
-      call bookupeqbins('pt-10GeV-wa',10d0,0d0,1d3)
-
-      call bookupeqbins('pt-50GeV',50d0,0d0,2d3)
-      call bookupeqbins('pt-50GeV-coll',50d0,0d0,2d3)
-      call bookupeqbins('pt-50GeV-wa',50d0,0d0,2d3)
-
-      call bookupeqbins('pt-200GeV',200d0,0d0,3d3)
-      call bookupeqbins('pt-200GeV-coll',200d0,0d0,3d3)
-      call bookupeqbins('pt-200GeV-wa',200d0,0d0,3d3)      
-
+      	enddo
+      enddo
       end
 
       subroutine analysis(dsig0)
@@ -119,6 +80,8 @@ C       enddo
       include 'hepevt.h'
       include 'pwhg_math.h' 
       include 'LesHouches.h'
+      include 'nlegborn.h'
+      include 'pwhg_rad.h'
       character * 6 whcprg      
       common/cwhcprg/whcprg
       integer jpref
@@ -132,7 +95,7 @@ C       enddo
       integer   ihep                ! HEPEVT index.
       real * 8 p_top(4),p_tb(4),p_wp(4),p_wm(4),p_lwp(4),p_lwm(4),
      1         p_nuwp(4),p_nuwm(4),p_b(4),p_bb(4),y,eta,pt,mass,
-     2         ptzmf(4),plzmf(4)
+     2         ptzmf(4),plzmf(4),p_jet(4)
       integer   maxtracks,maxjets
       parameter (maxtracks=nmxhep,maxjets=20)
       integer mjets,jetvec(maxtracks)
@@ -140,13 +103,13 @@ C       enddo
       real * 8 j_kt(maxjets),j_eta(maxjets),j_rap(maxjets),
      1     j_phi(maxjets),j_p(4,maxjets),y_t,y_tbar,deltay,y_ttb,y_j1
       real * 8 deltaphi_j_t
-      integer j,id,i_top,i_atop,i_bfromtop,i_abfromatop,
+      integer j,id,i_top,i_atop,i_jet,i_bfromtop,i_abfromatop,
      1     i_wp,i_wm,i_lwp,i_lwm,i_nuwp,i_nuwm,i_bjet,i_abjet,jhep,
      1     i_part,njets20,njets30,njets40
       real * 8 mtop,mtb,mwp,mwm,mb,mbb,p_bmax,e_bmax,xb,
      1     p_bbmax,e_bbmax,xbb,ewp,pwp,ewm,pwm,xw,
      2     dy,deta,dphi,dr,cth1,cth2,ptj1,mttbar,ptt,pttb,yj_minus_yttb
-      integer jcth1,i_jets,ixx,jzz,qxx,jet_index,kxx,counter,counter2,lxx,mxx,jxx
+      integer jcth1,i_jets,ixx,jzz,qxx,jet_index,kxx,counter1,counter2,lxx,mxx,jxx
       integer jet_position(maxjets),l1,l2,l3
       real * 8 w(4),pb(4),ptb,eta_t,eta_tb,eta_ttb,eta_j1
       real * 8 prodvec2,powheginput
@@ -175,79 +138,51 @@ C       enddo
       i_lwm = 0
       i_bfromtop = 0
       i_abfromatop = 0
+      i_jet = 0
 
-      if(whcprg.eq.'NLO') then
-         i_top = 3
-         i_atop = 4
-         i_wp = 5
-         i_wm = 6
-
-         i_lwp = 7
-         i_lwm = 9
-         i_nuwp = 8
-         i_nuwm = 10
-         i_bfromtop = 11
-         i_abfromatop = 12
-
-         IsForClustering = .false.
-         IsForClustering(13) = .true.
-         IsForClustering(i_bfromtop) = .true.
-         IsForClustering(i_abfromatop) = .true.
-C --------------------------------------------- C
-C - LHE PARTICLE TOP RECONSTRUCTION: MC TRUTH - C
-C --------------------------------------------- C
-      else
-c Build top MC; find the last top (tbar)
-c in the event record, i.e. before decays
-         do jhep=1,nhep
-            id=idhep(jhep)
-            if(idhep(jhep).eq.6) i_top = jhep
-            if(idhep(jhep).eq.-6) i_atop = jhep
-            id=abs(id)
-            if(id.eq.5.or.id.eq.24) then
+      do jhep=1,nhep
+         id=idhep(jhep)
+         if(idhep(jhep).eq.6) i_top = jhep
+         if(idhep(jhep).eq.-6) i_atop = jhep
+         id=abs(id)
+         if(id.eq.5.or.id.eq.24) then
             if(sonofid(6,jhep)) then
                if(idhep(jhep).eq.5) i_bfromtop = jhep
                if(idhep(jhep).eq.-5) i_abfromatop = jhep
                if(idhep(jhep).eq.24) i_wp = jhep
                if(idhep(jhep).eq.-24) i_wm = jhep
             endif
-            endif
-            if(id.ge.11.and.id.le.14) then
+         endif
+         if(id.ge.11.and.id.le.14) then
             if(sonofid(24,jhep)) then
                if(idhep(jhep).eq.-11.or.idhep(jhep).eq.-13) i_lwp = jhep
                if(idhep(jhep).eq.11.or.idhep(jhep).eq.13) i_lwm = jhep
                if(idhep(jhep).eq.-12.or.idhep(jhep).eq.-14)i_nuwm = jhep
                if(idhep(jhep).eq.12.or.idhep(jhep).eq.14) i_nuwp = jhep
             endif
-            endif
-c for jets, using only final state particles excluding leptons
-            if(isthep(jhep).eq.1.and.
-     1           (abs(idhep(jhep)).lt.11.or.abs(idhep(jhep)).gt.16)) then
-               IsForClustering(jhep) = .true.
-            else
-               IsForClustering(jhep) = .false.
-            endif
-         enddo
-      endif
- 
-      if(whcprg.ne.'NLO'.and.whcprg.ne.'LHE') then
-c Setup a flag:
-c 1 for events with no production radiation in the LHE
-c 2 for events with production radiation
-c 0 otherwise
-         if((phep(1,3)+phep(1,4))**2+(phep(2,3)+phep(2,4))**2.lt.1d-2)
-     1        then
-            iprodrad=1
-c            if(scalup.gt.46) then
-c               write(*,*) ' warning: scalup = ',scalup,
-c     1              ' in radiation in decay'
-c            endif
-         else
-            iprodrad=2
          endif
-      else
-         iprodrad = 0
-      endif
+
+
+! Select them like this because sometimes the NLO ones have only Born process, and so the 5th entry in phep is junk
+         if(whcprg.eq.'NLO') then
+            if(jhep.gt.2) then ! If it's a final state parton
+               if(abs(idhep(jhep)).lt.6.or.idhep(jhep).eq.21) then
+                  i_jet = jhep
+               endif
+            endif
+         elseif(whcprg.eq.'LHE') then
+            i_jet = 5
+         endif
+
+c for jets, using only final state particles excluding leptons
+         if(isthep(jhep).eq.1.and.
+     1           (abs(idhep(jhep)).lt.11.or.abs(idhep(jhep)).gt.16)) then
+            IsForClustering(jhep) = .true.
+         else
+            IsForClustering(jhep) = .false.
+         endif
+      enddo
+
 
       id1=idhep(1)
       id2=idhep(2)
@@ -256,14 +191,7 @@ c            endif
 
       p_top=phep(1:4,i_top)
       p_tb=phep(1:4,i_atop)
-      p_wp=phep(1:4,i_wp)
-      p_wm=phep(1:4,i_wm)
-      p_lwp=phep(1:4,i_lwp)
-      p_lwm=phep(1:4,i_lwm)
-      p_nuwp=phep(1:4,i_nuwp)
-      p_nuwm=phep(1:4,i_nuwm)
-      p_b=phep(1:4,i_bfromtop)
-      p_bb=phep(1:4,i_abfromatop)
+      p_jet=phep(1:4,i_jet)
 
       mjets = maxjets
       call buildjets(mjets,j_kt,j_eta,j_rap,j_phi,j_p,jetvec,
@@ -272,295 +200,107 @@ c            endif
       i_bjet = in_jet(i_bfromtop,jetvec)
       i_abjet = in_jet(i_abfromatop,jetvec)
 
-C c We now have mjets number of jets, however, some of these are b-jets.
-C c For our analysis, we sometimes want to only see the non b-jets, so this piece of code
-C c picks out the position of the 3 hardest non-bjets (at most - sometimes less than this if the jets are too soft to be picked up)
-C c This runs into a problem when we do hadronisation, as the b hadrons are no longer picked up properly, however we can just turn this off for the moment
 
-
-C c jet_postition starts as an array of 1..maxjets, then any b jets are set to zero, then we shift the following entries up
-C c So if we have 4 jets, and a b-jet as the second hardest jet then jet_position will go
-C c step 1 -> [1,2,3,4]
-C c step 2 -> [1,0,3,4]
-C c step 3 -> [1,3,4]
-C c Therefore, the 3 hardest non-b jets are located at jets numbers 1,3, and 4
-C c which can be easily accesed as jet_position(1),jet_position(2), and jet_position_(3)
-C c so now, the rapidity of say the 2nd hardest non b jet is given by j_rap(jet_position(2))
-
-C c first set the position of the b jets to zero
-C       do i_jets=1,maxjets
-C          jet_position(i_jets)=i_jets
-C          if(i_jets.eq.i_bjet.or.i_jets.eq.i_abjet) then
-C             jet_position(i_jets)=0
-C          endif
-C       enddo
-C c Next, if there are no zeroes (i.e. neither of the b-jets are the hardest jets) then we simply take the first n jets
-C       if(i_bjet.eq.0.and.i_abjet.eq.0) then
-C          continue
-C c if there is only one zero, we only need to shift the indices in the array once
-C       elseif(i_bjet.eq.0.and.i_abjet.ne.0) then
-C          jet_index=1
-C          do jzz=1,maxjets
-C             if(jet_position(jzz).eq.0) then
-C                jet_index=jzz
-C             endif
-C          enddo
-       
-C          do jzz=jet_index,maxjets-1
-C             jet_position(jzz)=jet_position(jzz+1)
-C          enddo
-C       elseif(i_bjet.ne.0.and.i_abjet.eq.0) then
-C          jet_index=1
-C          do jzz=1,maxjets
-C             if(jet_position(jzz).eq.0) then
-C                jet_index=jzz
-C             endif
-C          enddo
-       
-C          do jzz=jet_index,maxjets-1
-C             jet_position(jzz)=jet_position(jzz+1)
-C          enddo
-C       else
-C c now the (ususal) case where both the b jets are in the in the list of hardest jets
-C c We delete the two zeroes
-C          do qxx=1,2
-C             jet_index=1
-C             do jzz=1,maxjets+1-qxx
-C                if(jet_position(jzz).eq.0) then
-C                   jet_index=jzz
-C                endif
-C             enddo
-       
-C             do jzz=jet_index,maxjets-qxx
-C                jet_position(jzz)=jet_position(jzz+1)
-C             enddo
-C          enddo
-C       endif
-
-C       call getyetaptmass(p_top,y,eta,pt,mass)
-C       y_t=y
-C       call getyetaptmass(p_tb,y,eta,pt,mass)
-C       y_tbar=y
+      call getyetaptmass(p_top,y,eta,pt,mass)
+      y_t=y
+      call getyetaptmass(p_tb,y,eta,pt,mass)
+      y_tbar=y
       call getyetaptmass(p_top+p_tb,y,eta,pt,mass)
       y_ttb=y
-C       mttbar=mass
-C       eta_ttb = eta
+      mttbar=mass
 
-C       deltay=y_t-y_tbar
+      deltay=y_t-y_tbar
 
-C       ptj1=j_kt(jet_position(1))
-      call getyetaptmass(phep(1:4,5),y,eta,pt,mass)
-C   		ptj1 = pt
+      call getyetaptmass(p_jet,y,eta,pt,mass)
+  		ptj1 = pt
   		y_j1 = y
-C   		eta_j1 = eta    
-      ptj1=sqrt(phep(1,5)**2 + phep(2,5)**2)
-C       y_j1=0.5d0*log((phep(4,5)+phep(3,5))/(phep(4,5)-phep(3,5)))
-
-
-C       deltaphi_j_t=deltaphi(azi(p_top),j_phi(jet_position(1)))
-
 
 c Analysis - make the cuts
 
-C       do jxx = 1,2
+      if(whcprg.eq.'NLO') rho=rho_idx
 
-C       	condition1 = .false.
+      do jxx = 1,6
 
-C       	if(jxx.eq.1) then
-C       		prefix1='-incl'
-C       		condition1 = .true.
-C         	elseif(jxx.eq.2) then
-C       		prefix1='-str'
-C       		if((deltay.lt.0.and.rho.eq.1).or.(deltay.gt.0.and.rho.eq.2)) then
-C       			condition1 = .true.
-C       		endif
-C C       	elseif(jxx.eq.3) then
-C C       		prefix1='-unstr'
-C C       		if((deltay.gt.0.and.rho.eq.1).or.(deltay.lt.0.and.rho.eq.2)) then
-C C       			condition1 = .true.
-C C       		endif
-C C       	elseif(jxx.eq.4) then
-C C       		prefix1='-qqb'
-C C       		if(rho.gt.2) then
-C C       			condition1 = .true.
-C C       		endif
-C       	endif
+      	condition1 = .false.
 
-C       	do lxx=1,9
+      	if(jxx.eq.1) then
+      		prefix1='-incl'
+      		condition1 = .true.
+        	elseif(jxx.eq.2) then
+      		prefix1='-str'
+            if((rho.eq.1.and.deltay.lt.0).or.(rho.eq.2.and.deltay.gt.0)) then
+      			condition1 = .true.
+      		endif
+      	elseif(jxx.eq.3) then
+      		prefix1='-unstr'
+            if((rho.eq.1.and.deltay.gt.0).or.(rho.eq.2.and.deltay.lt.0)) then
+      			condition1 = .true.
+      		endif
+      	elseif(jxx.eq.4) then
+            prefix1='-vstr'
+            if((rho.eq.1.and.deltay.lt.-2).or.(rho.eq.2.and.deltay.gt.2)) then
+               condition1 = .true.
+            endif
+         elseif(jxx.eq.5) then
+            prefix1='-vunstr'
+            if((rho.eq.1.and.deltay.gt.-2).or.(rho.eq.2.and.deltay.lt.2)) then
+               condition1 = .true.
+            endif
+         elseif(jxx.eq.6) then
+      		prefix1='-qqb'
+      		if(rho.gt.2) then
+      			condition1 = .true.
+      		endif
+      	endif
 
-C       		condition2 = .false.
+      	do lxx=1,3
 
-C       		if(lxx.eq.1) then
-C       			prefix2 = '-no-cuts'
-C       			if(ptj1.gt.0) then 	! Making sure there is a jet
-C       				condition2 = .true.
-C       			endif
-C       		elseif(lxx.eq.2) then
-C       			prefix2 = '-wa'
-C       			if(ptj1.gt.0) then
-C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif
-C C       		elseif(lxx.eq.3) then
-C C       			prefix2 = '-wa-mcut'
-C C       			if(ptj1.gt.0) then
-C C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C C       					if(mttbar.gt.800) then
-C C       						condition2 = .true.
-C C       					endif
-C C       				endif
-C C       			endif
-C C       		elseif(lxx.eq.4) then
-C C       			prefix2 = '-wa-bfac'
-C C       			if(ptj1.gt.0) then
-C C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C C       					if(abs(deltay).lt.0.1) then
-C C       						condition2 = .true.
-C C       					endif
-C C       				endif
-C C       			endif
-C C       		elseif(lxx.eq.5) then
-C C       			prefix2 = '-wa-bfac-mcut'
-C C       			if(ptj1.gt.0) then
-C C       				if(abs(y_j1 - y_ttb).lt.0.5) then
-C C       					if(abs(deltay).lt.0.1) then
-C C       						if(mttbar.gt.800) then
-C C       							condition2 = .true.
-C C       						endif
-C C       					endif
-C C       				endif
-C C       			endif
-C       		elseif(lxx.eq.3) then
-C       			prefix2 = '-wa-beam'
-C       			if(ptj1.gt.0) then
-C       				if(abs(y_j1).lt.0.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif
-C       		elseif(lxx.eq.4) then
-C       			prefix2 = '-coll-beam'
-C       			if(ptj1.gt.0) then
-C       				if(abs(y_j1).gt.3.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif
-C       		elseif(lxx.eq.5) then
-C       			prefix2 = '-coll'
-C       			if(ptj1.gt.0) then
-C       				if(abs(y_j1 - y_ttb).gt.3.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif
-C       		elseif(lxx.eq.6) then
-C       			prefix2 = '-wa-eta'
-C       			if(ptj1.gt.0) then
-C       				if(abs(eta_j1 - eta_ttb).lt.0.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif
-C       		elseif(lxx.eq.7) then
-C       			prefix2 = '-wa-beam-eta'
-C       			if(ptj1.gt.0) then
-C       				if(abs(eta_j1).lt.0.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif
-C       		elseif(lxx.eq.8) then
-C       			prefix2 = '-coll-eta'
-C       			if(ptj1.gt.0) then
-C       				if(abs(eta_j1 - eta_ttb).gt.3.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif    
-C       		elseif(lxx.eq.9) then
-C       			prefix2 = '-coll-b-eta'
-C       			if(ptj1.gt.0) then
-C       				if(abs(eta_j1).gt.3.5) then
-C       					condition2 = .true.
-C       				endif
-C       			endif      			
-C       		endif
+      		condition2 = .false.
 
-C C       		    prefix2 = '-wa-eta'
-C C       		elseif(l.eq.7) then
-C C       			prefix2 = '-wa-beam-eta'
-C C       		elseif(l.eq.8) then
-C C       			prefix2 = '-coll-eta'
-C C       		elseif(l.eq.9) then
-C C       			prefix2 = '-coll-b-eta'
+      		if(lxx.eq.1) then
+      			prefix2 = '-no-cuts'
+      			if(ptj1.gt.0) then 	! Making sure there is a jet
+      				condition2 = .true.
+      			endif
+      		elseif(lxx.eq.2) then
+      			prefix2 = '-wa'   ! These cuts don't work as the radiation which is generated could be generated by the old AND new sudakov in the veto algorithm
+      			if(ptj1.gt.0) then
+                  if(sw.eq.0) then
+         				condition2 = .true.
+                  endif
+      			endif
+      		elseif(lxx.eq.3) then
+      			prefix2 = '-coll'
+      			if(ptj1.gt.0) then
+                  if(sw.eq.1) then
+      					condition2 = .true.
+      				endif
+      			endif
+      		endif
 
-C       		l1=lenocc(prefix1)
-C       		l2=lenocc(prefix2)
+      		l1=lenocc(prefix1)
+      		l2=lenocc(prefix2)
 
-C       		if(condition1.and.condition2) then
-C       			call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       		endif
+            if(jxx.ne.6) then
+      		   if(condition1.and.condition2) then
+      			   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      		   endif
+            elseif(lxx.eq.1.and.jxx.eq.6) then
+               if(condition1.and.condition2) then
+                  call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+               endif
+            endif
 
-C       		do mxx=1,3
-
-C       			condition3 = .false.
-
-C       			if(mxx.eq.1) then
-C       				prefix3='-pT-gt-10'
-C       				if(ptj1.gt.10) then
-C       					condition3 = .true.
-C       				endif
-C       			elseif(mxx.eq.2) then
-C       				prefix3='-pT-gt-25'
-C       				if(ptj1.gt.25) then
-C       					condition3 = .true.
-C       				endif
-C       			elseif(mxx.eq.3) then
-C       				prefix3='-pT-gt-50'
-C       				if(ptj1.gt.50) then
-C       					condition3 = .true.
-C       				endif
-C       			endif
-
-C       			l3=lenocc(prefix3)
-
-C       			if(condition1.and.condition2.and.condition3) then
-C       				call filld('y-jet-minus-y-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_ttb,dsig)
-C       				call filld('eta-j-minus-eta-ttb'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),eta_j1-eta_ttb,dsig)
-C c      				call filld('y-jet-minus-y-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),y_j1-y_t,dsig)
-C c      				call filld('deltaphi-jet-t'//prefix1(1:l1)//prefix2(1:l2)//prefix3(1:l3),deltaphi_j_t,dsig)
-C       			endif
-
-C       		enddo
-C       	enddo
-C       enddo
-
-      call filld('pt-2GeV',ptj1,dsig)
-      call filld('pt-10GeV',ptj1,dsig)
-      call filld('pt-50GeV',ptj1,dsig)
-      call filld('pt-200GeV',ptj1,dsig)
-
-      if(abs(y_j1-y_ttb).lt.0.5) then
-      	call filld('pt-2GeV-wa',ptj1,dsig)
-      	call filld('pt-10GeV-wa',ptj1,dsig)
-      	call filld('pt-50GeV-wa',ptj1,dsig)
-      	call filld('pt-200GeV-wa',ptj1,dsig)
-      elseif(abs(y_j1-y_ttb).gt.3.) then
-      	call filld('pt-2GeV-coll',ptj1,dsig)
-      	call filld('pt-10GeV-coll',ptj1,dsig)
-      	call filld('pt-50GeV-coll',ptj1,dsig)
-      	call filld('pt-200GeV-coll',ptj1,dsig)
-      endif
-
-C       if(abs(y_j1-y_ttb).gt.3.5) then
-C       	counter2=counter2+1
-C       	if(RB.gt.0) then
-C       		if(RB.lt.0.889.or.RB.gt.1.111) then
-C       			counter=counter+1
-C       			write(27,*) ptj1,RB,counter,counter2
-C       		endif
-C       	endif
-C       endif
-
+      	enddo
+      enddo
 
       end
 
