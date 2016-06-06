@@ -90,17 +90,6 @@ else
 ifeq ("$(ANALYSIS)","top")
 PWHGANAL=pwhg_analysis-top.o 
 else
-ifeq ("$(ANALYSIS)","new")
-FASTJET_CONFIG=$(shell which fastjet-config)
-ifeq ("$(theOS)","Linux")
-LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins ) -lstdc++
-else
-LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -lc++
-endif
-FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
-PWHGANAL=pwhg_analysis-new.o  fastjetfortran.o
-PWHGANALB=pwhg_analysis-b.o fastjetfortran.o
-else
 ifeq ("$(ANALYSIS)","final")
 FASTJET_CONFIG=$(shell which fastjet-config)
 ifeq ("$(theOS)","Linux")
@@ -110,10 +99,8 @@ LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -
 endif
 FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
 PWHGANAL=pwhg_analysis-final.o  fastjetfortran.o
-PWHGANALB=pwhg_analysis-b.o fastjetfortran.o
 else
 PWHGANAL=pwhg_analysis-dummy.o
-endif
 endif
 endif
 endif
