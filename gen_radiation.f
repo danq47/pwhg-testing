@@ -470,7 +470,7 @@ c
       include 'pwhg_flg.h'
       real * 8 t
       real * 8 x,y,x1b,x2b
-      real * 8 xlr,q2,xlam2c,kt2max,unorm,sborn,R1
+      real * 8 xlr,q2,xlam2c,kt2max,unorm,sborn
       integer nlc
       common/cpt2solve/xlr,q2,kt2max,xlam2c,unorm,sborn,nlc
       real * 8 xmin,rv,xp,xm,chi,tk,uk,ubound,ufct,
@@ -482,7 +482,7 @@ c
       external random,pt2solve,dfxmin,pwhg_alphas0,pwhg_upperb_rad
       unorm=rad_norms(rad_kinreg,rad_ubornidx)
 
-c Bfact = B1(2)/(B1+B2) for rho=1(2) - it is the amount we need to raise the upper bound by
+c We need to increase the upper bound of the veto algorithm
       if(flg_newsuda) then
          if(Bfact.lt.1d0) then
             unorm=unorm/Bfact
