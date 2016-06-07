@@ -37,10 +37,8 @@ do
 
 	if [ $(($i % 25)) -eq 0 ]; then
 	    cd plots
-	    ./merge 1 old*top
-	    mv fort.12 merged/old"$i"-merged.top
-	    ./merge 1 new*top
-	    mv fort.12 merged/new"$i"-merged.top
+	    ./merge 1 run*top
+	    mv fort.12 merged/run"$i"-merged.top
 	    rm *.top
 	    cd ..
 	fi
