@@ -3,7 +3,7 @@
 COMPILER=gfortran
 ## Choose PDF: native,lhapdf
 ## LHAPDF package has to be installed separately
-PDF = lhapdf
+PDF = native
 #Choose Analysis: none, default
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
 #ANALYSIS=default
@@ -12,7 +12,7 @@ ANALYSIS=SC
 #STATIC= -static
 #
 ifeq ("$(COMPILER)","gfortran")	
-F77= gfortran -fno-automatic 	
+F77= gfortran -fno-automatic -ffixed-line-length-132 -fno-align-commons
 ## -fbounds-check sometimes causes a weird error due to non-lazy evaluation
 ## of boolean in gfortran.
 #FFLAGS= -Wall -Wimplicit-interface -fbounds-check
@@ -101,7 +101,8 @@ ifeq ("$(ANALYSIS)","SC")
 ##To include Fastjet configuration uncomment the following lines. 
 #FASTJET_CONFIG=$(shell which fastjet-config)
 #LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins ) -lstdc++
-#FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
+LIBSFASTJET += $(shell $(FASTJET_CONFIG) --libs --plugins --rpath=no) -lstdc++ -lc++
+FJCXXFLAGS+= $(shell $(FASTJET_CONFIG) --cxxflags)
 PWHGANAL=pwhg_analysis-SC.o pwhg_bookhist-multi.o
 ## Also add required Fastjet drivers to PWHGANAL (examples are reported)
 #PWHGANAL+= fastjetsisconewrap.o fastjetktwrap.o fastjetCDFMidPointwrap.o fastjetD0RunIIConewrap.o fastjetfortran.o
