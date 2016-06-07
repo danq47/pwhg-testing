@@ -1,4 +1,4 @@
-!randomseed 352345 ! uncomment to set the random seed to a value of your choice.
+iseed 352345 ! uncomment to set the random seed to a value of your choice.
                    ! It generates the call RM48IN(352345,0,0) (see the RM48 manual).
                    ! THIS MAY ONLY AFFECTS THE GENERATION OF POWHEG EVENTS!
                    ! If POWHEG is interfaced to a shower MC, refer to the shower MC
@@ -9,10 +9,10 @@
 numevts 500000   ! number of events to be generated
 ih1   1        ! hadron 1
 ih2   1        ! hadron 2
-#ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
-#ndns2 131      ! pdf for hadron 2
-lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
-lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
+ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
+ndns2 131      ! pdf for hadron 2
+#lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
+#lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
 ebeam1 7000    ! energy of beam 1
 ebeam2 7000    ! energy of beam 2
 qmass  172     ! mass of heavy quark in GeV
