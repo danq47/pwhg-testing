@@ -19,14 +19,16 @@ ebeam2 4000d0    ! energy of beam 2
 use-old-grid    1 ! if 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
 use-old-ubound  1 ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; <> 1 regenerate
 
-ncall1 120000   ! number of calls for initializing the integration grid
+
+! I have cut ncall1, ncall2, and nubound by a factor of 2 from the originals
+ncall1 60000   ! number of calls for initializing the integration grid
 itmx1    5     ! number of iterations for initializing the integration grid
-ncall2 250000   ! number of calls for computing the integral and finding upper bound
+ncall2 125000   ! number of calls for computing the integral and finding upper bound
 itmx2    5     ! number of iterations for computing the integral and finding upper bound
 foldcsi   1    ! number of folds on csi integration
 foldy     1    ! number of folds on  y  integration
 foldphi   1    ! number of folds on phi integration
-nubound 20000  ! number of bbarra calls to setup norm of upper bounding function
+nubound 10000  ! number of bbarra calls to setup norm of upper bounding function
 icsimax  1     ! <= 100, number of csi subdivision when computing the upper bounds
 iymax    1     ! <= 100, number of y subdivision when computing the upper bounds
 xupbound 2d0   ! increase upper bound for radiation generation
@@ -44,7 +46,7 @@ testplots  1      ! (default 0, do not) do NLO and PWHG distributions
 #charmthrpdf  1.5  ! (default 1.5 GeV) pdf charm treshold
 #bottomthrpdf 5.0  ! (default 5.0 GeV) pdf bottom treshold
 
-iseed    12345    ! initialize random number sequence 
+iseed 1
 #rand1     -1      ! initialize random number sequence 
 #rand2     -1      ! initialize random number sequence 
 

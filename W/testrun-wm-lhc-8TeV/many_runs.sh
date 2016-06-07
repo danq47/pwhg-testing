@@ -18,7 +18,6 @@ mkdir plots/merged
 # set seed back to 1
 
 sed -i "s/iseed\ .*/iseed\ 1/g" powheg.input
-sed -i "s/newsuda\ 1/newsuda\ 0/g" powheg.input
 
 
 for i in {1..10000}
@@ -28,19 +27,8 @@ do
         rm pwgevents.lhe
 	../pwhg_main
 	../lhef_analysis
-	cp pwgLHEF* plots/old"$i".top
+	cp pwgLHEF* plots/run"$i".top
 
-
-# (3) Change to new Sudakov
-	sed -i  "s/newsuda\ 0/newsuda\ 1/g" powheg.input
-#	./clean.sh
-	rm pwgevents.lhe
-	../pwhg_main
-	../lhef_analysis
-	cp pwgLHEF* plots/new"$i".top
-
-# change back to old suda	
-	sed -i "s/newsuda\ 1/newsuda\ 0/g" powheg.input
 
 # change seed for next run (here they simply run with seed=1,seed=2...)
 # Would be better to somehow get it to read the seed and then increment it every time
@@ -58,9 +46,6 @@ do
 	fi
 
 done
-
-# Change seed back to 1 for next run
-sed -i "s/iseed\ "$[1+$i]"/iseed\ 1/g" powheg.input
 
 
 
