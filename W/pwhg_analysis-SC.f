@@ -15,64 +15,64 @@ c  pwhgfill  :  fills the histograms with data
 
       call inihists
 
-      call bookupeqbins('total',1d0,-0.5d0,0.5d0)
-      call bookupeqbins('totalcut',1d0,-0.5d0,0.5d0)
+!      call bookupeqbins('total',1d0,-0.5d0,0.5d0)
+!      call bookupeqbins('totalcut',1d0,-0.5d0,0.5d0)
 
 c      call bookupeqbins('Nphot',1d0,-0.5d0,5.5d0)
 
-      call bookupeqbins('V_mt',0.5d0,50d0,100d0)     !for W
+!      call bookupeqbins('V_mt',0.5d0,50d0,100d0)     !for W
       call bookupeqbins('V_pt1_report',0.25d0,0d0,25d0)
       call bookupeqbins('V_pt2_report',1.d0,0d0,300d0)
 c      call bookupeqbins('V_pt2',1d0,0d0,350d0)
 
-      call bookupeqbins('V_m',1.d0,60d0,120d0)
-      call bookupeqbins('V_m_report',1d0,50d0,200d0)
+!      call bookupeqbins('V_m',1.d0,60d0,120d0)
+!      call bookupeqbins('V_m_report',1d0,50d0,200d0)
 
-      call bookupeqbins('forward',2.4d0,60d0,120d0)
-      call bookupeqbins('backward',2.4d0,60d0,120d0)
+!      call bookupeqbins('forward',2.4d0,60d0,120d0)
+!      call bookupeqbins('backward',2.4d0,60d0,120d0)
 
-      call bookupeqbins('X_m_report',0.006d0,0.6d0,1.2d0)
-      call bookupeqbins('X_p_report',0.008d0,0.4d0,1.2d0)
+!      call bookupeqbins('X_m_report',0.006d0,0.6d0,1.2d0)
+!      call bookupeqbins('X_p_report',0.008d0,0.4d0,1.2d0)!
 
-      call bookupeqbins('l_y',0.2d0,-4d0,4d0)
-      call bookupeqbins('l_eta',0.2d0,-2.5d0,2.5d0)
-      call bookupeqbins('l_pt',1.4d0,25d0,60d0)
-      call bookupeqbins('l_pt_report',0.25d0,25d0,65d0)
+!      call bookupeqbins('l_y',0.2d0,-4d0,4d0)
+!      call bookupeqbins('l_eta',0.2d0,-2.5d0,2.5d0)
+!      call bookupeqbins('l_pt',1.4d0,25d0,60d0)
+!      call bookupeqbins('l_pt_report',0.25d0,25d0,65d0)!
 
-      call bookupeqbins('nu_y',0.2d0,-4d0,4d0)
-      call bookupeqbins('nu_eta',0.2d0,-2.5d0,2.5d0)
-      call bookupeqbins('nu_pt',1.4d0,25d0,60d0)
-      call bookupeqbins('nu_pt_report',0.25d0,25d0,65d0)
+!      call bookupeqbins('nu_y',0.2d0,-4d0,4d0)
+!      call bookupeqbins('nu_eta',0.2d0,-2.5d0,2.5d0)
+!      call bookupeqbins('nu_pt',1.4d0,25d0,60d0)
+!      call bookupeqbins('nu_pt_report',0.25d0,25d0,65d0)!
+!
 
+!      call bookupeqbins('delta_phi',0.1d0,0d0,3.2d0)
+!c      call bookupeqbins('dr1',0.1d0,0d0,3.2d0)
+!c      call bookupeqbins('dr2',0.1d0,0d0,3.2d0)
+!      call bookupeqbins('phistar_report',0.01d0,0d0,0.4d0)!
 
-      call bookupeqbins('delta_phi',0.1d0,0d0,3.2d0)
-c      call bookupeqbins('dr1',0.1d0,0d0,3.2d0)
-c      call bookupeqbins('dr2',0.1d0,0d0,3.2d0)
-      call bookupeqbins('phistar_report',0.01d0,0d0,0.4d0)
+!      call bookupeqbins('nophot',1d0,-0.5d0,0.5d0)!
+!
 
-      call bookupeqbins('nophot',1d0,-0.5d0,0.5d0)
+!      call bookupeqbins('lcos5', 0.01d0,-1d0,1d0)
+!      call bookupeqbins('lcos10',0.01d0,-1d0,1d0)
+!      call bookupeqbins('lcos20',0.01d0,-1d0,1d0)
+!      call bookupeqbins('lcos40',0.01d0,-1d0,1d0)
+!      call bookupeqbins('lcosg40',0.01d0,-1d0,1d0)!
 
+!      call bookupeqbins('genphi5',0.02d0,-3.15d0,3.15d0)
+!      call bookupeqbins('genphi10',0.02d0,-3.15d0,3.15d0)
+!      call bookupeqbins('genphi20',0.02d0,-3.15d0,3.15d0)
+!      call bookupeqbins('genphi40',0.02d0,-3.15d0,3.15d0)
+!      call bookupeqbins('genphig40',0.02d0,-3.15d0,3.15d0)!
 
-      call bookupeqbins('lcos5', 0.01d0,-1d0,1d0)
-      call bookupeqbins('lcos10',0.01d0,-1d0,1d0)
-      call bookupeqbins('lcos20',0.01d0,-1d0,1d0)
-      call bookupeqbins('lcos40',0.01d0,-1d0,1d0)
-      call bookupeqbins('lcosg40',0.01d0,-1d0,1d0)
-
-      call bookupeqbins('genphi5',0.02d0,-3.15d0,3.15d0)
-      call bookupeqbins('genphi10',0.02d0,-3.15d0,3.15d0)
-      call bookupeqbins('genphi20',0.02d0,-3.15d0,3.15d0)
-      call bookupeqbins('genphi40',0.02d0,-3.15d0,3.15d0)
-      call bookupeqbins('genphig40',0.02d0,-3.15d0,3.15d0)
-
-      call bookupeqbins('a0',1d0,0d0,100d0)
-      call bookupeqbins('a1',1d0,0d0,100d0)
-      call bookupeqbins('a2',1d0,0d0,100d0)
-      call bookupeqbins('a3',1d0,0d0,100d0)
-      call bookupeqbins('a4',1d0,0d0,100d0)
-      call bookupeqbins('a5',1d0,0d0,100d0)
-      call bookupeqbins('a6',1d0,0d0,100d0)
-      call bookupeqbins('a7',1d0,0d0,100d0)
+!      call bookupeqbins('a0',1d0,0d0,100d0)
+!      call bookupeqbins('a1',1d0,0d0,100d0)
+!      call bookupeqbins('a2',1d0,0d0,100d0)
+!      call bookupeqbins('a3',1d0,0d0,100d0)
+!      call bookupeqbins('a4',1d0,0d0,100d0)
+!      call bookupeqbins('a5',1d0,0d0,100d0)
+!      call bookupeqbins('a6',1d0,0d0,100d0)
+!      call bookupeqbins('a7',1d0,0d0,100d0)
 
       end
      
@@ -157,7 +157,7 @@ c p_W = p_l + p_nu
       pl03(1:3)=pl(1:3)
       pnu03(0)=pnu(4)
       pnu03(1:3)=pnu(1:3)
-      call get_ang_coeffs(pl03,pnu03,dsig)
+!      call get_ang_coeffs(pl03,pnu03,dsig)
 
 
       call getyetaptmass(pl,yl,etal,ptl,ml)
@@ -171,32 +171,32 @@ c p_W = p_l + p_nu
 
       phistar = phistar_report(pnu,pl)   !pl2 is the negatively charged lepton
 
-      call filld('total',0d0,dsig)
+!      call filld('total',0d0,dsig)
 
-      if(getpt(pl).gt.25.and.abs(geteta(pl))<2.5d0.and.
-     1   getpt(pnu).gt.25.and.
-     2   m.gt.1) then
-         call filld('totalcut',0d0,dsig)
-      endif
+C       if(getpt(pl).gt.25.and.abs(geteta(pl))<2.5d0.and.
+C      1   getpt(pnu).gt.25.and.
+C      2   m.gt.1) then
+C          call filld('totalcut',0d0,dsig)
+C       endif
 
 
 c      call filld('Nphot',dble(nphot),dsig)
 
 c lepton 1
-      call filld('l_y',    yl, dsig)
-      call filld('l_eta',etal, dsig)
-      call filld('l_pt', ptl, dsig)
-      call filld('l_pt_report', ptl, dsig)
+!      call filld('l_y',    yl, dsig)
+!      call filld('l_eta',etal, dsig)
+!      call filld('l_pt', ptl, dsig)
+!      call filld('l_pt_report', ptl, dsig)
 
 c lepton 2
-      call filld('nu_y',    ynu, dsig)
-      call filld('nu_eta',etanu, dsig)
-      call filld('nu_pt', ptnu, dsig)
-      call filld('nu_pt_report', ptnu, dsig)
+c      call filld('nu_y',    ynu, dsig)
+c      call filld('nu_eta',etanu, dsig)
+c      call filld('nu_pt', ptnu, dsig)
+c      call filld('nu_pt_report', ptnu, dsig)
 
 
 c azimuthal separation betwen lepton and neutrino
-      call filld('delta_phi',delphi,dsig)
+c      call filld('delta_phi',delphi,dsig)
 c      call filld('dr1',dr1,dsig)
 c      call filld('dr2',dr2,dsig)
 
@@ -204,20 +204,20 @@ c W
 c      call filld('V_pt_zoom',pt, dsig)
       call filld('V_pt1_report',pt, dsig)
       call filld('V_pt2_report',pt, dsig)
-      call filld('V_m',  m, dsig)
-      call filld('V_m_report',  m, dsig)
+c      call filld('V_m',  m, dsig)
+c      call filld('V_m_report',  m, dsig)
 c transverse mass of the lepton-neutrino system
-      call filld('V_mt',mtv,dsig)
+c      call filld('V_mt',mtv,dsig)
 
-      call filld('X_m_report',mtv/mz,dsig)
-      call filld('X_p_report',ptl*2d0/mz,dsig)
+c      call filld('X_m_report',mtv/mz,dsig)
+c      call filld('X_p_report',ptl*2d0/mz,dsig)
 
-      if (cs.lt.0d0) then
-          call filld('backward', m, dsig)
-      else
-          call filld('forward', m, dsig)
-      endif
-      call filld('phistar_report',phistar,dsig)
+c     if (cs.lt.0d0) then
+c          call filld('backward', m, dsig)
+c      else
+c          call filld('forward', m, dsig)
+c      endif
+c      call filld('phistar_report',phistar,dsig)
 
       end
 
