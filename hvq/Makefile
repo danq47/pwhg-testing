@@ -15,7 +15,7 @@ ANALYSIS=final
 #STATIC= -static
 #
 ifeq ("$(COMPILER)","gfortran")	
-OBJ=obj-ifort
+OBJ=obj-gfortran
 ifeq ("$(theOS)","Linux")
 F77=gfortran -fno-automatic -ffixed-line-length-132
 else
