@@ -21,8 +21,14 @@ c  pwhgfill  :  fills the histograms with data
 c      call bookupeqbins('Nphot',1d0,-0.5d0,5.5d0)
 
 !      call bookupeqbins('V_mt',0.5d0,50d0,100d0)     !for W
-      call bookupeqbins('V_pt1_report',0.25d0,0d0,25d0)
-      call bookupeqbins('V_pt2_report',1.d0,0d0,300d0)
+!      call bookupeqbins('pT-W-low-pT',0.25d0,0d0,25d0)
+!      call bookupeqbins('pT-W',1.d0,0d0,300d0)
+      call bookupeqbins('pT-jet-low-pT',0.25d0,0d0,25d0)
+      call bookupeqbins('pT-jet',1d0,0d0,300d0)
+      call bookupeqbins('pT-jet-5GeV',5d0,0d0,1000d0)
+      call bookupeqbins('pT-jet-10GeV',10d0,0d0,1500d0)
+      call bookupeqbins('pT-jet-50GeV',50d0,0d0,2000d0)
+      call bookupeqbins('pT-jet-200GeV',200d0,0d0,3000d0)
 c      call bookupeqbins('V_pt2',1d0,0d0,350d0)
 
 !      call bookupeqbins('V_m',1.d0,60d0,120d0)
@@ -102,9 +108,9 @@ c     we need to tell to this analysis file which program is running it
       integer ihep
       real * 8 powheginput,dotp
       external powheginput,dotp
-      integer vdecaytemp,vdecay2temp
+      integer vdecaytemp,vdecay2temp,i_jet
       real * 8 mtv
-      real * 8 yl,ptl,etal,ynu,ptnu,etanu,ml,mnu
+      real * 8 yl,ptl,etal,ynu,ptnu,etanu,ml,mnu,p_jet(4),pt_jet
       logical accepted
       real*8 mw,mz
       real*8 cs
@@ -135,6 +141,8 @@ c spin correlation observables
       pnu= (/0,0,0,0/)
       nphot = 0
 
+      i_jet=0
+
       do ihep=1,nhep
 c p_W = p_l + p_nu
          if( idhep(ihep).eq.vdecaytemp  ) then
@@ -150,6 +158,17 @@ c p_W = p_l + p_nu
                  pg(1:4,nphot) = phep(1:4,ihep)
              endif
          endif
+
+         if(whcprg.eq.'NLO') then
+            if(ihep.gt.2) then ! If it's a final state parton
+               if(abs(idhep(ihep)).lt.6.or.idhep(ihep).eq.21) then
+                  i_jet = ihep
+               endif
+            endif
+         elseif(whcprg.eq.'LHE') then
+            i_jet = 6
+         endif
+
       enddo
 
 
@@ -157,10 +176,12 @@ c p_W = p_l + p_nu
       pl03(1:3)=pl(1:3)
       pnu03(0)=pnu(4)
       pnu03(1:3)=pnu(1:3)
+      p_jet=phep(1:4,i_jet)
 !      call get_ang_coeffs(pl03,pnu03,dsig)
 
 
-      call getyetaptmass(pl,yl,etal,ptl,ml)
+      call getyetaptmass(p_jet,yl,etal,ptl,ml)
+      pt_jet=ptl
       call getyetaptmass(pnu,ynu,etanu,ptnu,mnu)
       delphi = getdphi(pl,pnu)
       pt=getpt(pw)
@@ -202,8 +223,14 @@ c      call filld('dr2',dr2,dsig)
 
 c W
 c      call filld('V_pt_zoom',pt, dsig)
-      call filld('V_pt1_report',pt, dsig)
-      call filld('V_pt2_report',pt, dsig)
+!      call filld('pT-W-low-pT',pt, dsig)
+!      call filld('pT-W',pt, dsig)
+      call filld('pT-jet-low-pT',pt_jet,dsig)
+      call filld('pT-jet',pt_jet,dsig)
+      call filld('pT-jet-5GeV',pt_jet,dsig)
+      call filld('pT-jet-10GeV',pt_jet,dsig)
+      call filld('pT-jet-50GeV',pt_jet,dsig)
+      call filld('pT-jet-200GeV',pt_jet,dsig)
 c      call filld('V_m',  m, dsig)
 c      call filld('V_m_report',  m, dsig)
 c transverse mass of the lepton-neutrino system

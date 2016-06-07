@@ -7,7 +7,7 @@ then thesed=sed                     # blah #
 else thesed=sed                      # blah #
 fi                                   # blah #
 #############################################
-sed -i '' 's/_/-/g' *.top;
+sed -i 's/_/-/g' *.top;
 # 0. Set a name for the gnuplot script which we will generate and,
 #    more usefully, a prefix for the eps files for the plots we will
 #    be generating. Also you can set whether you want "eps" or "pdf"
@@ -271,7 +271,7 @@ do
   echo "range1L = \"((\$1+\$2)/2):3\" "                           >> $gnuPlotScript
   echo "range2L = \"((\$1+\$2)/2):(\$7/\$3)\" "                   >> $gnuPlotScript
   echo ""                                                         >> $gnuPlotScript
-  echo "set nolog y"                                                >> $gnuPlotScript
+  echo "set log y"                                                >> $gnuPlotScript
   echo "unset xtics"                                              >> $gnuPlotScript
   echo ""                                                         >> $gnuPlotScript
   echo "# The bit that does the main plots: "                     >> $gnuPlotScript
