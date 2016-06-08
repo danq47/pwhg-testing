@@ -23,3 +23,5 @@ testrun-tdec-lhc/pwhg_chec*
 testrun-tdec-lhc/test.sh
 testrun-tdec-lhc/FlavRegList
 testrun-tdec-lhc/plots
+
+pythia8
