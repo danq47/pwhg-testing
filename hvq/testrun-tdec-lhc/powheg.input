@@ -1,5 +1,7 @@
+!testplots 1
+btlscalereal 1 ! Allows us to use the real scale to compute the renormalisation scale
 newsuda 0 ! 1 for new Sudakov, 0 for old
-iseed 12
+iseed 10
                    ! It generates the call RM48IN(352345,0,0) (see the RM48 manual).
                    ! THIS MAY ONLY AFFECTS THE GENERATION OF POWHEG EVENTS!
                    ! If POWHEG is interfaced to a shower MC, refer to the shower MC
@@ -56,14 +58,14 @@ tdec/sin2cabibbo 0.051
 use-old-grid 1    ! if 1 use old grid if file pwggrids.dat is present (# 1: regenerate)
 use-old-ubound 1  ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; # 1: regenerate
 
-ncall1 80000   ! number of calls for initializing the integration grid
+ncall1 10000   ! number of calls for initializing the integration grid
 itmx1 5        ! number of iterations for initializing the integration grid
-ncall2 800000  ! number of calls for computing the integral and finding upper bound
+ncall2 100000  ! number of calls for computing the integral and finding upper bound
 itmx2 5        ! number of iterations for computing the integral and finding upper bound
 foldcsi   1      ! number of folds on x integration
 foldy   1      ! number of folds on y integration
 foldphi 1      ! number of folds on phi integration
-nubound 800000  ! number of bbarra calls to setup norm of upper bounding function
+nubound 100000  ! number of bbarra calls to setup norm of upper bounding function
 iymax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
 ixmax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
 xupbound 2      ! increase upper bound for radiation generation

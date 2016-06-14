@@ -70,7 +70,8 @@
       include 'nlegborn.h'
       include 'pwhg_flst.h'
       include 'pwhg_kn.h'
-      real * 8 muf,mur
+      include 'pwhg_flg.h'
+      real * 8 muf,mur,myscale2,pjet2
       logical ini
       data ini/.true./
       logical runningscales
@@ -85,6 +86,7 @@
             runningscales=.true.
          endif
       endif
+      pjet2=kn_preal(1,5)**2+kn_preal(2,5)**2
       if (runningscales) then
          if (ini) then
             write(*,*) '****************************************'
@@ -98,6 +100,10 @@
          pt2=kn_pborn(1,3)**2+kn_pborn(2,3)**2+kn_masses(3)**2
          mur=sqrt(pt2)
          muf=mur
+         if(flg_btildepart.eq.'r'.and.pjet2.gt.0.1) then
+            myscale2=kn_preal(1,5)**2+kn_preal(2,5)**2
+            muf=sqrt(myscale2)       
+         endif
       else
          if (ini) then
             write(*,*) '***************************'
@@ -110,6 +116,10 @@
          endif
          muf=kn_masses(3)
          mur=muf
+         if(flg_btildepart.eq.'r'.and.pjet2.gt.0.1) then
+            myscale2=kn_preal(1,5)**2+kn_preal(2,5)**2
+            muf=sqrt(myscale2)       
+         endif
       endif
       end
 

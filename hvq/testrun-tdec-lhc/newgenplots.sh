@@ -7,7 +7,7 @@ then thesed=sed                     # blah #
 else thesed=sed                      # blah #
 fi                                   # blah #
 #############################################
-sed -i '' 's/_/-/g' *.top;
+sed -i "s/_/-/g" *.top;
 # 0. Set a name for the gnuplot script which we will generate and,
 #    more usefully, a prefix for the eps files for the plots we will
 #    be generating. Also you can set whether you want "eps" or "pdf"
