@@ -1,6 +1,7 @@
-!testplots 1
+dan_flag 0 ! 0 = total, 1 = stretched, 2 = unstretched
+testplots 1
 btlscalereal 1 ! Allows us to use the real scale to compute the renormalisation scale
-newsuda 0 ! 1 for new Sudakov, 0 for old
+newsuda 1 ! 1 for new Sudakov, 0 for old
 iseed 10
                    ! It generates the call RM48IN(352345,0,0) (see the RM48 manual).
                    ! THIS MAY ONLY AFFECTS THE GENERATION OF POWHEG EVENTS!
@@ -9,7 +10,7 @@ iseed 10
 
 !Heavy flavour production parameters
 
-numevts 100000   ! number of events to be generated
+numevts 00000   ! number of events to be generated
 ih1   1        ! hadron 1
 ih2   1        ! hadron 2
 ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
@@ -58,14 +59,14 @@ tdec/sin2cabibbo 0.051
 use-old-grid 1    ! if 1 use old grid if file pwggrids.dat is present (# 1: regenerate)
 use-old-ubound 1  ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; # 1: regenerate
 
-ncall1 10000   ! number of calls for initializing the integration grid
+ncall1 5000   ! number of calls for initializing the integration grid
 itmx1 5        ! number of iterations for initializing the integration grid
-ncall2 100000  ! number of calls for computing the integral and finding upper bound
+ncall2 50000  ! number of calls for computing the integral and finding upper bound
 itmx2 5        ! number of iterations for computing the integral and finding upper bound
 foldcsi   1      ! number of folds on x integration
 foldy   1      ! number of folds on y integration
 foldphi 1      ! number of folds on phi integration
-nubound 100000  ! number of bbarra calls to setup norm of upper bounding function
+nubound 50000  ! number of bbarra calls to setup norm of upper bounding function
 iymax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
 ixmax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
 xupbound 2      ! increase upper bound for radiation generation

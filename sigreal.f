@@ -1014,6 +1014,7 @@ c    csi^2 (1-y)   for FSR regions
       include 'pwhg_flg.h'
       include 'pwhg_par.h'
       include 'pwhg_pdf.h'
+      include 'pwhg_rad.h'
       integer imode
       real * 8 rr(maxalr)
       real * 8 rc(maxalr),rs(maxalr),rcs(maxalr),r
@@ -1030,11 +1031,13 @@ c    csi^2 (1-y)   for FSR regions
       real * 8 pdf1(-pdf_nparton:pdf_nparton),
      1         pdf2(-pdf_nparton:pdf_nparton)
       real * 8 rescfac
+      real * 8 powheginput
       logical ini
       data ini/.true./
       save ini,/cequivtoreal/,/cequivcoefreal/
       real * 8 dijterm
       external dijterm
+      Rfact = 0
       if(ini) then
          do alr=1,flst_nalr
             equivto(alr)=-1
@@ -1099,6 +1102,26 @@ c First mark as being computed
                endif
                flst_cur_alr = alr
                call realgr(flst_alr(1,alr),kn_preal,rr(alr))
+cccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+               if(flg_newsuda) then
+                  if(powheginput('#dan_flag').eq.1d0) then  ! stretched
+                     if(ggbornplanar1.lt.ggbornplanar2) then
+                        Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+                     else
+                        Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+                     endif
+                  elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
+                     if(ggbornplanar1.gt.ggbornplanar2) then
+                        Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+                     else
+                        Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+                     endif
+                  endif
+               endif
+
+cccccccccccccccccccccccccccccccccccccccccccccccccccc
+
 c Supply FKS factor to separate singular region:
                sumdijinv=0
 c Loop over all singular regions of the given contribution

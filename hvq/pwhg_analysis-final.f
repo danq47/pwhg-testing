@@ -132,6 +132,9 @@ C       enddo
       integer ngenerations,inotfound,iprodrad
       common/cngenerations/ngenerations
       integer id1,id2
+      real*8 random,rweight
+      external random
+
       ngenerations = powheginput("#ngenerations")
       if(ngenerations.lt.0) ngenerations = 4
 
@@ -309,14 +312,57 @@ C             endif
 
 C       	enddo
 C       enddo
-
-      if(id1.eq.0.and.id2.eq.0) then
-         call filld('pT-j1-2GeV',ptj1,dsig)
-         call filld('pT-j1-5GeV',ptj1,dsig)
-         call filld('pT-j1-10GeV',ptj1,dsig)
-         call filld('pT-j1-50GeV',ptj1,dsig)
-         call filld('pT-j1-200GeV',ptj1,dsig)
+      counter1=counter1+1
+      if(powheginput('#dan_flag').eq.1d0) then  ! stretched
+         rweight = min(ggbornplanar1,ggbornplanar2)/(ggbornplanar1+ggbornplanar2)
+         if(random().lt.rweight) then
+            counter2=counter2+1
+            if(id1.eq.0.and.id2.eq.0) then
+               call filld('pT-j1-2GeV',ptj1,dsig)
+               call filld('pT-j1-5GeV',ptj1,dsig)
+               call filld('pT-j1-10GeV',ptj1,dsig)
+               call filld('pT-j1-50GeV',ptj1,dsig)
+               call filld('pT-j1-200GeV',ptj1,dsig)
+            endif
+         else
+            if(id1.eq.0.and.id2.eq.0) then
+               call filld('pT-j1-2GeV',0d0,dsig)
+               call filld('pT-j1-5GeV',0d0,dsig)
+               call filld('pT-j1-10GeV',0d0,dsig)
+               call filld('pT-j1-50GeV',0d0,dsig)
+               call filld('pT-j1-200GeV',0d0,dsig)
+            endif
+         endif
+      elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
+         rweight = max(ggbornplanar1,ggbornplanar2)/(ggbornplanar1+ggbornplanar2)
+         if(random().lt.rweight) then
+            counter2=counter2+1
+            if(id1.eq.0.and.id2.eq.0) then
+               call filld('pT-j1-2GeV',ptj1,dsig)
+               call filld('pT-j1-5GeV',ptj1,dsig)
+               call filld('pT-j1-10GeV',ptj1,dsig)
+               call filld('pT-j1-50GeV',ptj1,dsig)
+               call filld('pT-j1-200GeV',ptj1,dsig)
+            endif
+         else
+            if(id1.eq.0.and.id2.eq.0) then
+               call filld('pT-j1-2GeV',0d0,dsig)
+               call filld('pT-j1-5GeV',0d0,dsig)
+               call filld('pT-j1-10GeV',0d0,dsig)
+               call filld('pT-j1-50GeV',0d0,dsig)
+               call filld('pT-j1-200GeV',0d0,dsig)
+            endif
+         endif
+      else
+         if(id1.eq.0.and.id2.eq.0) then
+            call filld('pT-j1-2GeV',ptj1,dsig)
+            call filld('pT-j1-5GeV',ptj1,dsig)
+            call filld('pT-j1-10GeV',ptj1,dsig)
+            call filld('pT-j1-50GeV',ptj1,dsig)
+            call filld('pT-j1-200GeV',ptj1,dsig)
+         endif
       endif
+      write(25,*) counter2,' out of ',counter1,' accepted.'
 
       end
 
