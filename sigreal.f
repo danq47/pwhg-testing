@@ -1111,12 +1111,14 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccc
                      else
                         Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
                      endif
+                     rr(alr) = Rfact * rr(alr)
                   elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
                      if(ggbornplanar1.gt.ggbornplanar2) then
                         Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
                      else
                         Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
                      endif
+                     rr(alr) = Rfact * rr(alr)
                   endif
                endif
 
