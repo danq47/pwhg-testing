@@ -1104,23 +1104,34 @@ c First mark as being computed
                call realgr(flst_alr(1,alr),kn_preal,rr(alr))
 cccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-               if(flg_newsuda) then
-                  if(powheginput('#dan_flag').eq.1d0) then  ! stretched
-                     if(ggbornplanar1.lt.ggbornplanar2) then
-                        Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
-                     else
-                        Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
-                     endif
-                     rr(alr) = Rfact * rr(alr)
-                  elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
-                     if(ggbornplanar1.gt.ggbornplanar2) then
-                        Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
-                     else
-                        Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
-                     endif
-                     rr(alr) = Rfact * rr(alr)
-                  endif
+					if(flg_b0_NLO) then
+               	if(flg_newsuda) then
+               	   if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then 
+               	      if(powheginput('#dan_flag').eq.1d0) then  ! stretched
+               	         if(ggbornplanar1.lt.ggbornplanar2) then
+               	            Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               	         else
+               	            Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+               	         endif
+               	         rr(alr) = Rfact * rr(alr)
+               	      elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
+               	         if(ggbornplanar1.gt.ggbornplanar2) then
+               	            Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               	         else
+               	            Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+               	         endif
+               	         rr(alr) = Rfact * rr(alr)
+               	      endif
+               	   else
+               	      rr(alr) = 0d0
+               	   endif
+               	endif
                endif
+
+
+
+
+
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccc
 

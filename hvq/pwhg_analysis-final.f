@@ -30,55 +30,57 @@ c  pwhgfill  :  fills the histograms with data
 
       call inihists
 
-C       do j = 1,6
-C       	if(j.eq.1) then
-C       		prefix1 = '-incl'
-C       	elseif(j.eq.2) then
-C       		prefix1 = '-str'
-C       	elseif(j.eq.3) then
-C       		prefix1 = '-unstr'
+      do j = 1,3
+      	if(j.eq.1) then
+      		prefix1 = '-incl'
+      	elseif(j.eq.2) then
+      		prefix1 = '-str'
+      	elseif(j.eq.3) then
+      		prefix1 = '-unstr'
 C          elseif(j.eq.4) then
 C             prefix1 = '-vstr'
 C          elseif(j.eq.5) then
 C             prefix1 = '-vunstr'
 C          else
 C       		prefix1 = '-qqb'
-C       	endif
+      	endif
       	
-C       	do l=1,3
-C       		if(l.eq.1) then
-C       			prefix2 = '-no-cuts'
+      	do l=1,2
+      		if(l.eq.1) then
+      			prefix2 = '-no-cuts'
+            else
+               prefix2 = '-gg'
 C       		elseif(l.eq.2) then
 C       			prefix2 = '-wa'
 C       		elseif(l.eq.3) then
 C       			prefix2 = '-coll'
-C       		endif
+      		endif
 
-C          	l1=lenocc(prefix1)
-C          	l2=lenocc(prefix2)
+         	l1=lenocc(prefix1)
+         	l2=lenocc(prefix2)
 
-C             if(j.ne.6) then
-C       		   call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
-C       		   call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
-C       		   call bookupeqbins('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,1500d0)
-C       		   call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
-C       		   call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
-C             elseif(l.eq.1.and.j.eq.6) then
-C                call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
-C                call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
-C                call bookupeqbins('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,1500d0)
-C                call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
-C                call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
-C             endif
+            if(j.ne.6) then
+      		   call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
+      		   call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
+      		   call bookupeqbins('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,1500d0)
+      		   call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
+      		   call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
+            elseif(l.eq.1.and.j.eq.6) then
+               call bookupeqbins('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),2d0,0d0,500d0)
+               call bookupeqbins('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),5d0,0d0,1000d0)
+               call bookupeqbins('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),10d0,0d0,1500d0)
+               call bookupeqbins('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),50d0,0d0,2000d0)
+               call bookupeqbins('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),200d0,0d0,3000d0)
+            endif
 
-C       	enddo
-C       enddo
+      	enddo
+      enddo
 
-      call bookupeqbins('pT-j1-2GeV',2d0,0d0,500d0)
-      call bookupeqbins('pT-j1-5GeV',5d0,0d0,1000d0)
-      call bookupeqbins('pT-j1-10GeV',10d0,0d0,1500d0)
-      call bookupeqbins('pT-j1-50GeV',50d0,0d0,2000d0)
-      call bookupeqbins('pT-j1-200GeV',200d0,0d0,3000d0)
+c      call bookupeqbins('pT-j1-2GeV',2d0,0d0,500d0)
+c      call bookupeqbins('pT-j1-5GeV',5d0,0d0,1000d0)
+c      call bookupeqbins('pT-j1-10GeV',10d0,0d0,1500d0)
+c      call bookupeqbins('pT-j1-50GeV',50d0,0d0,2000d0)
+c      call bookupeqbins('pT-j1-200GeV',200d0,0d0,3000d0)
 
 
       end
@@ -139,7 +141,6 @@ C       enddo
       if(ngenerations.lt.0) ngenerations = 4
 
       dsig  = dsig0
-
 
       i_top = 0
       i_atop = 0
@@ -230,23 +231,25 @@ c Analysis - make the cuts
 
       if(whcprg.eq.'NLO') rho=rho_idx
 
-C       do jxx = 1,6
+      do jxx = 1,3
 
-C       	condition1 = .false.
+      	condition1 = .false.
 
-C       	if(jxx.eq.1) then
-C       		prefix1='-incl'
-C       		condition1 = .true.
-C         	elseif(jxx.eq.2) then
-C       		prefix1='-str'
-C             if((rho.eq.1.and.deltay.lt.0).or.(rho.eq.2.and.deltay.gt.0)) then
-C       			condition1 = .true.
-C       		endif
-C       	elseif(jxx.eq.3) then
-C       		prefix1='-unstr'
-C             if((rho.eq.1.and.deltay.gt.0).or.(rho.eq.2.and.deltay.lt.0)) then
-C       			condition1 = .true.
-C       		endif
+      	if(jxx.eq.1) then
+      		prefix1='-incl'
+      		condition1 = .true.
+            counter1=counter1+1
+        	elseif(jxx.eq.2) then
+      		prefix1='-str'
+            if((rho.eq.1.and.deltay.lt.0).or.(rho.eq.2.and.deltay.gt.0)) then
+      			condition1 = .true.
+               counter2=counter2+1
+      		endif
+      	elseif(jxx.eq.3) then
+      		prefix1='-unstr'
+            if((rho.eq.1.and.deltay.gt.0).or.(rho.eq.2.and.deltay.lt.0)) then
+      			condition1 = .true.
+      		endif
 C       	elseif(jxx.eq.4) then
 C             prefix1='-vstr'
 C             if((rho.eq.1.and.deltay.lt.-2).or.(rho.eq.2.and.deltay.gt.2)) then
@@ -262,17 +265,24 @@ C       		prefix1='-qqb'
 C       		if(rho.gt.2) then
 C       			condition1 = .true.
 C       		endif
-C       	endif
+      	endif
 
-C       	do lxx=1,3
+      	do lxx=1,2
 
-C       		condition2 = .false.
+      		condition2 = .false.
 
-C       		if(lxx.eq.1) then
-C       			prefix2 = '-no-cuts'
-C       			if(ptj1.gt.0) then 	! Making sure there is a jet
-C       				condition2 = .true.
-C       			endif
+      		if(lxx.eq.1) then
+      			prefix2 = '-no-cuts'
+      			if(ptj1.gt.0) then 	! Making sure there is a jet
+      				condition2 = .true.
+      			endif
+            elseif(lxx.eq.2) then
+               prefix2 = '-gg'
+               if(ptj1.gt.0) then
+                  if(id1.eq.0.and.id2.eq.0) then
+                     condition2 = .true.
+                  endif
+               endif
 C       		elseif(lxx.eq.2) then
 C       			prefix2 = '-wa'   ! These cuts don't work as the radiation which is generated could be generated by the old AND new sudakov in the veto algorithm
 C       			if(ptj1.gt.0) then
@@ -287,81 +297,84 @@ C                   if(sw.eq.1) then
 C       					condition2 = .true.
 C       				endif
 C       			endif
-C       		endif
+      		endif
 
-C       		l1=lenocc(prefix1)
-C       		l2=lenocc(prefix2)
+      		l1=lenocc(prefix1)
+      		l2=lenocc(prefix2)
 
-C             if(jxx.ne.6) then
-C       		   if(condition1.and.condition2) then
-C       			   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			   call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			   call filld('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			   call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       			   call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C       		   endif
-C             elseif(lxx.eq.1.and.jxx.eq.6) then
-C                if(condition1.and.condition2) then
-C                   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C                   call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C                   call filld('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C                   call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C                   call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
-C                endif
-C             endif
+            if(jxx.ne.6) then
+      		   if(condition1.and.condition2) then
+      			   call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      			   call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+      		   endif
+            elseif(lxx.eq.1.and.jxx.eq.6) then
+               if(condition1.and.condition2) then
+                  call filld('pT-j1-2GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-5GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-10GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-50GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+                  call filld('pT-j1-200GeV'//prefix1(1:l1)//prefix2(1:l2),ptj1,dsig)
+               endif
+            endif
+      	enddo
+      enddo
 
-C       	enddo
-C       enddo
+C       write(24,*) 'total events:', counter1
+C       write(24,*) 'stretched events:', counter2
+C       write(24,*) 'stretched percentage:', (100.0 * counter2)/(1.0*counter1)
 !      counter1=counter1+1
-      if(powheginput('#dan_flag').eq.1d0) then  ! stretched
-C          rweight = min(ggbornplanar1,ggbornplanar2)/(ggbornplanar1+ggbornplanar2)
-C          if(random().lt.rweight) then
-C             counter2=counter2+1
-            if(id1.eq.0.and.id2.eq.0) then
-               call filld('pT-j1-2GeV',ptj1,dsig)
-               call filld('pT-j1-5GeV',ptj1,dsig)
-               call filld('pT-j1-10GeV',ptj1,dsig)
-               call filld('pT-j1-50GeV',ptj1,dsig)
-               call filld('pT-j1-200GeV',ptj1,dsig)
-            endif
-C          else
+C       if(powheginput('#dan_flag').eq.1d0) then  ! stretched
+C C          rweight = min(ggbornplanar1,ggbornplanar2)/(ggbornplanar1+ggbornplanar2)
+C C          if(random().lt.rweight) then
+C C             counter2=counter2+1
 C             if(id1.eq.0.and.id2.eq.0) then
-C                call filld('pT-j1-2GeV',0d0,dsig)
-C                call filld('pT-j1-5GeV',0d0,dsig)
-C                call filld('pT-j1-10GeV',0d0,dsig)
-C                call filld('pT-j1-50GeV',0d0,dsig)
-C                call filld('pT-j1-200GeV',0d0,dsig)
+C                call filld('pT-j1-2GeV',ptj1,dsig)
+C                call filld('pT-j1-5GeV',ptj1,dsig)
+C                call filld('pT-j1-10GeV',ptj1,dsig)
+C                call filld('pT-j1-50GeV',ptj1,dsig)
+C                call filld('pT-j1-200GeV',ptj1,dsig)
 C             endif
-C          endif
-      elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
-C          rweight = max(ggbornplanar1,ggbornplanar2)/(ggbornplanar1+ggbornplanar2)
-C          if(random().lt.rweight) then
-C             counter2=counter2+1
-            if(id1.eq.0.and.id2.eq.0) then
-               call filld('pT-j1-2GeV',ptj1,dsig)
-               call filld('pT-j1-5GeV',ptj1,dsig)
-               call filld('pT-j1-10GeV',ptj1,dsig)
-               call filld('pT-j1-50GeV',ptj1,dsig)
-               call filld('pT-j1-200GeV',ptj1,dsig)
-            endif
-C          else
+C C          else
+C C             if(id1.eq.0.and.id2.eq.0) then
+C C                call filld('pT-j1-2GeV',0d0,dsig)
+C C                call filld('pT-j1-5GeV',0d0,dsig)
+C C                call filld('pT-j1-10GeV',0d0,dsig)
+C C                call filld('pT-j1-50GeV',0d0,dsig)
+C C                call filld('pT-j1-200GeV',0d0,dsig)
+C C             endif
+C C          endif
+C       elseif(powheginput('#dan_flag').eq.2d0) then  ! unstretched
+C C          rweight = max(ggbornplanar1,ggbornplanar2)/(ggbornplanar1+ggbornplanar2)
+C C          if(random().lt.rweight) then
+C C             counter2=counter2+1
 C             if(id1.eq.0.and.id2.eq.0) then
-C                call filld('pT-j1-2GeV',0d0,dsig)
-C                call filld('pT-j1-5GeV',0d0,dsig)
-C                call filld('pT-j1-10GeV',0d0,dsig)
-C                call filld('pT-j1-50GeV',0d0,dsig)
-C                call filld('pT-j1-200GeV',0d0,dsig)
+C                call filld('pT-j1-2GeV',ptj1,dsig)
+C                call filld('pT-j1-5GeV',ptj1,dsig)
+C                call filld('pT-j1-10GeV',ptj1,dsig)
+C                call filld('pT-j1-50GeV',ptj1,dsig)
+C                call filld('pT-j1-200GeV',ptj1,dsig)
 C             endif
+C C          else
+C C             if(id1.eq.0.and.id2.eq.0) then
+C C                call filld('pT-j1-2GeV',0d0,dsig)
+C C                call filld('pT-j1-5GeV',0d0,dsig)
+C C                call filld('pT-j1-10GeV',0d0,dsig)
+C C                call filld('pT-j1-50GeV',0d0,dsig)
+C C                call filld('pT-j1-200GeV',0d0,dsig)
+C C             endif
+C C          endif
+C       else
+C          if(id1.eq.0.and.id2.eq.0) then
+C             call filld('pT-j1-2GeV',ptj1,dsig)
+C             call filld('pT-j1-5GeV',ptj1,dsig)
+C             call filld('pT-j1-10GeV',ptj1,dsig)
+C             call filld('pT-j1-50GeV',ptj1,dsig)
+C             call filld('pT-j1-200GeV',ptj1,dsig)
 C          endif
-      else
-         if(id1.eq.0.and.id2.eq.0) then
-            call filld('pT-j1-2GeV',ptj1,dsig)
-            call filld('pT-j1-5GeV',ptj1,dsig)
-            call filld('pT-j1-10GeV',ptj1,dsig)
-            call filld('pT-j1-50GeV',ptj1,dsig)
-            call filld('pT-j1-200GeV',ptj1,dsig)
-         endif
-      endif
+C       endif
 
       end
 
