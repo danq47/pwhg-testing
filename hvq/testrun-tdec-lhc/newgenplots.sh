@@ -7,7 +7,7 @@ then thesed=sed                     # blah #
 else thesed=sed                      # blah #
 fi                                   # blah #
 #############################################
-sed -i '' 's/_/-/g' *.top;
+sed -i "s/_/-/g" *.top;
 # 0. Set a name for the gnuplot script which we will generate and,
 #    more usefully, a prefix for the eps files for the plots we will
 #    be generating. Also you can set whether you want "eps" or "pdf"
@@ -69,6 +69,11 @@ do
   ixx=$((ixx+1))
   titles[$ixx]=`$thesed -n "$i p" ${file[1]} | $thesed "s/#//"`
   titles[$ixx]=`echo ${titles[ixx]} | sed "s/ index \(.*\)//"`
+  if [[ ${titles[ixx]} = *"str"* ]] ; then
+    stretch[$ixx]=1
+  else
+  	 stretch[$ixx]=0
+  fi
   theLineNo=`$thesed -n "$i =" ${file[1]}`
   theLineNo=$((theLineNo+1))
   theLine=`$thesed -n "$theLineNo p" ${file[1]}`
@@ -80,6 +85,7 @@ do
   theLine=`echo "scale=5 ; $theLine " | bc`
   xMin[$ixx]=$theLine
 done
+
 ixx=0
 jxx=0
 for i in `$thesed -n "/^$/ =" ${file[1]}`
@@ -311,12 +317,24 @@ do
   echo "set tmargin at screen 0.4"                                >> $gnuPlotScript
   echo "set bmargin at screen 0.2"                                >> $gnuPlotScript
   echo "set nolog y"                                              >> $gnuPlotScript
-  echo "set yrange [0.95:1.05]"                                         >> $gnuPlotScript
+  
+  if [[ ${stretch[ixx]} = 0 ]] ; then
+  	echo "set yrange [0.98:1.02]"                                 >> $gnuPlotScript
+  else
+  	echo "set yrange [0.0:2]"                                     >> $gnuPlotScript
+  fi
+  
   echo "set xrange restore"                                       >> $gnuPlotScript
   echo "set xlabel thexlabel"                                     >> $gnuPlotScript
   echo "set format x"                                             >> $gnuPlotScript
   echo "set key off"                                              >> $gnuPlotScript
-  echo "set ytics(\"0\" 0,\"0.5\" 0.5,\"1\" 1,\"1.5\" 1.5,\" \" 2)" >> $gnuPlotScript
+  
+	if [[ ${stretch[ixx]} = 0 ]] ; then
+  	echo "set ytics(\"0.98\" 0.98,\"0.99\" 0.99,\"1\" 1,\"1.01\" 1.01,\" \" 1.02)" >> $gnuPlotScript
+  else
+  	echo "set ytics(\"0\" 0,\"0.5\" 0.5,\"1\" 1,\"1.5\" 1.5,\" \" 2)" >> $gnuPlotScript
+  fi
+
   echo "set xtics"                                                >> $gnuPlotScript
 #  echo "set arrow from ${xMin[ixx]},1 to ${xMax[ixx]},1 nohead lt -1 lw 0.5" >> $gnuPlotScript
   echo ""                                                         >> $gnuPlotScript
