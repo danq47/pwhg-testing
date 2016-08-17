@@ -25,5 +25,7 @@ testrun-tdec-lhc/FlavRegList
 testrun-tdec-lhc/plots
 testrun-tdec-lhc/testplots
 testrun-tdec-lhc/events
+testrun-tdec-lhc/rivet
+
 
 pythia8

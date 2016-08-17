@@ -47,6 +47,12 @@ c Flag to see if we use the stretched/unstretched matrix elements for NLO calcul
       else
       	flg_b0_NLO = .false.
       endif
+c Flag to see if we use the stretched/unstretched matrix elements for NLO calculateion
+      if(powheginput('#rsoft').eq.1d0) then
+      	flg_rsoft = .true.
+      else
+      	flg_rsoft = .false.
+      endif
 
 c whether to save btilde calls to set up upper bounding envelope
       if(powheginput('#storemintupb').eq.1d0) then

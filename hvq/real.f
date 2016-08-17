@@ -12,7 +12,7 @@
       character * 2 prc
       common/process/prc
       real * 8 s,q1q,xm2,tk,uk,q2q,w1h,w2h,x,y,cth2,p_pup(0:4,nlegreal)
-      REAL * 8 t125,t152,t512,t215,t251,t521,ttot
+      REAL * 8 t125,t152,t512,t215,t251,t521,ttot,eik1,eik,n
       integer ifl,ixx
       real * 8 dotp,fppx
       external dotp,fppx
@@ -40,6 +40,23 @@ c     Need to redefine momenta to use the ggplanar function
             p_pup(4,ixx)=sqrt(p(0,ixx)**2 - p(1,ixx)**2 - p(2,ixx)**2 - p(3,ixx)**2 )   !m
          enddo
       endif
+
+! Here we are going to implement the soft matrix elements
+! as in MNR and my report, but in the planar limit
+      if(flg_rsoft) then
+
+      	rsoft1=( 2*(eik(p(:,2),p(:,4),p(:,5)) + eik(p(:,1),p(:,3),p(:,5)) )
+     1		+ 2*eik(p(:,1),p(:,2),p(:,5))- 
+     2 		(eik(p(:,3),p(:,3),p(:,5)) + eik(p(:,4),p(:,4),p(:,5))) )
+
+      	rsoft2=( 2*(eik(p(:,1),p(:,4),p(:,5)) + eik(p(:,2),p(:,3),p(:,5)) )
+     1		+ 2*eik(p(:,1),p(:,2),p(:,5))- 
+     2 		(eik(p(:,3),p(:,3),p(:,5)) + eik(p(:,4),p(:,4),p(:,5))) )
+
+     		rsoft1 = rsoft1*ggbornplanar1
+     		rsoft2 = rsoft2*ggbornplanar2
+     	endif
+
 
       if(rflav(1).eq.0.and.rflav(2).eq.0) then
          prc='gg'
@@ -199,6 +216,12 @@ c NR06:  NB: fqg -> q(p1)+g(p2)
          write(*,*) 'FPP: non existent subprocess',prc
          stop
       endif
+      end
+
+      function eik(p1,p2,k)
+      implicit none
+      real *8 p1(0:3),p2(0:3),k(0:3),dotp,eik
+      eik=dotp(p1,p2)/(dotp(p1,k)*dotp(p2,k))
       end
 
 

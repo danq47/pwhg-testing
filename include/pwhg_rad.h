@@ -41,6 +41,7 @@ c Rfact = After we have chosen rho, Rfact is the amount we multiply our the gg p
 c rhorweight(6) = array of the 6 planar amplitude weights in FNO (4.52)
 c ggbornplanar1(2) = Born planar amplitudes for rho=1(2)
 c switch = 0 if we are not near the collinear limit, and 1 if we are (as defined by [R(alr)-Rc(alr)]/R(alr) < \alpha_s (included in line 11 above)
+c rsoft1 and rsoft2, like the soft limits of the Real matrix elements, EQ. 4.1.5 in my report
 c
 cccccccccccccccccccccccccccccccccc
 
@@ -52,7 +53,8 @@ cccccccccccccccccccccccccccccccccc
      5     rad_totrm,rad_etotrm,
      6     rad_totbtlgen,rad_etotbtlgen,
      7     rad_totgen,rad_etotgen,
-     8     rad_tot,rad_etot,rhoweight,Bfact,Rfact,rhorweight(6),ggbornplanar1,ggbornplanar2
+     8     rad_tot,rad_etot,rhoweight,Bfact,Rfact,rhorweight(6),ggbornplanar1,ggbornplanar2,
+     9 	  rsoft1,rsoft2
 c Grid of the upper bounds of the ratio (R*kn_jacreal/B)/upper_bounding function
 c for each given kinematic region and underlying born
       real * 8 rad_csiynorms(rad_ncsiynormsmx,
@@ -105,6 +107,7 @@ c Current event weight, needed when doing reweghting
      2     rad_normfact,rad_ptsqmin,rad_charmthr2,rad_bottomthr2,
      3     rad_lamll,rad_xradremn,rad_pt2max,
      4     rad_branching,rad_currentweight,rhoweight,rhorweight,Bfact,Rfact,ggbornplanar1,ggbornplanar2,
+     5     rsoft1,rsoft2,
 c     integers
      1     rad_ubornidx,rad_alr_list,rad_alr_nlist,
      2     rad_realidx,rad_realalr,rad_realreg,

@@ -799,7 +799,7 @@ c supply Born zero damping factor, if required
       include 'pwhg_pdf.h'
       real * 8 rr(maxalr),rc(maxalr),rs(maxalr),rcs(maxalr)
       integer alr,alrpr,iret,em
-      integer nmomset,emitter
+      integer nmomset,emitter,counter,counter2
       parameter (nmomset=10)
       real * 8 res(nmomset,maxalr),preal(0:3,nlegreal,nmomset),cprop
       integer equivto(maxalr)
@@ -808,7 +808,7 @@ c supply Born zero damping factor, if required
       real * 8 sumdijinv,dampfac,r
       real * 8 pdf1(-pdf_nparton:pdf_nparton),
      1         pdf2(-pdf_nparton:pdf_nparton)
-      real * 8 ptsq,pwhg_pt2,dijterm
+      real * 8 ptsq,pwhg_pt2,dijterm,rs1,rh
       logical computed(maxalr)
       logical condition
       logical ini
@@ -915,9 +915,17 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
                if(flg_newsuda) then
                	if(flst_alr(1,alr).eq.0.and.flst_alr(2,alr).eq.0) then 
                		if(rho_idx.eq.1) then
-               			Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               			if(.not.flg_rsoft) then
+               				Rfact = rhorweight(1) + rhorweight(2) + rhorweight(3)
+               			else
+               				Rfact = rsoft1/(rsoft1+rsoft2)
+               			endif
                		elseif(rho_idx.eq.2) then
-               			Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+               			if(.not.flg_rsoft) then
+	               			Rfact = rhorweight(4) + rhorweight(5) + rhorweight(6)
+	               		else
+	               			Rfact = rsoft2/(rsoft1+rsoft2)
+	               		endif
                		endif
 
                      rr(alr) = (Rfact/Bfact) * rr(alr)
@@ -929,6 +937,7 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
 
                	endif
                endif
+
 
 
 
