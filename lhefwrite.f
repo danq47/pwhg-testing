@@ -72,7 +72,7 @@ c do not write events, write only the event count
          return
       endif
       write(nlf,'(a)')'<event>'
-      write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,rho_idx,switch
+      write(nlf,210) nup,idprup,xwgtup,scalup,aqedup,aqcdup,rho_idx,coll_check
       do 200 i=1,nup
          write(nlf,220) idup(i),istup(i),mothup(1,i),
      & mothup(2,i),icolup(1,i),icolup(2,i),(pup(j,i),j=1,5),

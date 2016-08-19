@@ -817,7 +817,7 @@ c supply Born zero damping factor, if required
       save ini,equivto,equivcoef
       external pwhg_pt2,dijterm
       Rfact = 0
-      switch = 0
+      coll_check = 0
       if(ini) then
          do alr=1,flst_nalr
             equivto(alr)=-1
@@ -924,7 +924,7 @@ c we multiply it by Rfact/Bfact i.e. the factor multiplying R^{alpha_r}/B^{f_b} 
 
                      ! Check if the radiation is collinear
                      if(abs((rr(alr)-rc(alr))/rr(alr)).lt.0.1) then
-                        switch = 1
+                        coll_check = 1
                      endif
 
                	endif

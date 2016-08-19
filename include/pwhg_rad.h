@@ -8,7 +8,14 @@ c rad_realalr: current alr
 
 c rad_realreg: index of regular contribution in the array flst_regular
       integer rad_ubornidx,rad_alr_list(maxalr),rad_alr_nlist,
-     #     rad_realidx,rad_realalr,rad_realreg,rho_idx,switch
+     #     rad_realidx,rad_realalr,rad_realreg,
+c
+c DQ variables
+c
+     1     rho_idx,coll_check
+c
+c end DQ variables
+c
 c rad_kinreg: index in current kinematic region
 c rad_nkinreg: number of kinematic regions
 c     kinematic regions are numbered as:
@@ -31,18 +38,32 @@ c Signed total, absolute value total, positive total and negative total
 c obtained in the integration of btilde
 
 
-
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
 c New variables added by DQ
 c
-c rho_idx: the value of rho that we are calculating (included in line 11 above)
-c rhoweight = B1/(B1+B2) - used to calculate rho in Born.f and gen_index
-c Bfact = B^\rho/(B1+B2) - after we have chosen \rho, Bfact is the Born cross section for the chosen value of rho
-c Rfact = After we have chosen rho, Rfact is the amount we multiply our the gg part of our real cross section by so that we only include Real contributions with the same underlying Born colour flow (see FNO (4.56) - this is implementing new sum that we have in the numerator of the exponent)
-c rhorweight(6) = array of the 6 planar amplitude weights in FNO (4.52)
-c ggbornplanar1(2) = Born planar amplitudes for rho=1(2)
-c switch = 0 if we are not near the collinear limit, and 1 if we are (as defined by [R(alr)-Rc(alr)]/R(alr) < \alpha_s (included in line 11 above)
+c rho_idx: the value of rho that we are calculating
+c (included in line 15 above)
 c
-cccccccccccccccccccccccccccccccccc
+c rhoweight: B1/(B1+B2) - used to calculate rho in Born.f and gen_index
+c
+c Bfact: B^\rho/(B1+B2) - after we have chosen \rho, Bfact * B_{tot}
+c is the Born cross section for the chosen value of rho
+c
+c Rfact: After we have chosen rho, Rfact is the sum over real planar
+c flows which have rho as their underlying Born flow i.e. it is the
+c sum over rho_r in {rho_r | rho} in FNO eq. (4.52). This multiplies
+c the alr=gg part of the real cross section to give us the modified real
+c cross section which is the numerator of the exponent in FNO eq. (4.56)
+c
+c rhorweight(6): array of the 6 planar amplitude weights in FNO (4.52)
+c
+c ggbornplanar1(2): Born planar amplitudes for rho=1(2) - B_{pl}^{gg,rho=1,2}
+c 
+c coll_check: 1 if we are near the collinear limit, and 0 if not.
+c Defined by [R(alr)-Rc(alr)]/R(alr) < \alpha_s (included in line 15 above)
+c
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       real * 8
      1     rad_totbtl,rad_etotbtl,
@@ -52,7 +73,15 @@ cccccccccccccccccccccccccccccccccc
      5     rad_totrm,rad_etotrm,
      6     rad_totbtlgen,rad_etotbtlgen,
      7     rad_totgen,rad_etotgen,
-     8     rad_tot,rad_etot,rhoweight,Bfact,Rfact,rhorweight(6),ggbornplanar1,ggbornplanar2
+     8     rad_tot,rad_etot,
+c
+c DQ variables
+c
+     9	  rhoweight,Bfact,Rfact,rhorweight(6),
+     &     ggbornplanar1,ggbornplanar2
+c
+c end DQ variables
+c
 c Grid of the upper bounds of the ratio (R*kn_jacreal/B)/upper_bounding function
 c for each given kinematic region and underlying born
       real * 8 rad_csiynorms(rad_ncsiynormsmx,
@@ -104,13 +133,28 @@ c Current event weight, needed when doing reweghting
      1     rad_csiynorms,rad_norms,rad_btilde_arr,rad_real_arr,
      2     rad_normfact,rad_ptsqmin,rad_charmthr2,rad_bottomthr2,
      3     rad_lamll,rad_xradremn,rad_pt2max,
-     4     rad_branching,rad_currentweight,rhoweight,rhorweight,Bfact,Rfact,ggbornplanar1,ggbornplanar2,
+     4     rad_branching,rad_currentweight,
+c
+c DQ variables
+c
+     5     rhoweight,rhorweight,Bfact,Rfact,
+     6     ggbornplanar1,ggbornplanar2,
+c
+c end DQ variables
+c
 c     integers
      1     rad_ubornidx,rad_alr_list,rad_alr_nlist,
      2     rad_realidx,rad_realalr,rad_realreg,
      3     rad_kinreg,rad_nkinreg,
      4     rad_ncsinorms,rad_nynorms,rad_type,rad_btilde_sign,
-     5     rad_iupperfsr,rad_iupperisr,rho_idx,switch,
+     5     rad_iupperfsr,rad_iupperisr,
+c
+c DQ variables
+c
+     6     rho_idx,coll_check,
+c
+c end DQ variables
+c
 c     logical
      6     rad_kinreg_on
       save /pwhg_rad/

@@ -35,9 +35,10 @@ c it is an event with radiation
          alr=rad_realalr
          em=flst_emitter(alr)
          rad=nlegreal
-c        Include rho for analysis by colour flow, and switch to see whether our radiation is collinear or not
+c        Include rho for analysis by colour flow, and coll_check 
+c        to see whether our radiation is collinear or not
          rho=rho_idx
-         sw=switch
+         coll=coll_check
 cccccccccccccccccccccccccccccccc
          if(em.eq.0) then
             if(kn_y.gt.0) then
