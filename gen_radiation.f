@@ -23,6 +23,7 @@
       common/lhseeds/lh_seed,lh_n1,lh_n2
       logical notfinite_kin
       flg_monitorubound = .true.
+      flg_remnant = .false.
 c If at the end the event is not generated for some reason (nup=0)
 c restart from here
  1    continue
@@ -73,6 +74,7 @@ c rad_type=1 for btilde events (used only for debugging purposes)
          call increasecnt("btilde event")
       else
 c generate remnant n+1 body cross section
+      	flg_remnant = .true.
          call reset_timer
          call gen_sigremnant
          if(notfinite_kin('Real')) goto 1

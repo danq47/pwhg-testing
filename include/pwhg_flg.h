@@ -24,6 +24,18 @@ c flg_pdfreweight: outputs extra infos useful for pdf's reweighting on the LHEF
 c flg_collremnsamp:  importance sampling for collinear remnants
 c flg_reweight: outputs extra infos for reweighting LH events
 
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C
+C FLAGS ADDED BY DQ
+C
+C flg_newsuda: use the old (0) or new (1) Sudakov to generate radiation
+C
+C flg_remnant: if the event is a remnant, we need to use the 
+C old colour connections in borcolour_lh
+C
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+
       logical flg_nlotest,flg_withsubtr,flg_withdamp,flg_withreg,
      1     flg_smartsig,flg_in_smartsig,flg_bornonly,flg_debug,
      2     flg_withnegweights,
@@ -35,7 +47,7 @@ c flg_reweight: outputs extra infos for reweighting LH events
      8     flg_storemintupb,flg_doublefsr,flg_monitorubound,
      9     flg_drscheme,flg_withresrad,flg_with_em,flg_em_rad,
      $     flg_LOevents,flg_evenmaxrat,flg_novirtual,flg_noevents,
-     1     flg_doubletags,flg_analysisextrainfo,flg_fullrwgt,flg_newsuda
+     1     flg_doubletags,flg_analysisextrainfo,flg_fullrwgt,flg_newsuda,flg_remnant
       character * 1 flg_btildepart
       character * 20 flg_processid
       common/pwhg_flg/flg_nlotest,flg_withsubtr,flg_withdamp,
@@ -51,5 +63,5 @@ c flg_reweight: outputs extra infos for reweighting LH events
      1     flg_drscheme,flg_withresrad,flg_with_em,flg_em_rad,
      2     flg_evenmaxrat,flg_novirtual,flg_noevents,flg_doubletags,
      3     flg_analysisextrainfo,flg_fullrwgt,
-     2     flg_btildepart,flg_processid,flg_newsuda
+     2     flg_btildepart,flg_processid,flg_newsuda,flg_remnant
       save /pwhg_flg/

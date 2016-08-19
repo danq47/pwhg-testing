@@ -161,19 +161,34 @@ c kinematics defined in the Les Houches interface
       include 'nlegborn.h'
       include 'pwhg_flst.h'
       include 'pwhg_kn.h'
+      include 'pwhg_flg.h'
+      include 'pwhg_rad.h'
       integer iclabel
       common/ciclabel/iclabel
       real * 8 random
       external random
       iclabel=500
-      if(idup(1).eq.21) then
-c gg
-         if(random().gt.0.5d0) then
-            call clinkqgga
-     1           (icolup(1,3),icolup(1,1),icolup(1,2),icolup(1,4))
-         else
-            call clinkqgga
-     1           (icolup(1,3),icolup(1,2),icolup(1,1),icolup(1,4))
+      if(idup(1).eq.21) then ! gg
+        	if(flg_newsuda.and.(.not.flg_remnant)) then 
+! Attach colour correctly according to rho if we are
+! using the new Sudakov and event is not a remnant
+         	if(rho_idx.eq.1) then
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,1),icolup(1,2),icolup(1,4))
+         	elseif(rho_idx.eq.2) then
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,2),icolup(1,1),icolup(1,4))
+         	endif	
+         else 
+! If using Old Sudakov (or remnant event), attach colour 
+! in the same way as before
+         	if(random().gt.0.5d0) then
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,1),icolup(1,2),icolup(1,4))
+         	else
+            	call clinkqgga
+     1         	  (icolup(1,3),icolup(1,2),icolup(1,1),icolup(1,4))
+         	endif	
          endif
       elseif(idup(1).gt.0) then
          call clinkqa(icolup(1,3),icolup(1,1))
