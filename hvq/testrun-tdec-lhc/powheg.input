@@ -3,19 +3,19 @@
 
 # TESTING FLAGS ADDED BY DQ
 
-btlscalereal 1 ! Allows us to use the real scale to compute the renormalisation scale
+btlscalereal 0 ! Allows us to use the real scale to compute the renormalisation scale
 
 # NLO plots
 b0NLO 0 ! Use modified matrix elements for the NLO calculation =1, or old matrix elements =0
-dan_flag 1 ! 0 = total, 1 = stretched, 2 = unstretched matrix elements
+dan_flag 0 ! 0 = total, 1 = stretched, 2 = unstretched matrix elements
 
 ############################ 
 
-testplots 0
-rsoft 1
+testplots 1
+rsoft 0
 
-newsuda 1 ! 1 for new Sudakov, 0 for old
-iseed 15
+newsuda 0 ! 1 for new Sudakov, 0 for old
+iseed 1
                    ! It generates the call RM48IN(352345,0,0) (see the RM48 manual).
                    ! THIS MAY ONLY AFFECTS THE GENERATION OF POWHEG EVENTS!
                    ! If POWHEG is interfaced to a shower MC, refer to the shower MC
@@ -26,10 +26,10 @@ iseed 15
 numevts 50000   ! number of events to be generated
 ih1   1        ! hadron 1
 ih2   1        ! hadron 2
-ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
-ndns2 131      ! pdf for hadron 2
-#lhans1  10050         ! pdf set for hadron 1 (LHA numbering)
-#lhans2  10050         ! pdf set for hadron 2 (LHA numbering)	
+#ndns1 131      ! pdf for hadron 1 (hvqpdf numbering)
+#ndns2 131      ! pdf for hadron 2
+lhans1  11000         ! pdf set for hadron 1 (LHA numbering)
+lhans2  11000         ! pdf set for hadron 2 (LHA numbering)	
 ebeam1 7000    ! energy of beam 1
 ebeam2 7000    ! energy of beam 2
 qmass  172     ! mass of heavy quark in GeV
@@ -72,14 +72,14 @@ tdec/sin2cabibbo 0.051
 use-old-grid 1    ! if 1 use old grid if file pwggrids.dat is present (# 1: regenerate)
 use-old-ubound 1  ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; # 1: regenerate
 
-ncall1 10000   ! number of calls for initializing the integration grid
+ncall1 8000   ! number of calls for initializing the integration grid
 itmx1 5        ! number of iterations for initializing the integration grid
-ncall2 100000  ! number of calls for computing the integral and finding upper bound
+ncall2 80000  ! number of calls for computing the integral and finding upper bound
 itmx2 5        ! number of iterations for computing the integral and finding upper bound
 foldcsi   1      ! number of folds on x integration
 foldy   1      ! number of folds on y integration
 foldphi 1      ! number of folds on phi integration
-nubound 100000  ! number of bbarra calls to setup norm of upper bounding function
+nubound 80000  ! number of bbarra calls to setup norm of upper bounding function
 iymax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
 ixmax 1        ! <= 10, normalization of upper bounding function in iunorm X iunorm square in y, log(m2qq)
 xupbound 2      ! increase upper bound for radiation generation

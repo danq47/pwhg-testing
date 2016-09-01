@@ -5,7 +5,7 @@ theOS=$(shell uname -s)
 COMPILER=gfortran
 ## Choose PDF: native,lhapdf
 ## LHAPDF package has to be installed separately
-PDF=native
+PDF=lhapdf
 #Choose Analysis: none, B-or-D, top
 ## default analysis may require FASTJET package, that has to be installed separately (see below)
 #ANALYSIS=new
